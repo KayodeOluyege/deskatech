@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DeskaTech — Considered Tech, Resold</title>
+<meta name="description" content="A curated marketplace for pre-owned phones, laptops, and audio. Hand-inspected, honestly graded, fairly priced.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600;9..144,700;9..144,900&family=JetBrains+Mono:wght@400;500&family=Inter+Tight:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<!-- ===== TICKER RIBBON ===== -->
+<div class="ribbon" aria-hidden="true">
+  <div class="ribbon-track">
+    <span class="ribbon-item">Free shipping over $200</span>
+    <span class="ribbon-item">30-day returns</span>
+    <span class="ribbon-item">Every device certified</span>
+    <span class="ribbon-item">Live auctions every Friday</span>
+    <span class="ribbon-item">Trade-in credit available</span>
+    <span class="ribbon-item">Free shipping over $200</span>
+    <span class="ribbon-item">30-day returns</span>
+    <span class="ribbon-item">Every device certified</span>
+    <span class="ribbon-item">Live auctions every Friday</span>
+    <span class="ribbon-item">Trade-in credit available</span>
+  </div>
+</div>
+
+<!-- ===== HEADER ===== -->
+<header>
+  <nav class="nav">
+    <div class="logo">DeskaTech<span class="logo-dot"></span></div>
+    <ul class="nav-links">
+      <li><a href="#shop">Shop</a></li>
+      <li><a href="#auctions">Auctions</a></li>
+      <li><a href="#categories">Categories</a></li>
+      <li><a href="#how">How it works</a></li>
+    </ul>
+    <div class="nav-actions">
+      <button class="icon-btn theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+        <svg class="moon-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Search">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Account">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Cart" id="cart-toggle">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-count" id="cart-count">0</span>
+      </button>
+      <button class="mobile-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+</header>
+
+<!-- ===== HERO ===== -->
+<main>
+<section class="hero">
+  <div class="hero-meta reveal">
+    <span class="live-dot"></span>
+    <span>Live · 1,247 listings available now</span>
+  </div>
+
+  <h1 class="hero-title reveal">
+    Considered tech,<br>
+    <span class="italic">resold</span> with <span class="accent">care.</span>
+  </h1>
+
+  <p class="hero-sub reveal">
+    A curated marketplace for pre-owned phones, laptops, and audio. Every device hand-inspected, honestly graded, and listed at a fair price — or sent to live auction.
+  </p>
+
+  <div class="hero-cta-group reveal">
+    <a href="#shop" class="btn btn-primary btn-lg">
+      Browse the catalogue
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    </a>
+    <a href="#auctions" class="btn btn-secondary btn-lg">View live auctions</a>
+  </div>
+</section>
+
+<!-- ===== STATS ===== -->
+<section class="stats">
+  <div class="stat reveal"><div class="stat-num">12<span class="small">k+</span></div><div class="stat-label">Devices certified</div></div>
+  <div class="stat reveal"><div class="stat-num">98<span class="small">%</span></div><div class="stat-label">Satisfaction rate</div></div>
+  <div class="stat reveal"><div class="stat-num">30<span class="small">d</span></div><div class="stat-label">Return window</div></div>
+  <div class="stat reveal"><div class="stat-num">42<span class="small">%</span></div><div class="stat-label">Avg savings vs new</div></div>
+</section>
+
+<!-- ===== CATEGORIES ===== -->
+<section id="categories">
+  <div class="section-head reveal">
+    <div><div class="section-label">01 / Categories</div><h2 class="section-title">Shop by <span class="italic">device.</span></h2></div>
+    <a href="#shop" class="section-link">All categories <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+  <div class="categories">
+    <div class="cat-card reveal" onclick="filterCategory('Phones')"><div></div><div class="cat-card-icon"><svg viewBox="0 0 100 100"><rect x="30" y="15" width="40" height="70" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="34" y="22" width="32" height="50" fill="currentColor" opacity="0.08"/><circle cx="50" cy="79" r="2" fill="none" stroke="currentColor" stroke-width="1"/></svg></div><div class="cat-card-meta"><span class="cat-card-name">Phones</span><span class="cat-card-count">412</span></div></div>
+    <div class="cat-card reveal" onclick="filterCategory('Laptops')"><div></div><div class="cat-card-icon"><svg viewBox="0 0 100 100"><path d="M 20 65 L 80 65 L 75 25 L 25 25 Z" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="65" width="72" height="6" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="44" y1="68" x2="56" y2="68" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="cat-card-meta"><span class="cat-card-name">Laptops</span><span class="cat-card-count">287</span></div></div>
+    <div class="cat-card reveal" onclick="filterCategory('Tablets')"><div></div><div class="cat-card-icon"><svg viewBox="0 0 100 100"><rect x="20" y="20" width="60" height="60" rx="4" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="24" y="24" width="52" height="48" fill="currentColor" opacity="0.08"/><circle cx="50" cy="76" r="1.5" fill="currentColor"/></svg></div><div class="cat-card-meta"><span class="cat-card-name">Tablets</span><span class="cat-card-count">156</span></div></div>
+    <div class="cat-card reveal" onclick="filterCategory('Audio')"><div></div><div class="cat-card-icon"><svg viewBox="0 0 100 100"><ellipse cx="35" cy="55" rx="10" ry="14" fill="none" stroke="currentColor" stroke-width="1.5"/><ellipse cx="65" cy="55" rx="10" ry="14" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M 35 41 Q 50 25 65 41" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div><div class="cat-card-meta"><span class="cat-card-name">Audio</span><span class="cat-card-count">203</span></div></div>
+    <div class="cat-card reveal" onclick="filterCategory('Wearables')"><div></div><div class="cat-card-icon"><svg viewBox="0 0 100 100"><rect x="35" y="35" width="30" height="30" rx="6" fill="none" stroke="currentColor" stroke-width="1.5"/><line x1="50" y1="35" x2="50" y2="20" stroke="currentColor" stroke-width="1.5"/><line x1="50" y1="65" x2="50" y2="80" stroke="currentColor" stroke-width="1.5"/><circle cx="50" cy="50" r="4" fill="var(--accent)"/></svg></div><div class="cat-card-meta"><span class="cat-card-name">Wearables</span><span class="cat-card-count">89</span></div></div>
+  </div>
+</section>
+
+<!-- ===== EDITORIAL ===== -->
+<section>
+  <div class="editorial reveal">
+    <div class="editorial-num">02</div>
+    <div class="editorial-text">
+      <h2>A device <span class="italic">isn't done</span> when you stop using it.</h2>
+      <p>Most second-hand markets treat used electronics like leftovers — sold quickly, cheaply, with no provenance. We do the opposite. Each item arrives at our workshop, where technicians benchmark battery cells, test every port, document scratches honestly, and grade against a public rubric.</p>
+      <p>The result: lower prices than retail, dignity preserved for the original owner, and one less device in landfill.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FEATURED AUCTION ===== -->
+<section id="auctions">
+  <div class="section-head reveal">
+    <div><div class="section-label">03 / Live now</div><h2 class="section-title">Auction <span class="italic">in progress.</span></h2></div>
+    <a href="#" class="section-link" onclick="event.preventDefault();">View all auctions <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+  </div>
+  <div class="featured-auction reveal">
+    <div class="fa-visual">
+      <svg viewBox="0 0 200 200"><rect x="40" y="120" width="120" height="8" rx="2" fill="currentColor" opacity="0.2"/><path d="M 50 120 L 150 120 L 155 50 L 45 50 Z" fill="currentColor" opacity="0.85"/><rect x="55" y="55" width="90" height="60" rx="2" fill="#0d0c0a"/><rect x="60" y="62" width="40" height="2" fill="var(--accent)"/><rect x="60" y="68" width="60" height="1.5" fill="white" opacity="0.5"/><rect x="60" y="74" width="50" height="1.5" fill="white" opacity="0.4"/><rect x="60" y="80" width="70" height="1.5" fill="white" opacity="0.3"/><circle cx="125" cy="95" r="10" fill="none" stroke="white" stroke-width="0.8" opacity="0.4"/></svg>
+    </div>
+    <div class="fa-content">
+      <div>
+        <div class="fa-meta">Listing #A-2814 · Like-New · Original box</div>
+        <h3 class="fa-title">MacBook Air <span class="italic">2022</span><br>M2, 16GB / 512GB</h3>
+        <p class="fa-desc">Single-owner machine, 89% battery cycle, no surface marks. Includes original USB-C charger and Apple Care receipt.</p>
+      </div>
+      <div>
+        <div class="fa-bid-info">
+          <div class="fa-bid-cell"><span class="label">Current bid</span><span class="value live" id="fa-bid">$899</span></div>
+          <div class="fa-bid-cell"><span class="label">Time left</span><span class="value" id="fa-time">2d 14h</span></div>
+        </div>
+        <div class="fa-actions">
+          <button class="btn btn-primary" onclick="openBidModal('macbook-2022')">Place bid</button>
+          <button class="btn btn-secondary" onclick="openProductModal('macbook-2022')">View details</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CATALOGUE ===== -->
+<section id="shop">
+  <div class="section-head reveal">
+    <div><div class="section-label">04 / Catalogue</div><h2 class="section-title">Available <span class="italic">now.</span></h2></div>
+  </div>
+  <div class="product-controls reveal">
+    <div class="filter-pills">
+      <button class="pill active" data-filter="all">All</button>
+      <button class="pill" data-filter="Phones">Phones</button>
+      <button class="pill" data-filter="Laptops">Laptops</button>
+      <button class="pill" data-filter="Tablets">Tablets</button>
+      <button class="pill" data-filter="Audio">Audio</button>
+      <button class="pill" data-filter="auction">Auctions only</button>
+      <button class="pill" data-filter="buynow">Buy now</button>
+    </div>
+    <select class="sort-dropdown"><option>Newest first</option><option>Price: low to high</option><option>Price: high to low</option><option>Ending soon</option></select>
+  </div>
+  <div class="grid" id="grid"></div>
+</section>
+
+<!-- ===== HOW IT WORKS ===== -->
+<section class="how-section" id="how">
+  <div class="how-inner">
+    <div class="section-head reveal" style="margin-bottom:0;"><div><div class="section-label">05 / Process</div><h2 class="section-title">How it <span class="italic">works.</span></h2></div></div>
+    <div class="how-grid">
+      <div class="how-step reveal"><div class="how-step-num">01</div><h3>We inspect</h3><p>Each device is hand-checked — battery, ports, screen, speakers, cameras. Nothing leaves the workshop without a report.</p></div>
+      <div class="how-step reveal"><div class="how-step-num">02</div><h3>We grade</h3><p>Excellent, Good, Fair, or Refurbished. Honest condition photos and a public rubric. No hidden surprises.</p></div>
+      <div class="how-step reveal"><div class="how-step-num">03</div><h3>You decide</h3><p>Buy at a fixed price or bid in our weekly auctions. Free shipping over $200, and a 30-day return window.</p></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <div class="footer-inner">
+    <h2 class="footer-hero">Tech for the<br><span class="italic">next</span> <span class="accent">generation.</span></h2>
+    <div class="footer-grid">
+      <div class="footer-col">
+        <div class="logo" style="color: var(--on-dark); margin-bottom: 16px;">DeskaTech<span class="logo-dot"></span></div>
+        <p style="color: var(--ink-mute); font-size: 14px; max-width: 320px; line-height: 1.6;">A curated marketplace for considered tech. Hand-inspected, honestly graded, fairly priced.</p>
+        <h4 style="margin-top: 32px;">Newsletter</h4>
+        <div class="newsletter-input"><input type="email" placeholder="your@email.com" /><button aria-label="Subscribe"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button></div>
+      </div>
+      <div class="footer-col"><h4>Shop</h4><ul><li><a href="#">All devices</a></li><li><a href="#">Auctions</a></li><li><a href="#">New arrivals</a></li><li><a href="#">Trade-in</a></li><li><a href="#">Gift cards</a></li></ul></div>
+      <div class="footer-col"><h4>Company</h4><ul><li><a href="#">About us</a></li><li><a href="#">How bidding works</a></li><li><a href="#">Workshop tour</a></li><li><a href="#">FAQ</a></li><li><a href="#">Contact</a></li></ul></div>
+      <div class="footer-col"><h4>Legal</h4><ul><li><a href="#">Terms of use</a></li><li><a href="#">Privacy policy</a></li><li><a href="#">Auction rules</a></li><li><a href="#">Returns</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-left">© 2026 DeskaTech · Made with care</div>
+      <div class="footer-social">
+        <a href="#" aria-label="Instagram"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.16c3.2 0 3.58 0 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s0 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58 0-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s0-3.58.07-4.85c.15-3.23 1.66-4.77 4.92-4.92 1.27-.05 1.65-.07 4.85-.07zm0 5.43a4.4 4.4 0 1 0 0 8.82 4.4 4.4 0 0 0 0-8.82zm5.6-1a1 1 0 1 1-2.06 0 1 1 0 0 1 2.06 0zM12 14a2.13 2.13 0 1 1 0-4.26 2.13 2.13 0 0 1 0 4.26z"/></svg></a>
+        <a href="#" aria-label="Twitter"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.16 17.52h1.833L7.084 4.126H5.117z"/></svg></a>
+        <a href="#" aria-label="TikTok"><svg fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5.8 20.1a6.34 6.34 0 0 0 10.86-4.43V8.59a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1.84-.02z"/></svg></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== PRODUCT MODAL ===== -->
+<div class="modal-overlay" id="product-modal"><div class="modal pdp" id="pdp-content"></div></div>
+
+<!-- ===== CART DRAWER ===== -->
+<div class="modal-overlay" id="cart-overlay" style="background: rgba(17,17,17,0.4);"></div>
+<aside class="cart-modal" id="cart-modal">
+  <div class="cart-header"><h3>Your cart</h3><button class="modal-close" onclick="closeCart()" style="position:static;"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+  <div class="cart-items" id="cart-items"></div>
+  <div class="cart-footer" id="cart-footer">
+    <div class="cart-row"><span>Subtotal</span><span id="cart-subtotal">$0</span></div>
+    <div class="cart-row"><span>Shipping</span><span>Free</span></div>
+    <div class="cart-row"><span>Estimated tax</span><span id="cart-tax">$0</span></div>
+    <div class="cart-total"><span>Total</span><span id="cart-total">$0</span></div>
+    <button class="btn btn-primary btn-block btn-lg" style="margin-top:20px;" onclick="checkout()">Proceed to checkout <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></button>
+  </div>
+</aside>
+
+<!-- Toast -->
+<div class="toast" id="toast"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg><span id="toast-msg">Added to cart</span></div>
+
+<script src="app.js"></script>
+</body>
+</html>
