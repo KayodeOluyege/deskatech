@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Liners — Filters</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root{
+  --coral:#FF385C; --coral-dark:#E00B41;
+  --ink:#222222; --muted:#717171; --line:#EBEBEB; --border:#DDDDDD;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  color:var(--ink);background:#fff;-webkit-font-smoothing:antialiased;
+}
+
+/* ---- background page ---- */
+.lf-page{padding:0 0 40px;}
+.lf-topbar{display:flex;align-items:center;justify-content:space-between;padding:18px 28px;border-bottom:1px solid var(--line);}
+.lf-logo{display:flex;align-items:center;gap:9px;font-weight:700;font-size:20px;letter-spacing:-.02em;}
+.lf-logo-dot{width:14px;height:14px;border-radius:50%;background:var(--coral);display:inline-block;}
+.lf-nav{display:flex;gap:22px;color:var(--muted);font-size:14px;font-weight:500;}
+.lf-nav span{cursor:pointer;}
+.lf-nav span:hover{color:var(--ink);}
+
+.lf-bar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 28px;flex-wrap:wrap;}
+.lf-bar-left{display:flex;gap:10px;flex-wrap:wrap;}
+.lf-chip-static{
+  background:#fff;border:1px solid var(--border);border-radius:999px;
+  padding:10px 18px;font-size:14px;font-weight:500;color:var(--ink);cursor:default;
+}
+.lf-filters-btn{
+  position:relative;display:inline-flex;align-items:center;gap:8px;
+  background:#fff;border:1px solid var(--ink);border-radius:999px;
+  padding:11px 20px;font-size:14px;font-weight:600;color:var(--ink);cursor:pointer;
+  transition:box-shadow .15s, transform .05s;
+}
+.lf-filters-btn:hover{box-shadow:0 2px 8px rgba(0,0,0,.12);}
+.lf-filters-btn:active{transform:scale(.98);}
+.lf-badge{width:8px;height:8px;border-radius:50%;background:var(--coral);display:inline-block;margin-left:2px;}
+
+.lf-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:22px;padding:8px 28px 0;}
+.lf-card-ghost{display:flex;flex-direction:column;gap:10px;}
+.lf-ghost-img{aspect-ratio:1/.82;border-radius:14px;background:#f1f1f1;}
+.lf-ghost-line{height:11px;border-radius:6px;background:#ededed;}
+.lf-ghost-line.w70{width:70%;} .lf-ghost-line.w40{width:40%;}
+
+/* ---- overlay + modal ---- */
+.lf-overlay{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;z-index:50;padding:24px;
+  animation:lf-fade .2s ease;
+}
+.lf-modal{
+  background:#fff;width:100%;max-width:780px;max-height:88vh;
+  border-radius:16px;display:flex;flex-direction:column;overflow:hidden;
+  box-shadow:0 8px 40px rgba(0,0,0,.28);animation:lf-pop .24s cubic-bezier(.2,.9,.3,1);
+}
+@keyframes lf-fade{from{opacity:0}to{opacity:1}}
+@keyframes lf-pop{from{opacity:0;transform:translateY(12px) scale(.98)}to{opacity:1;transform:none}}
+
+.lf-header{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  height:64px;border-bottom:1px solid var(--line);flex:none;
+}
+.lf-title{font-size:16px;font-weight:600;margin:0;}
+.lf-close{
+  position:absolute;right:18px;top:50%;transform:translateY(-50%);
+  width:34px;height:34px;border-radius:50%;border:none;background:transparent;
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);
+}
+.lf-close:hover{background:#f4f4f4;}
+
+.lf-body{overflow-y:auto;padding:0 32px;flex:1;}
+.lf-section{padding:26px 0;border-bottom:1px solid var(--line);}
+.lf-section.lf-last{border-bottom:none;}
+.lf-h3{font-size:20px;font-weight:600;margin:0;letter-spacing:-.01em;}
+.lf-sub{font-size:14px;color:var(--muted);margin:6px 0 0;}
+
+.lf-quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:18px;}
+.lf-quick{
+  display:flex;flex-direction:column;align-items:flex-start;gap:14px;
+  border:1px solid var(--border);border-radius:12px;padding:16px;background:#fff;
+  cursor:pointer;color:var(--ink);text-align:left;font-size:14px;font-weight:500;
+  transition:border-color .15s, box-shadow .15s;min-height:104px;
+}
+.lf-quick:hover{border-color:var(--ink);}
+.lf-quick.on{border:2px solid var(--ink);background:#f7f7f7;padding:15px;}
+
+.lf-segment{
+  display:flex;gap:0;margin-top:16px;border:1px solid var(--border);
+  border-radius:12px;padding:4px;background:#fff;
+}
+.lf-seg{
+  flex:1;border:none;background:transparent;border-radius:8px;
+  padding:11px 8px;font-size:13.5px;font-weight:500;color:var(--muted);
+  cursor:pointer;transition:.15s;white-space:nowrap;font-family:inherit;
+}
+.lf-seg:hover{color:var(--ink);}
+.lf-seg.on{background:#fff;color:var(--ink);font-weight:600;border:1px solid var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.08);}
+
+.lf-pills{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px;}
+.lf-pill{
+  display:inline-flex;align-items:center;gap:8px;
+  border:1px solid var(--border);border-radius:999px;padding:9px 16px;
+  font-size:14px;font-weight:500;color:var(--ink);background:#fff;cursor:pointer;
+  transition:border-color .15s, background .15s;font-family:inherit;
+}
+.lf-pill:hover{border-color:var(--ink);}
+.lf-pill.on{border:2px solid var(--ink);background:#f7f7f7;padding:8px 15px;}
+.lf-flag{font-size:15px;line-height:1;}
+.lf-count{font-size:12px;color:#9a9a9a;font-weight:500;}
+.lf-pill.on .lf-count{color:var(--muted);}
+
+.lf-more{
+  margin-top:18px;display:inline-flex;align-items:center;gap:6px;
+  background:none;border:none;padding:0;cursor:pointer;font-family:inherit;
+  font-size:14px;font-weight:600;color:var(--ink);text-decoration:underline;text-underline-offset:3px;
+}
+
+.lf-footer{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 24px;border-top:1px solid var(--line);flex:none;background:#fff;
+}
+.lf-clear{
+  background:none;border:none;font-size:15px;font-weight:600;color:var(--ink);
+  cursor:pointer;text-decoration:underline;text-underline-offset:3px;padding:8px 6px;font-family:inherit;
+}
+.lf-clear:disabled{color:#c2c2c2;cursor:default;text-decoration:none;}
+.lf-cta{
+  background:var(--coral);color:#fff;border:none;border-radius:8px;
+  padding:14px 24px;font-size:15px;font-weight:600;cursor:pointer;transition:background .15s, transform .05s;font-family:inherit;
+}
+.lf-cta:hover{background:var(--coral-dark);}
+.lf-cta:active{transform:scale(.98);}
+
+@media (max-width:560px){
+  .lf-overlay{padding:0;}
+  .lf-modal{max-width:100%;max-height:100%;height:100%;border-radius:0;}
+  .lf-quick-grid{grid-template-columns:repeat(2,1fr);}
+  .lf-nav{display:none;}
+  .lf-body{padding:0 20px;}
+  .lf-segment{flex-wrap:wrap;}
+  .lf-seg{flex:1 1 40%;}
+}
+@media (prefers-reduced-motion:reduce){
+  .lf-overlay,.lf-modal{animation:none;}
+  .lf-cta,.lf-filters-btn,.lf-pill,.lf-quick{transition:none;}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<script type="text/babel">
+const { useState, useMemo } = React;
+
+const COUNTRIES = [
+  { name: "Nigeria", flag: "🇳🇬", count: 790 },
+  { name: "Kenya", flag: "🇰🇪", count: 390 },
+  { name: "South Africa", flag: "🇿🇦", count: 342 },
+  { name: "Pan-African", flag: "🌍", count: 226 },
+  { name: "Ghana", flag: "🇬🇭", count: 210 },
+  { name: "Egypt", flag: "🇪🇬", count: 205 },
+  { name: "Uganda", flag: "🇺🇬", count: 130 },
+  { name: "Tanzania", flag: "🇹🇿", count: 84 },
+  { name: "Rwanda", flag: "🇷🇼", count: 73 },
+  { name: "Côte d'Ivoire", flag: "🇨🇮", count: 61 },
+  { name: "Morocco", flag: "🇲🇦", count: 59 },
+  { name: "Senegal", flag: "🇸🇳", count: 52 },
+];
+const CATEGORIES = [
+  { name: "Fintech", icon: "💳", count: 813 },
+  { name: "Health Tech", icon: "🩺", count: 157 },
+  { name: "Crypto & Web3", icon: "🪙", count: 120 },
+  { name: "E-commerce & Retail", icon: "🛒", count: 111 },
+  { name: "EdTech", icon: "🎓", count: 86 },
+  { name: "Logistics & Supply Chain", icon: "🚚", count: 84 },
+  { name: "Travel & Mobility", icon: "🧳", count: 77 },
+  { name: "AI & Analytics", icon: "🤖", count: 73 },
+  { name: "Agri Tech", icon: "🌾", count: 72 },
+  { name: "Communication & Social", icon: "💬", count: 64 },
+  { name: "HR & Talent", icon: "👥", count: 53 },
+  { name: "Marketing & CRM", icon: "📣", count: 41 },
+];
+const TAGS = [
+  { name: "SaaS", count: 930 }, { name: "B2B2C", count: 666 }, { name: "B2C", count: 665 },
+  { name: "B2B", count: 645 }, { name: "AI-Powered", count: 404 }, { name: "Marketplace", count: 369 },
+  { name: "Lending and Loans", count: 282 }, { name: "Mobile Money", count: 262 },
+  { name: "Multi-currency", count: 230 }, { name: "Cross-Border Payments", count: 220 },
+  { name: "Bill Payments", count: 202 }, { name: "Payment Gateway", count: 169 },
+  { name: "Last-Mile Delivery", count: 129 }, { name: "Savings", count: 125 },
+  { name: "Business Intelligence", count: 116 },
+];
+const SORTS = [
+  { key: "popular", label: "Most popular" }, { key: "newest", label: "Newest" },
+  { key: "rating", label: "Top rated" }, { key: "reviews", label: "Most reviewed" },
+];
+const RATINGS = [
+  { key: "any", label: "Any" }, { key: "3", label: "3.0+" },
+  { key: "4", label: "4.0+" }, { key: "4.5", label: "4.5+" },
+];
+const QUICK = [
+  { key: "verified", label: "Verified", icon: "verified" },
+  { key: "reviews", label: "Has reviews", icon: "star" },
+  { key: "alternatives", label: "Has alternatives", icon: "swap" },
+  { key: "opensource", label: "Open source", icon: "code" },
+];
+
+function Icon({ name }) {
+  const c = { width:26, height:26, viewBox:"0 0 24 24", fill:"none", stroke:"currentColor",
+    strokeWidth:1.7, strokeLinecap:"round", strokeLinejoin:"round" };
+  if (name==="verified") return <svg {...c}><path d="M12 2l2.6 1.9 3.2-.2 1 3 2.6 1.9-1 3 1 3-2.6 1.9-1 3-3.2-.2L12 22l-2.6-1.9-3.2.2-1-3L2.6 15.4l1-3-1-3 2.6-1.9 1-3 3.2.2z"/><path d="M9 12l2 2 4-4"/></svg>;
+  if (name==="star") return <svg {...c}><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.2l1-5.8L3.5 9.2l5.9-.9z"/></svg>;
+  if (name==="swap") return <svg {...c}><path d="M7 8h12M16 5l3 3-3 3"/><path d="M17 16H5M8 19l-3-3 3-3"/></svg>;
+  if (name==="code") return <svg {...c}><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13 4l-2 16"/></svg>;
+  return null;
+}
+function Chevron({ up }) {
+  return <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" style={{transform: up?"rotate(180deg)":"none", transition:"transform .2s"}}><polyline points="6 9 12 15 18 9"/></svg>;
+}
+
+function App() {
+  const [open, setOpen] = useState(true);
+  const [countries, setCountries] = useState(new Set());
+  const [categories, setCategories] = useState(new Set());
+  const [tags, setTags] = useState(new Set());
+  const [rating, setRating] = useState("any");
+  const [sort, setSort] = useState("popular");
+  const [quick, setQuick] = useState(new Set());
+  const [moreC, setMoreC] = useState(false);
+  const [moreCat, setMoreCat] = useState(false);
+  const [moreT, setMoreT] = useState(false);
+
+  const toggle = (setter) => (name) => setter((prev) => {
+    const next = new Set(prev);
+    next.has(name) ? next.delete(name) : next.add(name);
+    return next;
+  });
+
+  const isDefault = !countries.size && !categories.size && !tags.size && rating==="any" && !quick.size;
+
+  const count = useMemo(() => {
+    const sum = (data, sel) => [...sel].reduce((a,n)=>a+(data.find(d=>d.name===n)?.count||0),0);
+    let c = 1923; const groups = [];
+    if (countries.size) groups.push(sum(COUNTRIES, countries));
+    if (categories.size) groups.push(sum(CATEGORIES, categories));
+    if (tags.size) groups.push(sum(TAGS, tags));
+    if (groups.length) c = Math.min(c, Math.min(...groups));
+    if (groups.length > 1) c *= Math.pow(0.62, groups.length-1);
+    c *= { any:1, "3":0.82, "4":0.55, "4.5":0.3 }[rating];
+    c *= Math.pow(0.72, quick.size);
+    return Math.max(3, Math.round(c));
+  }, [countries, categories, tags, rating, quick]);
+
+  const clearAll = () => { setCountries(new Set()); setCategories(new Set()); setTags(new Set()); setRating("any"); setQuick(new Set()); };
+  const ctaLabel = isDefault ? "Show 1,900+ products" : `Show ${count.toLocaleString()} ${count===1?"product":"products"}`;
+
+  const shownC = moreC ? COUNTRIES : COUNTRIES.slice(0,6);
+  const shownCat = moreCat ? CATEGORIES : CATEGORIES.slice(0,6);
+  const shownT = moreT ? TAGS : TAGS.slice(0,8);
+
+  return (
+    <div>
+      <div className="lf-page">
+        <div className="lf-topbar">
+          <div className="lf-logo"><span className="lf-logo-dot"/> Liners</div>
+          <nav className="lf-nav"><span>Compare</span><span>Alternatives</span><span>Funding</span><span>News</span></nav>
+        </div>
+        <div className="lf-bar">
+          <div className="lf-bar-left">
+            <button className="lf-chip-static">🌍 All countries</button>
+            <button className="lf-chip-static">All categories</button>
+            <button className="lf-chip-static">Order by</button>
+          </div>
+          <button className="lf-filters-btn" onClick={()=>setOpen(true)}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>
+            Filters {!isDefault && <span className="lf-badge"/>}
+          </button>
+        </div>
+        <div className="lf-grid">
+          {Array.from({length:6}).map((_,i)=>(
+            <div className="lf-card-ghost" key={i}><div className="lf-ghost-img"/><div className="lf-ghost-line w70"/><div className="lf-ghost-line w40"/></div>
+          ))}
+        </div>
+      </div>
+
+      {open && (
+        <div className="lf-overlay" onClick={()=>setOpen(false)}>
+          <div className="lf-modal" role="dialog" aria-modal="true" aria-label="Filters" onClick={(e)=>e.stopPropagation()}>
+            <header className="lf-header">
+              <button className="lf-close" aria-label="Close" onClick={()=>setOpen(false)}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+              </button>
+              <h2 className="lf-title">Filters</h2>
+            </header>
+
+            <div className="lf-body">
+              <section className="lf-section">
+                <h3 className="lf-h3">Quick filters</h3>
+                <p className="lf-sub">Narrow down to the listings that matter</p>
+                <div className="lf-quick-grid">
+                  {QUICK.map((q)=>{const on=quick.has(q.key); return (
+                    <button key={q.key} className={`lf-quick ${on?"on":""}`} aria-pressed={on} onClick={()=>toggle(setQuick)(q.key)}>
+                      <Icon name={q.icon}/><span>{q.label}</span>
+                    </button>);})}
+                </div>
+              </section>
+
+              <section className="lf-section">
+                <h3 className="lf-h3">Sort by</h3>
+                <div className="lf-segment">
+                  {SORTS.map((s)=>(<button key={s.key} className={`lf-seg ${sort===s.key?"on":""}`} onClick={()=>setSort(s.key)}>{s.label}</button>))}
+                </div>
+              </section>
+
+              <section className="lf-section">
+                <h3 className="lf-h3">Country</h3>
+                <div className="lf-pills">
+                  {shownC.map((c)=>{const on=countries.has(c.name); return (
+                    <button key={c.name} className={`lf-pill ${on?"on":""}`} onClick={()=>toggle(setCountries)(c.name)}>
+                      <span className="lf-flag">{c.flag}</span>{c.name}<span className="lf-count">{c.count}</span>
+                    </button>);})}
+                </div>
+                <button className="lf-more" onClick={()=>setMoreC(v=>!v)}>{moreC?"Show less":`Show all ${COUNTRIES.length} countries`}<Chevron up={moreC}/></button>
+              </section>
+
+              <section className="lf-section">
+                <h3 className="lf-h3">Category</h3>
+                <div className="lf-pills">
+                  {shownCat.map((c)=>{const on=categories.has(c.name); return (
+                    <button key={c.name} className={`lf-pill ${on?"on":""}`} onClick={()=>toggle(setCategories)(c.name)}>
+                      <span className="lf-flag">{c.icon}</span>{c.name}<span className="lf-count">{c.count}</span>
+                    </button>);})}
+                </div>
+                <button className="lf-more" onClick={()=>setMoreCat(v=>!v)}>{moreCat?"Show less":`Show all ${CATEGORIES.length} categories`}<Chevron up={moreCat}/></button>
+              </section>
+
+              <section className="lf-section">
+                <h3 className="lf-h3">Minimum rating</h3>
+                <div className="lf-pills">
+                  {RATINGS.map((r)=>(<button key={r.key} className={`lf-pill ${rating===r.key?"on":""}`} onClick={()=>setRating(r.key)}>{r.key!=="any"&&<span className="lf-flag">★</span>}{r.label}</button>))}
+                </div>
+              </section>
+
+              <section className="lf-section lf-last">
+                <h3 className="lf-h3">Tags</h3>
+                <div className="lf-pills">
+                  {shownT.map((t)=>{const on=tags.has(t.name); return (
+                    <button key={t.name} className={`lf-pill ${on?"on":""}`} onClick={()=>toggle(setTags)(t.name)}>{t.name}<span className="lf-count">{t.count}</span></button>);})}
+                </div>
+                <button className="lf-more" onClick={()=>setMoreT(v=>!v)}>{moreT?"Show less":`Show all ${TAGS.length} tags`}<Chevron up={moreT}/></button>
+              </section>
+            </div>
+
+            <footer className="lf-footer">
+              <button className="lf-clear" onClick={clearAll} disabled={isDefault}>Clear all</button>
+              <button className="lf-cta" onClick={()=>setOpen(false)}>{ctaLabel}</button>
+            </footer>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
