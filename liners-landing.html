@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Liners — African Software Discovery</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --coral: #FF385C;
+  --coral-dark: #E00B41;
+  --ink: #222222;
+  --muted: #717171;
+  --line: #EBEBEB;
+  --border: #DDDDDD;
+  --bg: #F7F7F7;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+}
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 40;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  padding: 0 28px;
+  height: 80px;
+  display: flex; align-items: center; justify-content: space-between; gap: 20px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 20px; letter-spacing: -.02em;
+  flex-shrink: 0; text-decoration: none; color: var(--ink);
+}
+.nav-logo-dot { width: 13px; height: 13px; border-radius: 50%; background: var(--coral); }
+
+/* search pill */
+.search-pill {
+  display: flex; align-items: center;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.08);
+  overflow: hidden;
+  transition: box-shadow .2s;
+  flex: 1; max-width: 520px;
+}
+.search-pill:focus-within { box-shadow: 0 2px 14px rgba(0,0,0,.15); }
+.search-seg {
+  flex: 1; padding: 12px 20px;
+  border-right: 1px solid var(--line);
+  font-size: 13px;
+}
+.search-seg:last-of-type { border-right: none; }
+.search-seg label { display: block; font-size: 11px; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+.search-seg input, .search-seg select {
+  width: 100%; border: none; outline: none; font-size: 13px;
+  color: var(--muted); font-family: inherit; background: transparent;
+}
+.search-btn {
+  margin: 6px; width: 40px; height: 40px; border-radius: 50%;
+  background: var(--coral); color: #fff; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s, transform .1s;
+}
+.search-btn:hover { background: var(--coral-dark); }
+.search-btn:active { transform: scale(.95); }
+
+.nav-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.submit-btn {
+  font-size: 14px; font-weight: 600; padding: 10px 18px;
+  border-radius: 999px; border: 1px solid var(--border);
+  color: var(--ink); transition: box-shadow .15s;
+}
+.submit-btn:hover { box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.avatar {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--ink); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 600;
+}
+
+/* ── CATEGORY BAR ── */
+.cat-bar {
+  position: sticky; top: 80px; z-index: 30;
+  background: #fff; border-bottom: 1px solid var(--line);
+  padding: 0 28px;
+  display: flex; align-items: center; gap: 0;
+}
+.cat-scroll {
+  display: flex; gap: 0; overflow-x: auto; flex: 1;
+  scrollbar-width: none; -ms-overflow-style: none;
+  padding: 16px 0;
+}
+.cat-scroll::-webkit-scrollbar { display: none; }
+.cat-chip {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  padding: 0 20px; white-space: nowrap; flex-shrink: 0;
+  font-size: 12px; font-weight: 500; color: var(--muted);
+  border-bottom: 2px solid transparent;
+  transition: color .15s, border-color .15s;
+  padding-bottom: 14px; margin-bottom: -14px;
+}
+.cat-chip:hover { color: var(--ink); border-color: var(--border); }
+.cat-chip.active { color: var(--ink); border-color: var(--ink); font-weight: 600; }
+.cat-icon { font-size: 22px; line-height: 1; }
+.cat-divider { width: 1px; background: var(--line); height: 40px; flex-shrink: 0; margin: 0 12px; }
+.filters-btn {
+  display: flex; align-items: center; gap: 8px;
+  border: 1px solid var(--border); border-radius: 999px;
+  padding: 10px 18px; font-size: 13px; font-weight: 600; color: var(--ink);
+  white-space: nowrap; flex-shrink: 0; transition: box-shadow .15s;
+}
+.filters-btn:hover { box-shadow: 0 2px 8px rgba(0,0,0,.12); }
+.filters-badge {
+  width: 8px; height: 8px; border-radius: 50%; background: var(--coral);
+}
+
+/* ── GRID ── */
+.main { padding: 28px 28px 60px; }
+.results-label { font-size: 14px; color: var(--muted); margin-bottom: 20px; font-weight: 500; }
+.results-label strong { color: var(--ink); }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 24px 20px;
+}
+
+/* ── CARD ── */
+.card { cursor: pointer; }
+.card:hover .card-logo-wrap { transform: scale(1.02); }
+.card-logo-wrap {
+  aspect-ratio: 1 / 1;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg);
+  display: flex; align-items: center; justify-content: center;
+  transition: transform .25s ease;
+  margin-bottom: 12px;
+}
+.card-logo {
+  width: 72px; height: 72px; border-radius: 18px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 26px; font-weight: 700; color: #fff; letter-spacing: -.02em;
+}
+.card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2px; }
+.card-name { font-size: 15px; font-weight: 600; color: var(--ink); }
+.card-rating { display: flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; }
+.card-tagline { font-size: 13px; color: var(--muted); margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card-footer { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.card-flag { font-size: 15px; }
+.card-cat { font-size: 12px; color: var(--muted); }
+
+/* ── MODAL ── */
+.overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.5);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 50; padding: 24px;
+  animation: fade .2s ease;
+}
+.modal {
+  background: #fff; width: 100%; max-width: 780px; max-height: 88vh;
+  border-radius: 16px; display: flex; flex-direction: column; overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,.28);
+  animation: pop .24s cubic-bezier(.2,.9,.3,1);
+}
+@keyframes fade { from { opacity: 0 } to { opacity: 1 } }
+@keyframes pop { from { opacity:0; transform: translateY(12px) scale(.98) } to { opacity:1; transform: none } }
+.modal-header {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  height: 64px; border-bottom: 1px solid var(--line); flex: none;
+}
+.modal-title { font-size: 16px; font-weight: 600; }
+.modal-close {
+  position: absolute; right: 18px; top: 50%; transform: translateY(-50%);
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center; color: var(--ink);
+}
+.modal-close:hover { background: #f4f4f4; }
+.modal-body { overflow-y: auto; padding: 0 32px; flex: 1; }
+.modal-section { padding: 26px 0; border-bottom: 1px solid var(--line); }
+.modal-section.last { border-bottom: none; }
+.modal-h { font-size: 18px; font-weight: 600; margin-bottom: 4px; }
+.modal-sub { font-size: 14px; color: var(--muted); margin-bottom: 18px; }
+
+/* quick grid */
+.quick-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; }
+.quick-card {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 14px;
+  border: 1px solid var(--border); border-radius: 12px; padding: 16px;
+  font-size: 14px; font-weight: 500; color: var(--ink); min-height: 104px;
+  transition: border-color .15s;
+}
+.quick-card:hover { border-color: var(--ink); }
+.quick-card.on { border: 2px solid var(--ink); background: #f7f7f7; padding: 15px; }
+
+/* segment */
+.segment {
+  display: flex; border: 1px solid var(--border); border-radius: 12px;
+  padding: 4px; background: #fff; margin-top: 16px;
+}
+.seg {
+  flex: 1; border-radius: 8px; padding: 11px 8px;
+  font-size: 13px; font-weight: 500; color: var(--muted); white-space: nowrap;
+  transition: color .15s;
+}
+.seg:hover { color: var(--ink); }
+.seg.on { background: #fff; color: var(--ink); font-weight: 600; border: 1px solid var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+
+/* pills */
+.pills { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--border); border-radius: 999px; padding: 9px 16px;
+  font-size: 14px; font-weight: 500; color: var(--ink);
+  transition: border-color .15s;
+}
+.pill:hover { border-color: var(--ink); }
+.pill.on { border: 2px solid var(--ink); background: #f7f7f7; padding: 8px 15px; }
+.pill-count { font-size: 12px; color: #9a9a9a; }
+.pill.on .pill-count { color: var(--muted); }
+
+.more-btn {
+  margin-top: 14px; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 14px; font-weight: 600; color: var(--ink);
+  text-decoration: underline; text-underline-offset: 3px;
+}
+
+/* modal footer */
+.modal-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px; border-top: 1px solid var(--line); flex: none;
+}
+.clear-btn {
+  font-size: 15px; font-weight: 600; text-decoration: underline;
+  text-underline-offset: 3px; padding: 8px 6px; color: var(--ink);
+}
+.clear-btn:disabled { color: #ccc; text-decoration: none; }
+.cta-btn {
+  background: var(--coral); color: #fff; border-radius: 8px;
+  padding: 14px 24px; font-size: 15px; font-weight: 600;
+  transition: background .15s;
+}
+.cta-btn:hover { background: var(--coral-dark); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .nav { padding: 0 16px; }
+  .search-pill { display: none; }
+  .cat-bar { padding: 0 16px; }
+  .main { padding: 20px 16px 48px; }
+  .quick-grid { grid-template-columns: repeat(2,1fr); }
+  .modal-body { padding: 0 20px; }
+  .overlay { padding: 0; }
+  .modal { max-height: 100%; height: 100%; border-radius: 0; }
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="text/babel">
+const { useState, useMemo } = React;
+
+const CATEGORIES = [
+  { key: "all",        label: "All",              icon: "✦"  },
+  { key: "fintech",    label: "Fintech",           icon: "💳" },
+  { key: "health",     label: "Health Tech",       icon: "🩺" },
+  { key: "crypto",     label: "Crypto & Web3",     icon: "🪙" },
+  { key: "ecommerce",  label: "E-commerce",        icon: "🛒" },
+  { key: "edtech",     label: "EdTech",            icon: "🎓" },
+  { key: "logistics",  label: "Logistics",         icon: "🚚" },
+  { key: "ai",         label: "AI & Analytics",    icon: "🤖" },
+  { key: "agri",       label: "Agri Tech",         icon: "🌾" },
+  { key: "hr",         label: "HR & Talent",       icon: "👥" },
+  { key: "travel",     label: "Travel",            icon: "🧳" },
+];
+
+const PRODUCTS = [
+  { id:1,  name:"Paystack",      tagline:"Payment infrastructure for Africa",     cat:"fintech",   country:"Nigeria",      flag:"🇳🇬", rating:4.8, color:"#0BA4DB", initials:"PS" },
+  { id:2,  name:"Flutterwave",   tagline:"Send and receive money globally",        cat:"fintech",   country:"Nigeria",      flag:"🇳🇬", rating:4.7, color:"#F5A623", initials:"FW" },
+  { id:3,  name:"M-Pesa",        tagline:"Mobile money for everyone",              cat:"fintech",   country:"Kenya",        flag:"🇰🇪", rating:4.9, color:"#00A859", initials:"MP" },
+  { id:4,  name:"Andela",        tagline:"Connect with world-class engineers",     cat:"hr",        country:"Nigeria",      flag:"🇳🇬", rating:4.6, color:"#3B5BDB", initials:"AN" },
+  { id:5,  name:"Jumia",         tagline:"Africa's leading e-commerce platform",  cat:"ecommerce", country:"Nigeria",      flag:"🇳🇬", rating:4.2, color:"#F26522", initials:"JM" },
+  { id:6,  name:"Chipper Cash",  tagline:"Free cross-border money transfers",      cat:"fintech",   country:"Pan-African",  flag:"🌍", rating:4.5, color:"#7B2FBE", initials:"CC" },
+  { id:7,  name:"Kuda",          tagline:"The money app for Africans",             cat:"fintech",   country:"Nigeria",      flag:"🇳🇬", rating:4.7, color:"#400080", initials:"KD" },
+  { id:8,  name:"Helium Health", tagline:"Healthcare management software",         cat:"health",    country:"Nigeria",      flag:"🇳🇬", rating:4.6, color:"#12B886", initials:"HH" },
+  { id:9,  name:"mPharma",       tagline:"Affordable medicine access",             cat:"health",    country:"Ghana",        flag:"🇬🇭", rating:4.5, color:"#E64980", initials:"mP" },
+  { id:10, name:"Carry1st",      tagline:"Publish and scale mobile games",         cat:"ai",        country:"South Africa", flag:"🇿🇦", rating:4.3, color:"#1C7ED6", initials:"C1" },
+  { id:11, name:"Lipa Later",    tagline:"Buy now, pay later",                     cat:"fintech",   country:"Kenya",        flag:"🇰🇪", rating:4.3, color:"#2F9E44", initials:"LL" },
+  { id:12, name:"Ushahidi",      tagline:"Crowdsourced crisis mapping platform",   cat:"ai",        country:"Kenya",        flag:"🇰🇪", rating:4.4, color:"#E67700", initials:"US" },
+  { id:13, name:"Twiga Foods",   tagline:"B2B food distribution platform",         cat:"logistics", country:"Kenya",        flag:"🇰🇪", rating:4.3, color:"#5C940D", initials:"TF" },
+  { id:14, name:"Coursera-NG",   tagline:"Online courses for African learners",    cat:"edtech",    country:"Nigeria",      flag:"🇳🇬", rating:4.5, color:"#0066CC", initials:"CN" },
+  { id:15, name:"Agrorite",      tagline:"Smart farming tools for smallholders",   cat:"agri",      country:"Nigeria",      flag:"🇳🇬", rating:4.2, color:"#74B816", initials:"AG" },
+  { id:16, name:"Kobo360",       tagline:"Digital freight & logistics platform",   cat:"logistics", country:"Nigeria",      flag:"🇳🇬", rating:4.4, color:"#F76707", initials:"K3" },
+];
+
+const COUNTRIES_F = [
+  { name:"Nigeria",      flag:"🇳🇬", count:790 },
+  { name:"Kenya",        flag:"🇰🇪", count:390 },
+  { name:"South Africa", flag:"🇿🇦", count:342 },
+  { name:"Pan-African",  flag:"🌍",  count:226 },
+  { name:"Ghana",        flag:"🇬🇭", count:210 },
+  { name:"Egypt",        flag:"🇪🇬", count:205 },
+  { name:"Uganda",       flag:"🇺🇬", count:130 },
+  { name:"Tanzania",     flag:"🇹🇿", count:84  },
+  { name:"Rwanda",       flag:"🇷🇼", count:73  },
+  { name:"Morocco",      flag:"🇲🇦", count:59  },
+];
+const CATS_F = [
+  { name:"Fintech",               icon:"💳", count:813 },
+  { name:"Health Tech",           icon:"🩺", count:157 },
+  { name:"Crypto & Web3",         icon:"🪙", count:120 },
+  { name:"E-commerce & Retail",   icon:"🛒", count:111 },
+  { name:"EdTech",                icon:"🎓", count:86  },
+  { name:"Logistics & Supply Chain",icon:"🚚",count:84 },
+  { name:"AI & Analytics",        icon:"🤖", count:73  },
+  { name:"Agri Tech",             icon:"🌾", count:72  },
+  { name:"HR & Talent",           icon:"👥", count:53  },
+  { name:"Marketing & CRM",       icon:"📣", count:41  },
+];
+const TAGS_F = [
+  { name:"SaaS", count:930 }, { name:"B2B2C", count:666 }, { name:"B2C", count:665 },
+  { name:"B2B", count:645 }, { name:"AI-Powered", count:404 }, { name:"Marketplace", count:369 },
+  { name:"Lending and Loans", count:282 }, { name:"Mobile Money", count:262 },
+  { name:"Cross-Border Payments", count:220 }, { name:"Bill Payments", count:202 },
+];
+const SORTS = [
+  { key:"popular", label:"Most popular" }, { key:"newest", label:"Newest" },
+  { key:"rating",  label:"Top rated"   }, { key:"reviews", label:"Most reviewed" },
+];
+const RATINGS = [
+  { key:"any", label:"Any" }, { key:"3", label:"3.0+" },
+  { key:"4",   label:"4.0+" }, { key:"4.5", label:"4.5+" },
+];
+const QUICK = [
+  { key:"verified",    label:"Verified",         icon:"✔" },
+  { key:"reviews",     label:"Has reviews",      icon:"★" },
+  { key:"alternatives",label:"Has alternatives", icon:"⇄" },
+  { key:"opensource",  label:"Open source",      icon:"<>" },
+];
+
+/* ── helpers ── */
+function StarIcon() {
+  return <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3l2.6 5.3 5.9.9-4.3 4.1 1 5.8L12 16.9 6.8 19.2l1-5.8L3.5 9.2l5.9-.9z"/></svg>;
+}
+function SearchIcon() {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>;
+}
+function FilterIcon() {
+  return <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="7" y1="12" x2="17" y2="12"/><line x1="10" y1="18" x2="14" y2="18"/></svg>;
+}
+function CloseIcon() {
+  return <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>;
+}
+function ChevronIcon({ up }) {
+  return <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" style={{transform: up?"rotate(180deg)":"none", transition:"transform .2s"}}><polyline points="6 9 12 15 18 9"/></svg>;
+}
+
+/* ── ProductCard ── */
+function ProductCard({ p }) {
+  return (
+    <div className="card">
+      <div className="card-logo-wrap">
+        <div className="card-logo" style={{ background: p.color }}>{p.initials}</div>
+      </div>
+      <div className="card-meta">
+        <span className="card-name">{p.name}</span>
+        <span className="card-rating"><StarIcon /> {p.rating}</span>
+      </div>
+      <div className="card-tagline">{p.tagline}</div>
+      <div className="card-footer">
+        <span className="card-flag">{p.flag}</span>
+        <span className="card-cat">{p.country}</span>
+      </div>
+    </div>
+  );
+}
+
+/* ── FilterModal ── */
+function FilterModal({ onClose }) {
+  const [countries, setCountries] = useState(new Set());
+  const [categories, setCats]     = useState(new Set());
+  const [tags, setTags]           = useState(new Set());
+  const [rating, setRating]       = useState("any");
+  const [sort, setSort]           = useState("popular");
+  const [quick, setQuick]         = useState(new Set());
+  const [moreC, setMoreC]         = useState(false);
+  const [moreCat, setMoreCat]     = useState(false);
+  const [moreT, setMoreT]         = useState(false);
+
+  const toggle = setter => name => setter(prev => {
+    const next = new Set(prev);
+    next.has(name) ? next.delete(name) : next.add(name);
+    return next;
+  });
+
+  const isDefault = !countries.size && !categories.size && !tags.size && rating === "any" && !quick.size;
+
+  const count = useMemo(() => {
+    const sum = (data, sel) => [...sel].reduce((a,n) => a + (data.find(d => d.name===n)?.count||0), 0);
+    let c = 1923; const groups = [];
+    if (countries.size)  groups.push(sum(COUNTRIES_F, countries));
+    if (categories.size) groups.push(sum(CATS_F, categories));
+    if (tags.size)       groups.push(sum(TAGS_F, tags));
+    if (groups.length)   c = Math.min(c, Math.min(...groups));
+    if (groups.length>1) c *= Math.pow(0.62, groups.length-1);
+    c *= { any:1, "3":0.82, "4":0.55, "4.5":0.3 }[rating];
+    c *= Math.pow(0.72, quick.size);
+    return Math.max(3, Math.round(c));
+  }, [countries, categories, tags, rating, quick]);
+
+  const clearAll = () => { setCountries(new Set()); setCats(new Set()); setTags(new Set()); setRating("any"); setQuick(new Set()); };
+  const ctaLabel = isDefault ? "Show 1,900+ products" : `Show ${count.toLocaleString()} products`;
+
+  const shownC   = moreC   ? COUNTRIES_F : COUNTRIES_F.slice(0,6);
+  const shownCat = moreCat ? CATS_F      : CATS_F.slice(0,6);
+  const shownT   = moreT   ? TAGS_F      : TAGS_F.slice(0,6);
+
+  return (
+    <div className="overlay" onClick={onClose}>
+      <div className="modal" role="dialog" aria-modal="true" onClick={e => e.stopPropagation()}>
+        <header className="modal-header">
+          <button className="modal-close" aria-label="Close" onClick={onClose}><CloseIcon/></button>
+          <span className="modal-title">Filters</span>
+        </header>
+        <div className="modal-body">
+
+          {/* Quick */}
+          <div className="modal-section">
+            <div className="modal-h">Quick filters</div>
+            <div className="modal-sub">Narrow down to the listings that matter</div>
+            <div className="quick-grid">
+              {QUICK.map(q => {
+                const on = quick.has(q.key);
+                return (
+                  <button key={q.key} className={`quick-card ${on?"on":""}`} onClick={() => toggle(setQuick)(q.key)}>
+                    <span style={{fontSize:22}}>{q.icon}</span>
+                    <span style={{fontSize:14}}>{q.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Sort */}
+          <div className="modal-section">
+            <div className="modal-h">Sort by</div>
+            <div className="segment">
+              {SORTS.map(s => <button key={s.key} className={`seg ${sort===s.key?"on":""}`} onClick={() => setSort(s.key)}>{s.label}</button>)}
+            </div>
+          </div>
+
+          {/* Country */}
+          <div className="modal-section">
+            <div className="modal-h">Country</div>
+            <div className="pills">
+              {shownC.map(c => {
+                const on = countries.has(c.name);
+                return (
+                  <button key={c.name} className={`pill ${on?"on":""}`} onClick={() => toggle(setCountries)(c.name)}>
+                    <span>{c.flag}</span>{c.name}<span className="pill-count">{c.count}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <button className="more-btn" onClick={() => setMoreC(v=>!v)}>
+              {moreC ? "Show less" : `Show all ${COUNTRIES_F.length} countries`} <ChevronIcon up={moreC}/>
+            </button>
+          </div>
+
+          {/* Category */}
+          <div className="modal-section">
+            <div className="modal-h">Category</div>
+            <div className="pills">
+              {shownCat.map(c => {
+                const on = categories.has(c.name);
+                return (
+                  <button key={c.name} className={`pill ${on?"on":""}`} onClick={() => toggle(setCats)(c.name)}>
+                    <span>{c.icon}</span>{c.name}<span className="pill-count">{c.count}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <button className="more-btn" onClick={() => setMoreCat(v=>!v)}>
+              {moreCat ? "Show less" : `Show all ${CATS_F.length} categories`} <ChevronIcon up={moreCat}/>
+            </button>
+          </div>
+
+          {/* Rating */}
+          <div className="modal-section">
+            <div className="modal-h">Minimum rating</div>
+            <div className="pills" style={{marginTop:16}}>
+              {RATINGS.map(r => (
+                <button key={r.key} className={`pill ${rating===r.key?"on":""}`} onClick={() => setRating(r.key)}>
+                  {r.key !== "any" && <span>★</span>}{r.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Tags */}
+          <div className="modal-section last">
+            <div className="modal-h">Tags</div>
+            <div className="pills">
+              {shownT.map(t => {
+                const on = tags.has(t.name);
+                return (
+                  <button key={t.name} className={`pill ${on?"on":""}`} onClick={() => toggle(setTags)(t.name)}>
+                    {t.name}<span className="pill-count">{t.count}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <button className="more-btn" onClick={() => setMoreT(v=>!v)}>
+              {moreT ? "Show less" : `Show all ${TAGS_F.length} tags`} <ChevronIcon up={moreT}/>
+            </button>
+          </div>
+
+        </div>
+        <footer className="modal-footer">
+          <button className="clear-btn" onClick={clearAll} disabled={isDefault}>Clear all</button>
+          <button className="cta-btn" onClick={onClose}>{ctaLabel}</button>
+        </footer>
+      </div>
+    </div>
+  );
+}
+
+/* ── App ── */
+function App() {
+  const [activeCat, setActiveCat] = useState("all");
+  const [search, setSearch]       = useState("");
+  const [modal, setModal]         = useState(false);
+  const [hasFilters, setHasFilters] = useState(false);
+
+  const filtered = useMemo(() => {
+    return PRODUCTS.filter(p => {
+      if (activeCat !== "all" && p.cat !== activeCat) return false;
+      if (search && !p.name.toLowerCase().includes(search.toLowerCase()) &&
+          !p.tagline.toLowerCase().includes(search.toLowerCase())) return false;
+      return true;
+    });
+  }, [activeCat, search]);
+
+  return (
+    <div>
+      {/* NAV */}
+      <nav className="nav">
+        <a className="nav-logo" href="#">
+          <span className="nav-logo-dot"/> Liners
+        </a>
+        <div className="search-pill">
+          <div className="search-seg">
+            <label>Search</label>
+            <input
+              placeholder="Software name..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+            />
+          </div>
+          <div className="search-seg">
+            <label>Category</label>
+            <select defaultValue="">
+              <option value="">Any</option>
+              {CATS_F.map(c => <option key={c.name}>{c.name}</option>)}
+            </select>
+          </div>
+          <div className="search-seg">
+            <label>Country</label>
+            <select defaultValue="">
+              <option value="">Any</option>
+              {COUNTRIES_F.map(c => <option key={c.name}>{c.name}</option>)}
+            </select>
+          </div>
+          <button className="search-btn" aria-label="Search"><SearchIcon/></button>
+        </div>
+        <div className="nav-right">
+          <button className="submit-btn">Submit a product</button>
+          <div className="avatar">K</div>
+        </div>
+      </nav>
+
+      {/* CATEGORY BAR */}
+      <div className="cat-bar">
+        <div className="cat-scroll">
+          {CATEGORIES.map(c => (
+            <button
+              key={c.key}
+              className={`cat-chip ${activeCat===c.key?"active":""}`}
+              onClick={() => setActiveCat(c.key)}
+            >
+              <span className="cat-icon">{c.icon}</span>
+              <span>{c.label}</span>
+            </button>
+          ))}
+        </div>
+        <div className="cat-divider"/>
+        <button className="filters-btn" onClick={() => setModal(true)}>
+          <FilterIcon/> Filters {hasFilters && <span className="filters-badge"/>}
+        </button>
+      </div>
+
+      {/* GRID */}
+      <main className="main">
+        <div className="results-label">
+          <strong>{filtered.length.toLocaleString()}</strong> products found
+        </div>
+        <div className="grid">
+          {filtered.map(p => <ProductCard key={p.id} p={p}/>)}
+        </div>
+      </main>
+
+      {/* MODAL */}
+      {modal && <FilterModal onClose={() => setModal(false)}/>}
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App/>);
+</script>
+</body>
+</html>
