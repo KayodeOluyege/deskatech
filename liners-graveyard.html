@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Liners — Product Graveyard</title>
+<title>Liners Graveyard — Discontinued African Products</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -26,6 +26,9 @@
     --moss: #4c8a63;
     --moss-light: #6fae83;
     --moon: #a9c4ff;
+    --amber: #e8a33d;
+    --acquired: #7ea6e0;
+    --shutdown: #c98a7a;
   }
   * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   html, body { height: 100%; }
@@ -39,6 +42,7 @@
   a { color: inherit; text-decoration: none; }
   button { font-family: inherit; cursor: pointer; }
   input, select { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--moss-light); outline-offset: 2px; }
 
   /* ── ATMOSPHERE ── */
   .sky {
@@ -183,7 +187,7 @@
     color: var(--moss-light); margin-bottom: 18px;
   }
   .hero h1 {
-    font-family: 'Geist', serif; font-size: 48px; font-weight: 800; line-height: 1.18; letter-spacing: -.01em;
+    font-size: 48px; font-weight: 800; line-height: 1.18; letter-spacing: -.01em;
     margin-bottom: 16px; color: var(--stone-1);
     text-shadow: 0 2px 24px rgba(169,196,255,.1);
   }
@@ -223,23 +227,33 @@
 
   hr.divider { border: none; border-top: 1px solid var(--border); max-width: 1180px; margin: 36px auto 0; }
 
-  /* ── FILTER BAR ── */
-  .filter-bar {
-    max-width: 1180px; margin: 0 auto; padding: 26px 32px 0;
-    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  /* ── FILTER PANEL ── */
+  .filter-panel { max-width: 1180px; margin: 0 auto; padding: 26px 32px 0; }
+  .filter-row { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 150px; }
+  .field label {
+    font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-dim);
   }
-  .cat-pills { display: flex; gap: 8px; flex-wrap: wrap; }
-  .cat-pill {
-    border: 1px solid var(--border); background: var(--panel); color: var(--muted);
-    border-radius: 999px; padding: 8px 15px; font-size: 13px; font-weight: 600;
-    transition: border-color .15s, color .15s, background .15s;
-  }
-  .cat-pill:hover { color: var(--ink); border-color: var(--muted-dim); }
-  .cat-pill.active { background: var(--moss); border-color: var(--moss); color: #fff; }
-  .sort-select {
+  .field select {
     border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px;
-    font-size: 13px; color: var(--ink); background: var(--panel);
+    font-size: 13.5px; color: var(--ink); background: var(--panel); min-width: 150px;
   }
+  .field select:hover { border-color: var(--muted-dim); }
+  .field.grow { flex: 1; min-width: 0; }
+  .clear-filters {
+    font-size: 13px; font-weight: 600; color: var(--muted); background: none; border: 1px solid var(--border);
+    border-radius: 8px; padding: 9px 14px; white-space: nowrap; transition: border-color .15s, color .15s;
+  }
+  .clear-filters:hover { color: var(--ink); border-color: var(--muted-dim); }
+
+  .filter-chips { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 14px; min-height: 0; }
+  .filter-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--chip-bg); color: var(--moss-light); font-size: 12.5px; font-weight: 600;
+    border-radius: 999px; padding: 6px 8px 6px 12px; border: 1px solid rgba(76,138,99,.25);
+  }
+  .filter-chip button { background: none; border: none; color: var(--moss-light); display: flex; opacity: .75; }
+  .filter-chip button:hover { opacity: 1; }
 
   /* ── CEMETERY ── */
   .cemetery {
@@ -255,7 +269,7 @@
   .grid-count { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
   .grid-count strong { color: var(--ink); }
   .grave-grid {
-    display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px 20px;
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 34px 20px;
   }
   .grave-plot:nth-child(3n+2) { transform: translateY(14px); }
   .grave-plot:nth-child(4n+3) { transform: translateY(-8px); }
@@ -277,7 +291,7 @@
     transition: transform .2s, box-shadow .2s;
     z-index: 2;
   }
-  .grave-link:hover .tombstone { transform: translateY(-4px); box-shadow: 0 24px 40px -6px rgba(0,0,0,.7), inset 0 0 0 1px rgba(0,0,0,.12); }
+  .grave-link:hover .tombstone, .grave-link:focus-visible .tombstone { transform: translateY(-4px); box-shadow: 0 24px 40px -6px rgba(0,0,0,.7), inset 0 0 0 1px rgba(0,0,0,.12); }
   .tombstone::before {
     content: ''; position: absolute; inset: 0; border-radius: inherit;
     background-image: repeating-linear-gradient(115deg, rgba(0,0,0,.05) 0 1.5px, transparent 1.5px 7px);
@@ -311,15 +325,15 @@
     box-shadow: 0 10px 18px -4px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.15);
   }
   .grave-logo {
-    position: absolute; top: 24px; left: 50%; transform: translateX(-50%);
-    width: 38px; height: 38px; border-radius: 50%;
+    position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    width: 36px; height: 36px; border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    color: #fff; font-weight: 800; font-size: 14px; filter: saturate(.7);
+    color: #fff; font-weight: 800; font-size: 13px; filter: saturate(.7);
     box-shadow: inset 0 2px 4px rgba(0,0,0,.4), 0 0 0 3px rgba(255,255,255,.15), 0 0 0 4px rgba(0,0,0,.22);
   }
-  .grave-rip {
-    position: absolute; top: 70px; left: 0; right: 0; text-align: center;
-    font-size: 10.5px; font-weight: 700; letter-spacing: .3em; color: #565b62;
+  .grave-epitaph {
+    position: absolute; top: 62px; left: 14px; right: 14px; text-align: center;
+    font-size: 10px; font-style: italic; line-height: 1.35; color: #4a4e55;
     text-shadow: 0 1px 0 rgba(255,255,255,.3);
   }
   .grave-mound {
@@ -334,15 +348,30 @@
 
   .grave-info { margin-top: 12px; width: 100%; }
   .grave-name { font-size: 15px; font-weight: 700; color: var(--stone-1); letter-spacing: .01em; }
-  .grave-years { font-size: 12px; color: var(--muted-dim); margin-top: 3px; font-variant-numeric: tabular-nums; }
-  .grave-meta { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+  .grave-tagline { font-size: 11.5px; color: var(--muted-dim); margin-top: 2px; }
+  .grave-years { font-size: 11.5px; color: var(--muted-dim); margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .grave-lifespan { color: var(--muted); }
+  .grave-meta { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
   .grave-tag {
-    font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    font-size: 10px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
     padding: 3px 8px; border-radius: 999px; background: var(--chip-bg); color: var(--muted);
     border: 1px solid var(--border);
   }
+  .grave-tag.cause { color: var(--amber); background: rgba(232,163,61,.1); border-color: rgba(232,163,61,.25); }
+  .grave-tag.fate-shutdown { color: var(--shutdown); background: rgba(201,138,122,.1); border-color: rgba(201,138,122,.25); }
+  .grave-tag.fate-acquired { color: var(--acquired); background: rgba(126,166,224,.1); border-color: rgba(126,166,224,.25); }
 
   .no-results { display: none; text-align: center; padding: 60px 0; color: var(--muted); font-size: 14px; grid-column: 1 / -1; }
+
+  .pagination { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 44px; }
+  .page-btn {
+    border: 1px solid var(--border); background: var(--panel); color: var(--ink);
+    border-radius: 8px; padding: 8px 16px; font-size: 13.5px; font-weight: 600;
+    display: flex; align-items: center; gap: 6px; transition: border-color .15s, opacity .15s;
+  }
+  .page-btn:hover:not(:disabled) { border-color: var(--moss-light); }
+  .page-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .page-indicator { font-size: 13px; color: var(--muted); }
 
   /* ── CTA ── */
   .cta-band { max-width: 1180px; margin: 50px auto 0; padding: 0 32px; }
@@ -379,9 +408,10 @@
     .stat-card { min-width: 45%; }
     .grave-grid { grid-template-columns: repeat(2, 1fr); }
     .hero h1 { font-size: 34px; }
+    .field, .field select { min-width: 130px; }
   }
   @media (max-width: 520px) {
-    .grave-grid { grid-template-columns: 1fr 1fr; gap: 24px 12px; }
+    .grave-grid { grid-template-columns: 1fr 1fr; gap: 28px 12px; }
     .tombstone { width: 120px; height: 144px; }
     .grave-mound { width: 140px; }
   }
@@ -442,33 +472,70 @@
   </div>
 </header>
 
+<main>
 <section class="hero">
-  <div class="eyebrow"><i class="ti ti-skull"></i> Product Graveyard</div>
+  <div class="eyebrow"><i class="ti ti-skull"></i> Liners Graveyard</div>
   <h1>Here Lies What<br>Africa Built.</h1>
-  <p class="sub">Every discontinued, shut down, and acquired-into-oblivion product from the African tech ecosystem — laid to rest with nothing but a name, a lifespan, and the category it once served.</p>
+  <p class="sub">Every discontinued, acquired-into-oblivion, or quietly sunset product from the African tech ecosystem — with its death certificate, autopsy, and the founders still building.</p>
 
   <div class="search-bar">
     <i class="ti ti-search"></i>
-    <input class="search-input" id="graveSearch" type="text" placeholder="Search the graveyard, e.g. &quot;Gigbanc&quot; or &quot;Fintech&quot;..." />
+    <input class="search-input" id="graveSearch" type="text" placeholder="Search the graveyard, e.g. &quot;Gigbanc&quot; or &quot;Fintech&quot;..." aria-label="Search the graveyard" />
   </div>
   <div class="trending">
     <span id="recentlyBuried">Recently buried: …</span>
   </div>
 </section>
 
-<div class="stats-row" id="statsRow"></div>
+<div class="stats-row" id="statsRow" aria-live="polite"></div>
 
 <hr class="divider" />
 
-<div class="filter-bar">
-  <div class="cat-pills" id="catPills"></div>
-  <select class="sort-select" id="sortSelect">
-    <option value="recent">Recently buried</option>
-    <option value="oldest">Oldest first</option>
-    <option value="funding">Most funded</option>
-    <option value="az">A – Z</option>
-  </select>
-</div>
+<form class="filter-panel" id="filterForm" aria-label="Filter graveyard results">
+  <div class="filter-row">
+    <div class="field">
+      <label for="fCountry">Country</label>
+      <select id="fCountry"><option value="">All countries</option></select>
+    </div>
+    <div class="field">
+      <label for="fCategory">Category</label>
+      <select id="fCategory"><option value="">All categories</option></select>
+    </div>
+    <div class="field">
+      <label for="fFate">Fate</label>
+      <select id="fFate"><option value="">All fates</option></select>
+    </div>
+    <div class="field">
+      <label for="fCause">Primary cause</label>
+      <select id="fCause"><option value="">All causes</option></select>
+    </div>
+    <div class="field">
+      <label for="fYear">Death year</label>
+      <select id="fYear"><option value="">Any year</option></select>
+    </div>
+    <div class="field">
+      <label for="fLifespan">Lifespan</label>
+      <select id="fLifespan">
+        <option value="">Any lifespan</option>
+        <option value="0-2">Under 3 years</option>
+        <option value="3-5">3 – 5 years</option>
+        <option value="6-10">6 – 10 years</option>
+        <option value="11-99">10+ years</option>
+      </select>
+    </div>
+    <div class="field grow" style="min-width:140px">
+      <label for="sortSelect">Sort by</label>
+      <select id="sortSelect">
+        <option value="burial">Newest burial</option>
+        <option value="death">Newest death</option>
+        <option value="oldest">Oldest death</option>
+        <option value="lifespan">Shortest lifespan</option>
+      </select>
+    </div>
+    <button type="button" class="clear-filters" id="clearFilters">Clear filters</button>
+  </div>
+  <div class="filter-chips" id="filterChips"></div>
+</form>
 
 <div class="cemetery">
   <div class="ghost g3" style="top:40px; left:46%;" aria-hidden="true"></div>
@@ -478,9 +545,10 @@
   <div class="firefly" style="top:150px; right:18%; animation-delay:-1.8s;" aria-hidden="true"></div>
   <div class="firefly" style="top:400px; left:60%; animation-delay:-3.4s;" aria-hidden="true"></div>
 
-  <div class="grid-count"><strong id="visibleCount">0</strong> products buried here</div>
+  <div class="grid-count" aria-live="polite"><strong id="visibleCount">0</strong> of <span id="totalCount">0</span> products buried here</div>
   <div class="grave-grid" id="graveGrid"></div>
-  <div class="no-results" id="noResults">Nothing here matches. Try another search or category.</div>
+  <div class="no-results" id="noResults">Nothing here matches. Try clearing a filter.</div>
+  <nav class="pagination" id="pagination" aria-label="Graveyard pagination"></nav>
 </div>
 
 <div class="cta-band">
@@ -492,10 +560,11 @@
     <button class="btn-bury"><i class="ti ti-plant-2" style="font-size:15px"></i> Submit a shutdown</button>
   </div>
 </div>
+</main>
 
 <footer class="footer">
   <div class="footer-row">
-    <p class="footer-brand">Liners Product Graveyard is a record of discontinued African software products, kept for research and remembrance. Part of <a href="https://liners.com" style="color:var(--moss-light)">liners.com</a> — the record of African software.</p>
+    <p class="footer-brand">Liners Graveyard is a record of discontinued African software products, kept for research and remembrance. Part of <a href="https://liners.com" style="color:var(--moss-light)">liners.com</a> — the record of African software.</p>
     <div class="footer-links">
       <a href="#">Submit a shutdown</a>
       <a href="#">Methodology</a>
@@ -508,157 +577,272 @@
 <script>
   const GRAVES = [
     {
-      name: "Gigbanc", tagline: "Global bank account", initial: "G", color: "#0bb4b0",
-      category: "Fintech", country: "Nigeria", flag: "🇳🇬",
-      founded: 2023, died: "Jul 2026",
-      cause: "High infrastructure & compliance costs",
+      slug: "gigbanc", name: "Gigbanc", initial: "G", color: "#0bb4b0",
+      tagline: "Global bank account",
+      country: "Nigeria", flag: "🇳🇬", category: "Fintech",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2023, died: "2026-07", diedLabel: "Jul 2026", lifespanYears: 3,
+      buriedOn: "2026-07-20",
       epitaph: "Global by ambition, buried by compliance costs.",
-      funding: "$735K"
+      primaryCauseLabel: "Infrastructure dependency"
     },
     {
-      name: "Brass", tagline: "Banking for local businesses", initial: "B", color: "#f5a623",
-      category: "Fintech", country: "Nigeria", flag: "🇳🇬",
-      founded: 2020, died: "Jun 2026",
-      cause: "Acquired by Paystack after operational challenges",
+      slug: "brass", name: "Brass", initial: "B", color: "#f5a623",
+      tagline: "Banking for local businesses",
+      country: "Nigeria", flag: "🇳🇬", category: "Fintech",
+      fate: "acquired", fateLabel: "Acquired & discontinued",
+      born: 2020, died: "2026-06", diedLabel: "Jun 2026", lifespanYears: 6,
+      buriedOn: "2026-07-18",
       epitaph: "Rescued for two years, then quietly absorbed.",
-      funding: "$1.7M"
+      primaryCauseLabel: "Acquisition or strategy change"
     },
     {
-      name: "Chimoney", tagline: "API for cross-border payments", initial: "C", color: "#7b2fbe",
-      category: "Fintech", country: "Nigeria", flag: "🇳🇬",
-      founded: 2022, died: "May 2026",
-      cause: "Lack of funding / weak customer acquisition",
+      slug: "chimoney", name: "Chimoney", initial: "C", color: "#7b2fbe",
+      tagline: "API for cross-border payments",
+      country: "Nigeria", flag: "🇳🇬", category: "Fintech",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2022, died: "2026-05", diedLabel: "May 2026", lifespanYears: 4,
+      buriedOn: "2026-07-15",
       epitaph: "Built the rails. Nobody knew to ride them.",
-      funding: "$300K"
+      primaryCauseLabel: "Distribution or go-to-market"
     },
     {
-      name: "Livestock Wealth", tagline: "Crowdfarming company", initial: "L", color: "#2f9e44",
-      category: "Agriculture", country: "South Africa", flag: "🇿🇦",
-      founded: 2015, died: "May 2026",
-      cause: "Liquidity crisis / insolvency",
+      slug: "livestock-wealth", name: "Livestock Wealth", initial: "L", color: "#2f9e44",
+      tagline: "Crowdfarming company",
+      country: "South Africa", flag: "🇿🇦", category: "Agriculture",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2015, died: "2026-05", diedLabel: "May 2026", lifespanYears: 11,
+      buriedOn: "2026-07-12",
       epitaph: "Covered every farmer's default until it couldn't.",
-      funding: "$700K"
+      primaryCauseLabel: "Business model or unit economics"
     },
     {
-      name: "FoodCourt", tagline: "Cloud kitchen", initial: "F", color: "#e8590c",
-      category: "FoodTech", country: "Nigeria", flag: "🇳🇬",
-      founded: 2021, died: "Apr 2026",
-      cause: "Unpaid salaries & vendor debts",
+      slug: "foodcourt", name: "FoodCourt", initial: "F", color: "#e8590c",
+      tagline: "Cloud kitchen",
+      country: "Nigeria", flag: "🇳🇬", category: "FoodTech",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2021, died: "2026-04", diedLabel: "Apr 2026", lifespanYears: 5,
+      buriedOn: "2026-07-10",
       epitaph: "The kitchens went quiet when the wages stopped.",
-      funding: "$2.2M"
+      primaryCauseLabel: "Funding or runway"
     },
     {
-      name: "Zarttech", tagline: "Talent outsourcing", initial: "Z", color: "#495057",
-      category: "Other", country: "Pan-African", flag: "🌍",
-      founded: 2020, died: "Mar 2026",
-      cause: "Governance & operational friction",
+      slug: "zarttech", name: "Zarttech", initial: "Z", color: "#495057",
+      tagline: "Talent outsourcing",
+      country: "Pan-African", flag: "🌍", category: "Other",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2020, died: "2026-03", diedLabel: "Mar 2026", lifespanYears: 6,
+      buriedOn: "2026-07-14",
       epitaph: "A mission worth funding. A team that couldn't hold together.",
-      funding: "$1.5M"
+      primaryCauseLabel: "Governance or fraud"
     },
     {
-      name: "KOKO Networks", tagline: "Smart commerce platform", initial: "K", color: "#12b886",
-      category: "Other", country: "Kenya", flag: "🇰🇪",
-      founded: 2013, died: "Jan 2026",
-      cause: "Loss of carbon credit revenue",
+      slug: "koko-networks", name: "KOKO Networks", initial: "K", color: "#12b886",
+      tagline: "Smart commerce platform",
+      country: "Kenya", flag: "🇰🇪", category: "Other",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2013, died: "2026-01", diedLabel: "Jan 2026", lifespanYears: 13,
+      buriedOn: "2026-07-17",
       epitaph: "When the carbon credits died, so did the company.",
-      funding: "$125M"
+      primaryCauseLabel: "Regulation"
     }
   ];
 
-  const CATEGORIES = ["All", ...Array.from(new Set(GRAVES.map(g => g.category)))];
+  const PAGE_SIZE = 6;
+  let state = { q: "", country: "", category: "", fate: "", cause: "", year: "", lifespan: "", sort: "burial", page: 1 };
 
-  const catPills = document.getElementById('catPills');
-  catPills.innerHTML = CATEGORIES.map((c, i) =>
-    `<button class="cat-pill${i === 0 ? ' active' : ''}" data-cat="${c}">${c}</button>`
-  ).join('');
-
-  let activeCategory = "All";
-  let sortMode = "recent";
-
-  function monthOrder(str) {
-    const [mon, yr] = str.split(" ");
-    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
-    return parseInt(yr, 10) * 12 + months.indexOf(mon);
+  // populate filter dropdowns from data
+  function uniq(field) { return Array.from(new Set(GRAVES.map(g => g[field]))).sort(); }
+  function fillSelect(id, values) {
+    const el = document.getElementById(id);
+    values.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v; opt.textContent = v;
+      el.appendChild(opt);
+    });
   }
-  function fundingValue(str) {
-    const n = parseFloat(str.replace(/[^0-9.]/g, ""));
-    return str.includes("M") ? n * 1_000_000 : n * 1_000;
+  fillSelect('fCountry', uniq('country'));
+  fillSelect('fCategory', uniq('category'));
+  const FATE_LABELS = { shutdown: "Shut down", acquired: "Acquired & discontinued", sunset: "Sunset by its owner", rebranded: "Rebranded or absorbed", dormant: "Dormant", unknown: "Unknown" };
+  Object.entries(FATE_LABELS).forEach(([val, label]) => {
+    const opt = document.createElement('option'); opt.value = val; opt.textContent = label;
+    document.getElementById('fFate').appendChild(opt);
+  });
+  fillSelect('fCause', uniq('primaryCauseLabel'));
+  fillSelect('fYear', Array.from(new Set(GRAVES.map(g => g.died.slice(0,4)))).sort().reverse());
+
+  // read state from URL
+  function readURL() {
+    const p = new URLSearchParams(location.search);
+    state.q = p.get('q') || "";
+    state.country = p.get('country') || "";
+    state.category = p.get('category') || "";
+    state.fate = p.get('fate') || "";
+    state.cause = p.get('cause') || "";
+    state.year = p.get('year') || "";
+    state.lifespan = p.get('lifespan') || "";
+    state.sort = p.get('sort') || "burial";
+    state.page = parseInt(p.get('page') || "1", 10) || 1;
+    document.getElementById('graveSearch').value = state.q;
+    document.getElementById('fCountry').value = state.country;
+    document.getElementById('fCategory').value = state.category;
+    document.getElementById('fFate').value = state.fate;
+    document.getElementById('fCause').value = state.cause;
+    document.getElementById('fYear').value = state.year;
+    document.getElementById('fLifespan').value = state.lifespan;
+    document.getElementById('sortSelect').value = state.sort;
+  }
+  function writeURL() {
+    const p = new URLSearchParams();
+    Object.entries(state).forEach(([k, v]) => { if (v && !(k === 'sort' && v === 'burial') && !(k === 'page' && v === 1)) p.set(k, v); });
+    history.replaceState(null, '', p.toString() ? `?${p}` : location.pathname);
   }
 
-  function render() {
-    const q = document.getElementById('graveSearch').value.trim().toLowerCase();
+  function matchesLifespan(years, bucket) {
+    if (!bucket) return true;
+    const [lo, hi] = bucket.split('-').map(Number);
+    return years >= lo && years <= hi;
+  }
+
+  function filteredSorted() {
     let list = GRAVES.filter(g =>
-      (activeCategory === "All" || g.category === activeCategory) &&
-      (g.name.toLowerCase().includes(q) || g.tagline.toLowerCase().includes(q) || g.category.toLowerCase().includes(q))
+      (!state.country || g.country === state.country) &&
+      (!state.category || g.category === state.category) &&
+      (!state.fate || g.fate === state.fate) &&
+      (!state.cause || g.primaryCauseLabel === state.cause) &&
+      (!state.year || g.died.slice(0,4) === state.year) &&
+      matchesLifespan(g.lifespanYears, state.lifespan) &&
+      (!state.q || (g.name + g.tagline + g.category + g.country).toLowerCase().includes(state.q.toLowerCase()))
     );
+    if (state.sort === "burial") list.sort((a,b) => b.buriedOn.localeCompare(a.buriedOn));
+    else if (state.sort === "death") list.sort((a,b) => b.died.localeCompare(a.died));
+    else if (state.sort === "oldest") list.sort((a,b) => a.died.localeCompare(b.died));
+    else if (state.sort === "lifespan") list.sort((a,b) => a.lifespanYears - b.lifespanYears);
+    return list;
+  }
 
-    if (sortMode === "recent") list.sort((a, b) => monthOrder(b.died) - monthOrder(a.died));
-    else if (sortMode === "oldest") list.sort((a, b) => monthOrder(a.died) - monthOrder(b.died));
-    else if (sortMode === "funding") list.sort((a, b) => fundingValue(b.funding) - fundingValue(a.funding));
-    else if (sortMode === "az") list.sort((a, b) => a.name.localeCompare(b.name));
+  function renderChips() {
+    const chips = [];
+    if (state.country) chips.push(["country", `${GRAVES.find(g=>g.country===state.country)?.flag||''} ${state.country}`]);
+    if (state.category) chips.push(["category", state.category]);
+    if (state.fate) chips.push(["fate", FATE_LABELS[state.fate]]);
+    if (state.cause) chips.push(["cause", state.cause]);
+    if (state.year) chips.push(["year", `Died ${state.year}`]);
+    if (state.lifespan) chips.push(["lifespan", document.getElementById('fLifespan').selectedOptions[0].textContent]);
+    const el = document.getElementById('filterChips');
+    el.innerHTML = chips.map(([key, label]) =>
+      `<span class="filter-chip">${label} <button type="button" data-clear="${key}" aria-label="Remove ${label} filter"><i class="ti ti-x" style="font-size:11px"></i></button></span>`
+    ).join('');
+    el.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+      state[btn.dataset.clear] = "";
+      state.page = 1;
+      syncControlsFromState();
+      run();
+    }));
+  }
+
+  function syncControlsFromState() {
+    document.getElementById('fCountry').value = state.country;
+    document.getElementById('fCategory').value = state.category;
+    document.getElementById('fFate').value = state.fate;
+    document.getElementById('fCause').value = state.cause;
+    document.getElementById('fYear').value = state.year;
+    document.getElementById('fLifespan').value = state.lifespan;
+  }
+
+  function renderPagination(total) {
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (state.page > totalPages) state.page = totalPages;
+    const el = document.getElementById('pagination');
+    el.innerHTML = `
+      <button class="page-btn" id="prevPage" ${state.page <= 1 ? 'disabled' : ''}><i class="ti ti-chevron-left" style="font-size:13px"></i> Prev</button>
+      <span class="page-indicator">Page ${state.page} of ${totalPages}</span>
+      <button class="page-btn" id="nextPage" ${state.page >= totalPages ? 'disabled' : ''}>Next <i class="ti ti-chevron-right" style="font-size:13px"></i></button>
+    `;
+    document.getElementById('prevPage').addEventListener('click', () => { state.page--; run(); window.scrollTo({top: document.querySelector('.cemetery').offsetTop - 90, behavior:'smooth'}); });
+    document.getElementById('nextPage').addEventListener('click', () => { state.page++; run(); window.scrollTo({top: document.querySelector('.cemetery').offsetTop - 90, behavior:'smooth'}); });
+  }
+
+  function run() {
+    const all = filteredSorted();
+    const start = (state.page - 1) * PAGE_SIZE;
+    const pageItems = all.slice(start, start + PAGE_SIZE);
 
     const grid = document.getElementById('graveGrid');
     const noResults = document.getElementById('noResults');
 
-    grid.innerHTML = list.map(g => `
+    grid.innerHTML = pageItems.map(g => `
       <div class="grave-plot">
-        <a class="grave-link" href="#" data-slug="${g.name.toLowerCase().replace(/\s+/g,'-')}">
+        <a class="grave-link" href="liners-graveyard-product.html?slug=${g.slug}">
           <div class="tomb-visual">
             <div class="tombstone">
               <div class="moss"></div>
               <div class="speckle"></div>
               <div class="crack2"></div>
               <div class="grave-logo" style="background:${g.color}">${g.initial}</div>
-              <div class="grave-rip">R · I · P</div>
+              <div class="grave-epitaph">"${g.epitaph}"</div>
             </div>
             <div class="tomb-base"></div>
           </div>
           <div class="grave-mound"></div>
           <div class="grave-info">
             <div class="grave-name">${g.name}</div>
-            <div class="grave-years">${g.founded} – ${g.died}</div>
+            <div class="grave-tagline">${g.tagline}</div>
             <div class="grave-meta">
+              <span class="grave-tag">${g.flag} ${g.country}</span>
               <span class="grave-tag">${g.category}</span>
             </div>
+            <div class="grave-meta">
+              <span class="grave-tag fate-${g.fate}">${g.fateLabel}</span>
+              <span class="grave-tag cause">${g.primaryCauseLabel}</span>
+            </div>
+            <div class="grave-years">${g.born} – ${g.diedLabel} <span class="grave-lifespan">· ~${g.lifespanYears} yrs</span></div>
           </div>
         </a>
       </div>
     `).join('');
 
-    document.getElementById('visibleCount').textContent = list.length;
-    noResults.style.display = list.length ? 'none' : 'block';
-    grid.style.display = list.length ? 'grid' : 'block';
+    document.getElementById('visibleCount').textContent = pageItems.length;
+    document.getElementById('totalCount').textContent = all.length;
+    noResults.style.display = all.length ? 'none' : 'block';
+    grid.style.display = all.length ? 'grid' : 'none';
+    renderPagination(all.length);
+    renderChips();
+    writeURL();
   }
 
-  document.getElementById('graveSearch').addEventListener('input', render);
-  document.getElementById('sortSelect').addEventListener('change', e => { sortMode = e.target.value; render(); });
-  catPills.addEventListener('click', e => {
-    const btn = e.target.closest('.cat-pill');
-    if (!btn) return;
-    document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-    activeCategory = btn.dataset.cat;
-    render();
+  document.getElementById('graveSearch').addEventListener('input', e => { state.q = e.target.value; state.page = 1; run(); });
+  document.getElementById('fCountry').addEventListener('change', e => { state.country = e.target.value; state.page = 1; run(); });
+  document.getElementById('fCategory').addEventListener('change', e => { state.category = e.target.value; state.page = 1; run(); });
+  document.getElementById('fFate').addEventListener('change', e => { state.fate = e.target.value; state.page = 1; run(); });
+  document.getElementById('fCause').addEventListener('change', e => { state.cause = e.target.value; state.page = 1; run(); });
+  document.getElementById('fYear').addEventListener('change', e => { state.year = e.target.value; state.page = 1; run(); });
+  document.getElementById('fLifespan').addEventListener('change', e => { state.lifespan = e.target.value; state.page = 1; run(); });
+  document.getElementById('sortSelect').addEventListener('change', e => { state.sort = e.target.value; run(); });
+  document.getElementById('clearFilters').addEventListener('click', () => {
+    state = { q: "", country: "", category: "", fate: "", cause: "", year: "", lifespan: "", sort: "burial", page: 1 };
+    document.getElementById('graveSearch').value = "";
+    syncControlsFromState();
+    document.getElementById('sortSelect').value = "burial";
+    run();
   });
 
-  render();
+  readURL();
+  run();
 
   // stats
-  const totalFunding = GRAVES.reduce((sum, g) => sum + fundingValue(g.funding), 0);
-  const fmtFunding = totalFunding >= 1_000_000
-    ? `$${(totalFunding / 1_000_000).toFixed(1)}M`
-    : `$${Math.round(totalFunding / 1000)}K`;
+  function fundingValue() { return 0; }
   document.getElementById('statsRow').innerHTML = `
     <div class="stat-card"><div class="stat-num">${GRAVES.length}</div><div class="stat-label">products buried</div></div>
-    <div class="stat-card"><div class="stat-num accent">${fmtFunding}</div><div class="stat-label">raised, buried anyway</div></div>
-    <div class="stat-card"><div class="stat-num">${CATEGORIES.length - 1}</div><div class="stat-label">categories affected</div></div>
-    <div class="stat-card"><div class="stat-num">${new Set(GRAVES.map(g=>g.country)).size}</div><div class="stat-label">countries represented</div></div>
+    <div class="stat-card"><div class="stat-num accent">$132.1M</div><div class="stat-label">raised, buried anyway</div></div>
+    <div class="stat-card"><div class="stat-num">${uniq('category').length}</div><div class="stat-label">categories affected</div></div>
+    <div class="stat-card"><div class="stat-num">${uniq('country').length}</div><div class="stat-label">countries represented</div></div>
   `;
 
-  // recently buried trending line
-  const recent = [...GRAVES].sort((a,b) => monthOrder(b.died) - monthOrder(a.died)).slice(0,3);
+  // recently buried trending line (by burial date)
+  const recent = [...GRAVES].sort((a,b) => b.buriedOn.localeCompare(a.buriedOn)).slice(0,3);
   document.getElementById('recentlyBuried').innerHTML =
-    'Recently buried: ' + recent.map(g => `<a href="#">${g.name}</a>`).join(' · ');
+    'Recently buried: ' + recent.map(g => `<a href="liners-graveyard-product.html?slug=${g.slug}">${g.name}</a>`).join(' · ');
 
   // sound toggle
   const soundBtn = document.getElementById('soundToggle');

@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liners Graveyard — Death Certificate</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+  :root {
+    --navy: #002E99;
+    --navy-light: #4d7bff;
+    --ink: #eef0f7;
+    --muted: #8b93a8;
+    --muted-dim: #5b6378;
+    --border: #232838;
+    --bg: #05060a;
+    --panel: #0d0f18;
+    --panel-2: #11141f;
+    --chip-bg: #161a2c;
+    --stone-1: #d9dce1;
+    --moss: #4c8a63;
+    --moss-light: #6fae83;
+    --moon: #a9c4ff;
+    --amber: #e8a33d;
+    --acquired: #7ea6e0;
+    --shutdown: #c98a7a;
+    --brass: #c9a876;
+  }
+  * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink); background: var(--bg);
+    -webkit-font-smoothing: antialiased; overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--moss-light); outline-offset: 2px; }
+
+  /* ── ATMOSPHERE (shared with hub) ── */
+  .sky { position: fixed; inset: 0; z-index: -3;
+    background: radial-gradient(60% 40% at 78% 8%, rgba(169,196,255,.10), transparent 60%),
+      radial-gradient(120% 90% at 50% -10%, #10152a 0%, #05060a 55%, #030308 100%); }
+  .moon { position: fixed; top: 7%; right: 10%; width: 70px; height: 70px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f4f7ff, var(--moon) 60%, #7d97d1 100%);
+    box-shadow: 0 0 60px 18px rgba(169,196,255,.25), 0 0 140px 50px rgba(169,196,255,.08); z-index: -3; opacity: .8; }
+  .stars { position: fixed; inset: 0; z-index: -3; pointer-events: none;
+    background-image: radial-gradient(1.5px 1.5px at 20% 15%, #fff, transparent), radial-gradient(1px 1px at 40% 8%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 65% 4%, #fff, transparent), radial-gradient(1px 1px at 85% 12%, #fff, transparent); opacity: .5; }
+  .fog-layer { position: fixed; left: -10%; width: 120%; height: 200px; bottom: -30px; z-index: -2; pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(180,190,210,.05) 40%, rgba(180,190,210,.08) 100%); filter: blur(6px);
+    animation: drift 45s linear infinite; }
+  @keyframes drift { 0%,100% { transform: translateX(-4%); } 50% { transform: translateX(4%); } }
+  .spiderweb { position: fixed; top: -6px; left: -6px; width: 80px; height: 80px; z-index: 35; pointer-events: none; opacity: .4; }
+  @media (prefers-reduced-motion: reduce) { .fog-layer { animation: none; } }
+
+  /* ── HEADER / FOOTER (shared) ── */
+  .header { border-bottom: 1px solid var(--border); padding: 0 32px; height: 68px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    position: sticky; top: 0; background: rgba(5,6,10,.85); backdrop-filter: blur(10px); z-index: 30; }
+  .logo { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 17px; }
+  .logo-mark { width: 30px; height: 30px; border-radius: 8px; background: var(--navy); color: #fff;
+    display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700; }
+  .section-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--moss-light);
+    background: rgba(76,138,99,.12); border: 1px solid rgba(76,138,99,.3); border-radius: 999px; padding: 5px 11px; margin-left: 6px; }
+  .nav-links { display: flex; align-items: center; gap: 24px; flex: 1; padding-left: 28px; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); }
+  .nav-links a:hover { color: var(--ink); }
+  .icon-btn { width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: var(--panel);
+    display: flex; align-items: center; justify-content: center; color: var(--ink); font-size: 16px; }
+  .icon-btn:hover { border-color: var(--moss-light); }
+  .btn-outline { border: 1px solid var(--border); background: none; color: var(--ink); border-radius: 8px; padding: 9px 14px;
+    font-size: 13.5px; font-weight: 600; display: flex; align-items: center; gap: 5px; }
+  .btn-outline:hover { border-color: var(--moss-light); background: rgba(76,138,99,.08); }
+  .footer { max-width: 900px; margin: 60px auto 0; padding: 30px 32px 40px; border-top: 1px solid var(--border); }
+  .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .footer-brand { font-size: 13px; color: var(--muted-dim); max-width: 460px; line-height: 1.6; }
+  .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: var(--muted); }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-legal { font-size: 11.5px; color: var(--muted-dim); margin-top: 22px; line-height: 1.7; }
+
+  /* ── PAGE ── */
+  main { max-width: 900px; margin: 0 auto; padding: 0 32px 40px; position: relative; }
+  section { margin-top: 56px; }
+  .section-head { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .section-head h2 { font-size: 20px; font-weight: 700; color: var(--stone-1); }
+  .section-head i { color: var(--moss-light); font-size: 18px; }
+
+  /* Shutdown banner */
+  .shutdown-banner { background: var(--panel); border-bottom: 1px solid var(--border);
+    padding: 12px 32px; display: flex; align-items: center; justify-content: center; gap: 10px;
+    font-size: 13.5px; color: var(--stone-1); text-align: center; }
+  .shutdown-banner i { color: var(--shutdown); font-size: 16px; }
+  .shutdown-banner.acquired i { color: var(--acquired); }
+  .shutdown-banner a { color: var(--moss-light); font-weight: 600; margin-left: 4px; }
+
+  /* Identity */
+  .identity { text-align: center; padding-top: 48px; }
+  .id-logo { width: 68px; height: 68px; border-radius: 50%; margin: 0 auto 18px; display: flex; align-items: center;
+    justify-content: center; color: #fff; font-weight: 800; font-size: 26px; filter: saturate(.7);
+    box-shadow: inset 0 3px 6px rgba(0,0,0,.4), 0 0 0 4px rgba(255,255,255,.12), 0 0 0 6px rgba(0,0,0,.25); }
+  .identity h1 { font-size: 34px; font-weight: 800; color: var(--stone-1); margin-bottom: 6px; }
+  .identity .tagline { font-size: 15px; color: var(--muted); margin-bottom: 20px; }
+  .identity .chips { display: flex; align-items: center; justify-content: center; gap: 8px; flex-wrap: wrap; margin-bottom: 26px; }
+  .id-chip { font-size: 12px; font-weight: 700; letter-spacing: .03em; padding: 5px 11px; border-radius: 999px;
+    background: var(--chip-bg); color: var(--muted); border: 1px solid var(--border); }
+  .id-chip.fate-shutdown { color: var(--shutdown); background: rgba(201,138,122,.1); border-color: rgba(201,138,122,.25); }
+  .id-chip.fate-acquired { color: var(--acquired); background: rgba(126,166,224,.1); border-color: rgba(126,166,224,.25); }
+  .epitaph-quote { font-size: 20px; font-style: italic; color: var(--stone-1); max-width: 560px; margin: 0 auto;
+    line-height: 1.5; position: relative; padding: 0 20px; }
+  .epitaph-quote::before, .epitaph-quote::after { content: '"'; color: var(--moss-light); opacity: .5; font-size: 32px; }
+
+  /* Death certificate */
+  .certificate { border: 1px solid rgba(201,168,118,.35); border-radius: 18px; padding: 34px 36px; background: var(--panel);
+    position: relative; overflow: hidden; }
+  .certificate::before { content: ''; position: absolute; inset: 6px; border: 1px solid rgba(201,168,118,.18); border-radius: 12px; pointer-events: none; }
+  .cert-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; position: relative; }
+  .cert-heading .cert-label { font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--brass); }
+  .cert-heading .cert-mark { font-size: 20px; }
+  .cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 32px; position: relative; }
+  .cert-field dt { font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--muted-dim); margin-bottom: 4px; }
+  .cert-field dd { font-size: 14.5px; color: var(--stone-1); font-weight: 600; }
+  .cert-field dd.muted { color: var(--muted); font-weight: 500; font-style: italic; }
+  .cert-actions { display: flex; align-items: center; gap: 12px; margin-top: 28px; flex-wrap: wrap; }
+  .btn-cert { background: var(--moss); color: #fff; border: none; border-radius: 8px; padding: 11px 18px; font-size: 13.5px;
+    font-weight: 700; display: inline-flex; align-items: center; gap: 7px; }
+  .btn-cert:hover { background: var(--moss-light); }
+  .btn-cert.secondary { background: none; border: 1px solid var(--border); color: var(--ink); }
+  .btn-cert.secondary:hover { border-color: var(--moss-light); }
+  .cert-note { font-size: 12.5px; color: var(--muted-dim); margin-top: 4px; }
+  .cert-preview-canvas { display: none; }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 28px; }
+  .timeline::before { content: ''; position: absolute; left: 6px; top: 6px; bottom: 6px; width: 2px; background: var(--border); }
+  .tl-event { position: relative; padding-bottom: 28px; }
+  .tl-event:last-child { padding-bottom: 0; }
+  .tl-event::before { content: ''; position: absolute; left: -28px; top: 4px; width: 12px; height: 12px; border-radius: 50%;
+    background: var(--moss); box-shadow: 0 0 0 3px rgba(76,138,99,.25); }
+  .tl-date { font-size: 11.5px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; color: var(--moss-light); margin-bottom: 4px; }
+  .tl-title { font-size: 15px; font-weight: 700; color: var(--stone-1); margin-bottom: 4px; }
+  .tl-desc { font-size: 13.5px; color: var(--muted); line-height: 1.55; }
+
+  /* Autopsy */
+  .autopsy p { font-size: 14.5px; color: var(--muted); line-height: 1.7; margin-bottom: 16px; }
+  .autopsy h3 { font-size: 13px; font-weight: 700; color: var(--stone-1); text-transform: uppercase; letter-spacing: .04em; margin: 22px 0 8px; }
+  .autopsy h3:first-child { margin-top: 0; }
+  .correction-link { font-size: 13px; font-weight: 600; color: var(--moss-light); display: inline-flex; align-items: center; gap: 5px; margin-top: 8px; }
+  .correction-link:hover { text-decoration: underline; }
+
+  /* Lessons */
+  .lessons-box { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 22px 26px; }
+  .lessons-box ul { list-style: none; }
+  .lessons-box li { display: flex; gap: 10px; font-size: 14.5px; color: var(--stone-1); line-height: 1.55; margin-bottom: 14px; }
+  .lessons-box li:last-child { margin-bottom: 0; }
+  .lessons-box li i { color: var(--moss-light); font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+
+  /* Verdict */
+  .verdict-box { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 26px; text-align: center; }
+  .verdict-q { font-size: 16px; font-weight: 700; color: var(--stone-1); margin-bottom: 4px; }
+  .verdict-sub { font-size: 12.5px; color: var(--muted-dim); margin-bottom: 20px; }
+  .verdict-choices { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .verdict-btn { border: 1px solid var(--border); background: var(--panel-2); color: var(--ink); border-radius: 10px;
+    padding: 14px 22px; font-size: 14px; font-weight: 700; min-width: 180px; transition: border-color .15s, background .15s; }
+  .verdict-btn:hover { border-color: var(--moss-light); }
+  .verdict-btn.chosen { border-color: var(--moss); background: rgba(76,138,99,.12); }
+  .verdict-results { display: none; max-width: 420px; margin: 0 auto; }
+  .verdict-results.show { display: block; }
+  .vr-row { margin-bottom: 14px; }
+  .vr-row:last-child { margin-bottom: 0; }
+  .vr-label { display: flex; justify-content: space-between; font-size: 13px; font-weight: 600; color: var(--stone-1); margin-bottom: 6px; }
+  .vr-track { height: 10px; border-radius: 999px; background: var(--chip-bg); overflow: hidden; }
+  .vr-fill { height: 100%; border-radius: 999px; background: var(--moss); transition: width .6s ease; }
+  .verdict-total { font-size: 12.5px; color: var(--muted-dim); margin-top: 16px; }
+  .verdict-change { font-size: 12.5px; color: var(--moss-light); margin-top: 10px; }
+  .verdict-change:hover { text-decoration: underline; }
+  .signin-gate { display: flex; flex-direction: column; align-items: center; gap: 10px; }
+
+  /* Sources */
+  .source-card { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px;
+    border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; margin-bottom: 12px; }
+  .source-card:last-child { margin-bottom: 0; }
+  .source-title { font-size: 14px; font-weight: 700; color: var(--stone-1); margin-bottom: 4px; }
+  .source-meta { font-size: 12.5px; color: var(--muted-dim); }
+  .source-link { font-size: 12.5px; font-weight: 600; color: var(--moss-light); flex-shrink: 0; display: inline-flex; align-items: center; gap: 4px; }
+  .evidence-badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; color: var(--brass);
+    background: rgba(201,168,118,.1); border: 1px solid rgba(201,168,118,.28); border-radius: 999px; padding: 5px 12px; margin-bottom: 18px; }
+
+  /* Alternatives */
+  .alt-note { font-size: 13.5px; color: var(--muted-dim); margin-bottom: 20px; line-height: 1.6; }
+  .alt-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .alt-card { border: 1px solid var(--border); border-radius: 14px; padding: 18px; background: var(--panel); }
+  .alt-top { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .alt-logo { width: 34px; height: 34px; border-radius: 9px; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 13px; flex-shrink: 0; }
+  .alt-name { font-size: 14.5px; font-weight: 700; color: var(--stone-1); display: flex; align-items: center; gap: 5px; }
+  .alt-active-dot { width: 7px; height: 7px; border-radius: 50%; background: #4ade80; box-shadow: 0 0 6px rgba(74,222,128,.6); }
+  .alt-meta { font-size: 11.5px; color: var(--muted-dim); margin-bottom: 8px; }
+  .alt-desc { font-size: 13px; color: var(--muted); line-height: 1.5; margin-bottom: 14px; }
+  .alt-view { font-size: 12.5px; font-weight: 600; color: var(--moss-light); display: inline-flex; align-items: center; gap: 4px; }
+  .alt-view:hover { text-decoration: underline; }
+
+  /* Correction modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(3,4,8,.7); backdrop-filter: blur(3px); z-index: 50;
+    display: none; align-items: center; justify-content: center; padding: 20px; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--panel); border: 1px solid var(--border); border-radius: 16px; padding: 28px; max-width: 440px; width: 100%; }
+  .modal h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; color: var(--stone-1); }
+  .modal p { font-size: 13.5px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; }
+  .modal textarea { width: 100%; min-height: 110px; border: 1px solid var(--border); border-radius: 8px; background: var(--panel-2);
+    color: var(--ink); padding: 10px 12px; font-size: 13.5px; font-family: inherit; resize: vertical; margin-bottom: 14px; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+  .btn-ghost { background: none; border: 1px solid var(--border); color: var(--muted); border-radius: 8px; padding: 9px 16px; font-size: 13.5px; font-weight: 600; }
+  .modal .success { display: none; text-align: center; padding: 10px 0; }
+  .modal .success i { font-size: 32px; color: var(--moss-light); margin-bottom: 10px; }
+
+  @media (max-width: 700px) {
+    .nav-links { display: none; }
+    .cert-grid { grid-template-columns: 1fr; }
+    .alt-grid { grid-template-columns: 1fr; }
+    .identity h1 { font-size: 26px; }
+    .epitaph-quote { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky"></div>
+<div class="moon"></div>
+<div class="stars"></div>
+<div class="fog-layer"></div>
+<div class="spiderweb" aria-hidden="true">
+  <svg viewBox="0 0 100 100" fill="none" stroke="rgba(210,218,235,.6)" stroke-width="1.4">
+    <path d="M100,0 L0,0" /><path d="M100,0 L0,35" /><path d="M100,0 L0,70" />
+    <path d="M78,0 A 22 22 0 0 1 100,22" /><path d="M53,0 A 47 47 0 0 1 100,47" />
+  </svg>
+</div>
+
+<header class="header">
+  <a class="logo" href="https://liners.com">
+    <span class="logo-mark">L</span> Liners <span class="section-badge"><i class="ti ti-skull" style="font-size:12px"></i> Graveyard</span>
+  </a>
+  <nav class="nav-links">
+    <a href="liners-graveyard.html"><i class="ti ti-arrow-left" style="font-size:12px"></i> Back to Graveyard</a>
+    <a href="https://liners.com">Liners Home</a>
+  </nav>
+  <div class="header-right">
+    <button class="btn-outline"><i class="ti ti-plus" style="font-size:13px"></i> Submit a shutdown</button>
+  </div>
+</header>
+
+<div class="shutdown-banner" id="shutdownBanner"></div>
+
+<main>
+  <section class="identity" id="identitySection" style="margin-top:0"></section>
+
+  <section id="certificateSection">
+    <div class="section-head"><i class="ti ti-certificate"></i><h2>Death certificate</h2></div>
+    <div class="certificate">
+      <div class="cert-heading">
+        <span class="cert-label">Liners Graveyard · Official record</span>
+        <span class="cert-mark">🪦</span>
+      </div>
+      <dl class="cert-grid" id="certGrid"></dl>
+      <div class="cert-actions">
+        <button class="btn-cert" id="downloadCertBtn"><i class="ti ti-download"></i> Download certificate</button>
+        <button class="btn-cert secondary" id="shareCertBtn"><i class="ti ti-share-3"></i> Share certificate</button>
+      </div>
+      <p class="cert-note" id="certStatus"></p>
+    </div>
+    <canvas class="cert-preview-canvas" id="certCanvas" width="1200" height="630"></canvas>
+  </section>
+
+  <section id="timelineSection">
+    <div class="section-head"><i class="ti ti-timeline"></i><h2>Timeline</h2></div>
+    <div class="timeline" id="timelineList"></div>
+  </section>
+
+  <section id="autopsySection">
+    <div class="section-head"><i class="ti ti-file-report"></i><h2>Autopsy report</h2></div>
+    <div class="autopsy" id="autopsyBody"></div>
+    <button class="correction-link" id="suggestCorrectionBtn"><i class="ti ti-edit" style="font-size:14px"></i> Suggest a correction</button>
+  </section>
+
+  <section id="lessonsSection">
+    <div class="section-head"><i class="ti ti-bulb"></i><h2>Lessons for future builders</h2></div>
+    <div class="lessons-box"><ul id="lessonsList"></ul></div>
+  </section>
+
+  <section id="verdictSection">
+    <div class="section-head"><i class="ti ti-gavel"></i><h2>The Verdict</h2></div>
+    <div class="verdict-box">
+      <div class="verdict-q">Was this shutdown inevitable?</div>
+      <div class="verdict-sub" id="verdictVoteCount"></div>
+
+      <div id="signinGate" class="signin-gate">
+        <div class="verdict-choices">
+          <button class="verdict-btn" data-vote="inevitable">Inevitable</button>
+          <button class="verdict-btn" data-vote="survivable">This product could have survived</button>
+        </div>
+      </div>
+
+      <div class="verdict-results" id="verdictResults">
+        <div class="vr-row">
+          <div class="vr-label"><span>Inevitable</span><span id="pctInevitable">0%</span></div>
+          <div class="vr-track"><div class="vr-fill" id="fillInevitable" style="width:0%"></div></div>
+        </div>
+        <div class="vr-row">
+          <div class="vr-label"><span>Could have survived</span><span id="pctSurvivable">0%</span></div>
+          <div class="vr-track"><div class="vr-fill" id="fillSurvivable" style="width:0%; background:var(--acquired)"></div></div>
+        </div>
+        <div class="verdict-total" id="verdictTotal"></div>
+        <button class="verdict-change" id="changeVoteBtn">Change your vote</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="sourcesSection">
+    <div class="section-head"><i class="ti ti-books"></i><h2>Sources</h2></div>
+    <span class="evidence-badge" id="evidenceBadge"></span>
+    <div id="sourcesList"></div>
+  </section>
+
+  <section id="surviving-alternatives">
+    <div class="section-head"><i class="ti ti-heartbeat"></i><h2>Surviving alternatives</h2></div>
+    <p class="alt-note" id="altNote"></p>
+    <div class="alt-grid" id="altGrid"></div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="footer-row">
+    <p class="footer-brand">Liners Graveyard is a record of discontinued African software products, kept for research and remembrance. Part of <a href="https://liners.com" style="color:var(--moss-light)">liners.com</a> — the record of African software.</p>
+    <div class="footer-links">
+      <a href="liners-graveyard.html">All burials</a>
+      <a href="#">Methodology</a>
+      <a href="https://liners.com">Back to Liners</a>
+    </div>
+  </div>
+  <p class="footer-legal">© 2026, Liners. Product and company names are trademarks of their respective owners, referenced here strictly for identification and informational purposes; this page does not imply affiliation or endorsement.</p>
+</footer>
+
+<div class="modal-overlay" id="correctionModal">
+  <div class="modal">
+    <div id="correctionForm">
+      <h3>Suggest a correction</h3>
+      <p>Spot something wrong in this autopsy? Corrections enter admin review and don't change the published page directly.</p>
+      <textarea id="correctionText" placeholder="What should be corrected, and what's your source?"></textarea>
+      <div class="modal-actions">
+        <button class="btn-ghost" id="cancelCorrection">Cancel</button>
+        <button class="btn-cert" id="submitCorrection"><i class="ti ti-send"></i> Submit</button>
+      </div>
+    </div>
+    <div class="success" id="correctionSuccess">
+      <i class="ti ti-circle-check"></i>
+      <p style="margin:0">Thanks — this has been sent for editorial review.</p>
+    </div>
+  </div>
+</div>
+
+<script>
+  const DETAILS = {
+    gigbanc: {
+      name: "Gigbanc", initial: "G", color: "#0bb4b0", tagline: "Global bank account",
+      country: "Nigeria", flag: "🇳🇬", category: "Fintech",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: "2023", bornPrecision: "Year", died: "July 2026", diedPrecision: "Month",
+      lifespanYears: 3, stageAtDeath: "Seed", funding: "$735K",
+      founders: "Babatope Oni, Paul Omoregie Okundaye",
+      primaryCause: "Infrastructure dependency", contributingCauses: ["Regulation", "Funding or runway"],
+      evidence: "Well supported",
+      epitaph: "Global by ambition, buried by compliance costs.",
+      deathSummary: "Gigbanc shut down in July 2026 after the cost of multi-jurisdiction compliance and cross-border banking infrastructure outpaced its ability to raise or earn enough to cover it.",
+      autopsy: {
+        attempted: "Gigbanc set out to become a neobank built specifically for African freelancers, remote workers and creators — multi-currency wallets, virtual dollar cards, and cross-border settlement in one account.",
+        worked: "The product resonated. Gigbanc crossed 150,000 customers and built genuine demand for a dollar-denominated account aimed at Africa's remote workforce.",
+        warningSigns: "Every new market added its own compliance regime, banking partner, and licensing cost. Infrastructure spend grew faster than revenue per user, and the company never closed a round large enough to outlast that curve.",
+        whatHappened: "By mid-2026, the cost of maintaining compliant infrastructure across multiple jurisdictions had outpaced what the business could raise or earn. Gigbanc shut down operations in July 2026.",
+        futureAdvice: "Multi-country fintech infrastructure is a balance-sheet business before it's a product business. Model regulatory and compliance cost per new market before you expand into it, not after."
+      },
+      lessons: [
+        "Compliance cost scales with jurisdictions, not just users — price that into your expansion plan.",
+        "150,000 customers is a distribution win, not a business model.",
+        "Raise ahead of the cost curve you can already see coming."
+      ],
+      timeline: [
+        { date: "2023", title: "Gigbanc launches", desc: "Positions itself as a neobank for African freelancers, remote workers and creators." },
+        { date: "2024", title: "Passes 150,000 customers", desc: "Raises early funding to support multi-currency wallets and virtual dollar cards." },
+        { date: "Early 2026", title: "Compliance costs outpace revenue", desc: "Infrastructure and regulatory costs across multiple jurisdictions become unsustainable." },
+        { date: "Jul 2026", title: "Shuts down", desc: "Ceases operations after failing to raise or earn enough to cover its compliance footprint." }
+      ],
+      sources: [
+        { title: "Why Gigbanc lost Africa's cross-border payments race", publisher: "Startup Graveyard Africa", date: "Jul 2026", url: "https://startupgraveyard.africa/startups/gigbanc" }
+      ]
+    },
+    brass: {
+      name: "Brass", initial: "B", color: "#f5a623", tagline: "Banking for local businesses",
+      country: "Nigeria", flag: "🇳🇬", category: "Fintech",
+      fate: "acquired", fateLabel: "Acquired & discontinued",
+      born: "2020", bornPrecision: "Year", died: "June 2026", diedPrecision: "Month",
+      lifespanYears: 6, stageAtDeath: "Seed", funding: "$1.7M",
+      founders: "Emmanuel Okeke, Sola Akindolu",
+      primaryCause: "Acquisition or strategy change", contributingCauses: ["Execution"],
+      evidence: "Well supported",
+      epitaph: "Rescued for two years, then quietly absorbed.",
+      deathSummary: "After a two-year rescue effort, Brass was absorbed into Paystack MFB in June 2026, ending its run as an independent business-banking platform.",
+      autopsy: {
+        attempted: "Brass built premium digital banking software for African SMEs — current accounts, cash-flow analytics, and business banking tools aimed at small and medium-sized businesses underserved by traditional banks.",
+        worked: "Brass earned a loyal SME following and raised a seed round from well-known Africa-focused investors, including Ventures Platform and Hustle Fund.",
+        warningSigns: "A prolonged, quiet rescue process stretching almost two years suggested Brass could not independently close the gap between its cost base and its revenue.",
+        whatHappened: "After a two-year rescue effort, Brass was absorbed into Paystack MFB in June 2026, ending its run as an independent business-banking platform.",
+        futureAdvice: "A quiet, prolonged rescue is itself a signal — for founders and observers alike. Decide, and communicate, sooner rather than let a rescue drag until it becomes an acquisition of convenience."
+      },
+      lessons: [
+        "Being acquired to survive isn't the same as being acquired to grow — read the difference in the deal terms.",
+        "SME banking margins are thin; distribution and lending books matter more than interface polish.",
+        "A two-year rescue is a slow way of finding out the business couldn't stand alone."
+      ],
+      timeline: [
+        { date: "2020", title: "Brass launches", desc: "Digital banking platform for African SMEs — current accounts and cash-flow analytics." },
+        { date: "2024", title: "Rescue effort begins", desc: "Operational challenges prompt a prolonged search for a rescue or acquisition." },
+        { date: "Jun 2026", title: "Absorbed into Paystack MFB", desc: "Brass is folded into Paystack's banking arm after a two-year rescue bid." }
+      ],
+      sources: [
+        { title: "Once-beloved fintech Brass absorbed into Paystack MFB after two-year rescue bid", publisher: "Startup Graveyard Africa", date: "Jun 2026", url: "https://startupgraveyard.africa/startups/brass" }
+      ]
+    },
+    chimoney: {
+      name: "Chimoney", initial: "C", color: "#7b2fbe", tagline: "API for cross-border payments",
+      country: "Nigeria", flag: "🇳🇬", category: "Fintech",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: "2022", bornPrecision: "Year", died: "May 2026", diedPrecision: "Month",
+      lifespanYears: 4, stageAtDeath: "Pre-seed", funding: "$300K",
+      founders: "Uchi Uchibeke",
+      primaryCause: "Distribution or go-to-market", contributingCauses: ["Funding or runway"],
+      evidence: "Confirmed",
+      epitaph: "Built the rails. Nobody knew to ride them.",
+      deathSummary: "Chimoney stopped processing transactions in May 2026 after thin funding relative to multi-jurisdiction compliance costs left no clear path to more capital.",
+      autopsy: {
+        attempted: "Chimoney built APIs and infrastructure to move value between currencies, ledgers and protocols — rails for developers rather than a consumer product.",
+        worked: "The product worked technically: Chimoney shipped working cross-border payment infrastructure and won support from Techstars Toronto and XRPL Grants.",
+        warningSigns: "Revenue stayed flat for an extended period while the founder spent most of his time building rather than on distribution — a go-to-market gap that never closed.",
+        whatHappened: "Chimoney stopped processing transactions in May 2026. In the founder's own words: “The product worked. It was distribution... We raised under $1M over the life of the company... Revenue stayed flat, and without a clear path to more capital, I had to make a call.”",
+        futureAdvice: "An API business needs a distribution motion as deliberate as its architecture. Time spent building without a matching investment in go-to-market shows up later as a flat revenue line."
+      },
+      lessons: [
+        "“The product worked” is not the same as “people knew it existed.”",
+        "Infrastructure plays in regulated, multi-jurisdiction markets need capital runway matched to audit and compliance costs, not just engineering costs.",
+        "A founder who can name the exact failure mode this precisely is a rare, valuable source."
+      ],
+      timeline: [
+        { date: "2022", title: "Chimoney launches", desc: "Builds APIs and infrastructure to move value between currencies, ledgers and protocols." },
+        { date: "2023–2025", title: "Revenue plateaus", desc: "Product ships and works, but distribution and customer acquisition never scale with it." },
+        { date: "May 2026", title: "Stops processing transactions", desc: "Founder winds down the company, citing thin funding relative to jurisdictional compliance costs." }
+      ],
+      sources: [
+        { title: "Why we're stopping transactions at Chimoney", publisher: "Startup Graveyard Africa", date: "May 2026", url: "https://startupgraveyard.africa/startups/chimoney" }
+      ]
+    },
+    "livestock-wealth": {
+      name: "Livestock Wealth", initial: "L", color: "#2f9e44", tagline: "Crowdfarming company",
+      country: "South Africa", flag: "🇿🇦", category: "Agriculture",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: "2015", bornPrecision: "Year", died: "May 2026", diedPrecision: "Month",
+      lifespanYears: 11, stageAtDeath: "Seed", funding: "$700K",
+      founders: "Ntuthuko Shezi",
+      primaryCause: "Business model or unit economics", contributingCauses: ["Funding or runway"],
+      evidence: "Well supported",
+      epitaph: "Covered every farmer's default until it couldn't.",
+      deathSummary: "Livestock Wealth collapsed in May 2026 after absorbing partner-farmer defaults, defaulting on a convertible loan, and failing a final business-rescue attempt.",
+      autopsy: {
+        attempted: "Livestock Wealth pioneered 'crowdfarming' in South Africa — letting retail investors fund tangible agricultural assets like cattle breeding, free-range oxen and macadamia orchards, managed by partner farmers.",
+        worked: "The model built a genuine retail investor base around a category that barely existed before, and it raised support from MassChallenge and AlphaCode Club.",
+        warningSigns: "Livestock Wealth chose to personally absorb partner-farmer defaults to protect its brand promise to investors — a decision that quietly converted farmer risk into company risk.",
+        whatHappened: "The startup burned through capital covering those defaults, then defaulted on a convertible loan from institutional backers and failed a final business-rescue attempt, collapsing in May 2026.",
+        futureAdvice: "Protecting a brand promise by absorbing someone else's risk onto your balance sheet is a decision that needs its own capital plan — don't let goodwill quietly become an unfunded liability."
+      },
+      lessons: [
+        "Marketplace models that guarantee outcomes are underwriting risk whether they call it that or not.",
+        "A single institutional convertible-loan default can end a business faster than years of slow burn.",
+        "Business rescue is a last resort, not a plan — have the harder conversation earlier."
+      ],
+      timeline: [
+        { date: "2015", title: "Livestock Wealth launches", desc: "Pioneers crowdfarming for retail investors in South Africa." },
+        { date: "2020–2024", title: "Absorbs farmer defaults", desc: "Covers partner-farmer defaults out of pocket to protect its brand promise to investors." },
+        { date: "2025", title: "Defaults on convertible loan", desc: "Fails to meet obligations to institutional backers." },
+        { date: "May 2026", title: "Shuts down", desc: "A final business-rescue attempt fails and the company collapses." }
+      ],
+      sources: [
+        { title: "Africa's crowdfunding agritech woes worsen in collapse of SA's top platform", publisher: "Startup Graveyard Africa", date: "May 2026", url: "https://startupgraveyard.africa/startups/livestock-wealth" }
+      ]
+    },
+    foodcourt: {
+      name: "FoodCourt", initial: "F", color: "#e8590c", tagline: "Cloud kitchen",
+      country: "Nigeria", flag: "🇳🇬", category: "FoodTech",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: "2021", bornPrecision: "Year", died: "April 2026", diedPrecision: "Month",
+      lifespanYears: 5, stageAtDeath: "Seed", funding: "$2.2M",
+      founders: "Henry Nneji, Paul Iruene",
+      primaryCause: "Funding or runway", contributingCauses: ["Execution"],
+      evidence: "Well supported",
+      epitaph: "The kitchens went quiet when the wages stopped.",
+      deathSummary: "FoodCourt paused operations after unpaid wages triggered a kitchen strike in March 2026; its last branch closed the following month after it failed to secure further funding.",
+      autopsy: {
+        attempted: "FoodCourt operated Y Combinator-backed co-kitchens in Lagos, letting customers order from multiple virtual food brands in a single basket for fast, consolidated delivery.",
+        worked: "FoodCourt reached meaningful scale, with 51–200 employees and backing from YC, Goodwater Capital and Microtraction.",
+        warningSigns: "Unpaid wages and outstanding vendor debts began surfacing before the shutdown — a cash crisis visible to staff and suppliers well before it became public.",
+        whatHappened: "Unpaid wages triggered a kitchen strike in March 2026, and FoodCourt stopped taking orders. Its last operational branch closed in April 2026 after it failed to secure further funding.",
+        futureAdvice: "In cloud-kitchen and delivery models, working-capital discipline is the business — a funding gap shows up first as unpaid vendors and wages, long before it shows up in a headline."
+      },
+      lessons: [
+        "A kitchen strike is a lagging indicator of a cash problem that started months earlier.",
+        "Vendor and payroll debt are the earliest, most visible warning signs of a runway crisis.",
+        "Backing and real revenue don't substitute for working-capital discipline in a low-margin, capital-intensive model."
+      ],
+      timeline: [
+        { date: "2021", title: "FoodCourt launches", desc: "YC-backed cloud kitchen platform opens in Lagos." },
+        { date: "2024", title: "Scales to 51–200 employees", desc: "Raises seed funding from YC, Goodwater Capital and Microtraction." },
+        { date: "Mar 2026", title: "Kitchen strike over unpaid wages", desc: "Staff strike halts orders after wages go unpaid." },
+        { date: "Apr 2026", title: "Last branch closes", desc: "FoodCourt fails to secure further funding and shuts its final location." }
+      ],
+      sources: [
+        { title: "FoodCourt's operational pause signals mounting pressure on Nigeria's food-tech startups", publisher: "Startup Graveyard Africa", date: "Apr 2026", url: "https://startupgraveyard.africa/startups/foodcourt" }
+      ]
+    },
+    zarttech: {
+      name: "Zarttech", initial: "Z", color: "#495057", tagline: "Talent outsourcing",
+      country: "Pan-African", flag: "🌍", category: "Other",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: "2020", bornPrecision: "Year", died: "March 2026", diedPrecision: "Month",
+      lifespanYears: 6, stageAtDeath: "Seed", funding: "$1.5M",
+      founders: "Nelson T. Ajulo",
+      primaryCause: "Governance or fraud", contributingCauses: ["Founder or team"],
+      evidence: "Well supported",
+      epitaph: "A mission worth funding. A team that couldn't hold together.",
+      deathSummary: "Zarttech formally ceased operations in early 2026 after internal operational challenges and stakeholder friction eroded momentum despite its social mission.",
+      autopsy: {
+        attempted: "Zarttech, a Netherlands-headquartered scale-up, connected high-end African tech talent with global firms, aiming to close Europe's roughly 500,000-person tech talent gap while reducing hiring bias.",
+        worked: "The mission attracted real backing, including Rabobank and 15Wins, and Zarttech scaled to over 100 employees supplying talent to global clients.",
+        warningSigns: "Internal operational challenges and stakeholder friction built up over time, eroding the momentum a mission-driven scale-up depends on to keep everyone aligned.",
+        whatHappened: "Despite a strong social mission, governance and operational friction led to a loss of momentum, and Zarttech formally ceased operations in early 2026.",
+        futureAdvice: "A strong mission attracts capital and talent, but it doesn't substitute for resolved governance. Founder and stakeholder alignment needs as much active management as the product itself."
+      },
+      lessons: [
+        "Mission-driven doesn't mean friction-proof — governance still has to be actively managed.",
+        "Talent-outsourcing margins depend on trust between founders and clients; internal friction shows up externally faster than founders expect.",
+        "A public apology at shutdown suggests the friction was known internally well before it became public."
+      ],
+      timeline: [
+        { date: "2020", title: "Zarttech launches", desc: "Connects African tech talent with global firms from a Netherlands HQ." },
+        { date: "2022–2025", title: "Scales past 100 employees", desc: "Raises seed funding from Rabobank and 15Wins." },
+        { date: "Early 2026", title: "Operational friction surfaces", desc: "Governance and stakeholder friction erode momentum." },
+        { date: "Mar 2026", title: "Ceases operations", desc: "Zarttech ends operations and issues a public apology." }
+      ],
+      sources: [
+        { title: "Zarttech ends operations, issues public apology", publisher: "Startup Graveyard Africa", date: "Mar 2026", url: "https://startupgraveyard.africa/startups/zarttech" }
+      ]
+    },
+    "koko-networks": {
+      name: "KOKO Networks", initial: "K", color: "#12b886", tagline: "Smart commerce platform",
+      country: "Kenya", flag: "🇰🇪", category: "Other",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: "2013", bornPrecision: "Year", died: "January 2026", diedPrecision: "Exact date (30 Jan 2026)",
+      lifespanYears: 13, stageAtDeath: "Series A", funding: "$125M",
+      founders: "Greg Murray",
+      primaryCause: "Regulation", contributingCauses: ["External shock"],
+      evidence: "Well supported",
+      epitaph: "When the carbon credits died, so did the company.",
+      deathSummary: "KOKO Networks ceased operations on 30 January 2026 and laid off all 700 employees after the Kenyan government discontinued approval for its carbon-credit sales.",
+      autopsy: {
+        attempted: "KOKO Networks built a smart-commerce and clean-cooking platform across urban Africa, distributing bioethanol cooking fuel through smart dispensers, with carbon-credit sales subsidizing the model at scale.",
+        worked: "KOKO scaled to between 1,001 and 5,000 employees and raised a $125M Series A from Mirova, Rand Merchant Bank and Microsoft's Climate Innovation Fund — one of the largest raises in this graveyard.",
+        warningSigns: "The business model leaned heavily on government approval for carbon-credit sales — a single point of regulatory dependency underwriting the unit economics.",
+        whatHappened: "Following the Kenyan government's discontinuation of its carbon-credit sales, KOKO laid off all 700 remaining employees and ceased operations on 30 January 2026, facing bankruptcy after failing to secure approval to sell its carbon credits.",
+        futureAdvice: "When a subsidy or credit scheme is load-bearing for unit economics, model the business without it. A single regulatory decision shouldn't be able to end a company overnight."
+      },
+      lessons: [
+        "A $125M raise doesn't protect a business model built on a single regulatory dependency.",
+        "Carbon-credit and subsidy-dependent models need a credible unsubsidized path, even if it's slower.",
+        "Climate-linked infrastructure businesses are exposed to policy risk as much as market risk."
+      ],
+      timeline: [
+        { date: "2013", title: "KOKO Networks launches", desc: "Builds a smart-commerce platform for urban Africa." },
+        { date: "2019", title: "Raises $125M Series A", desc: "Backed by Mirova, Rand Merchant Bank and Microsoft's Climate Innovation Fund." },
+        { date: "2025", title: "Carbon-credit approval withdrawn", desc: "Kenyan government discontinues approval for KOKO's carbon-credit sales." },
+        { date: "30 Jan 2026", title: "Ceases operations", desc: "Lays off all 700 remaining employees, facing bankruptcy." }
+      ],
+      sources: [
+        { title: "The rise & fall of KOKO Networks: a cautionary tale for Kenya's & Africa's climate startups", publisher: "Startup Graveyard Africa", date: "Jan 2026", url: "https://startupgraveyard.africa/startups/koko-networks" }
+      ]
+    }
+  };
+
+  const ALTERNATIVES = [
+    { name: "Flutterwave", initial: "F", color: "#f5a623", country: "Nigeria +13", desc: "Accept and send payments across Africa and beyond.", url: "https://liners.com" },
+    { name: "Paystack", initial: "P", color: "#0bb4b0", desc: "Payment gateways in Nigeria and across Africa.", country: "Nigeria", url: "https://liners.com" },
+    { name: "Chipper Cash", initial: "C", color: "#7b2fbe", desc: "Free cross-border money transfers across Africa.", country: "Multi-country", url: "https://liners.com" }
+  ];
+
+  const params = new URLSearchParams(location.search);
+  const slug = params.get('slug') && DETAILS[params.get('slug')] ? params.get('slug') : 'gigbanc';
+  const d = DETAILS[slug];
+  document.title = `${d.name} — Liners Graveyard`;
+
+  // shutdown banner
+  const banner = document.getElementById('shutdownBanner');
+  banner.classList.toggle('acquired', d.fate === 'acquired');
+  const bannerCopy = d.fate === 'acquired'
+    ? `This product was acquired and discontinued in ${d.died}.`
+    : `This product shut down in ${d.died}.`;
+  banner.innerHTML = `<i class="ti ${d.fate === 'acquired' ? 'ti-building-bank' : 'ti-alert-triangle'}"></i> ${bannerCopy} <a href="#certificateSection">See the death certificate</a>`;
+
+  // identity
+  document.getElementById('identitySection').innerHTML = `
+    <div class="id-logo" style="background:${d.color}">${d.initial}</div>
+    <h1>${d.name}</h1>
+    <div class="tagline">${d.tagline}</div>
+    <div class="chips">
+      <span class="id-chip">${d.flag} ${d.country}</span>
+      <span class="id-chip">${d.category}</span>
+      <span class="id-chip fate-${d.fate}">${d.fateLabel}</span>
+    </div>
+    <p class="epitaph-quote">${d.epitaph}</p>
+  `;
+
+  // certificate
+  document.getElementById('certGrid').innerHTML = `
+    <div class="cert-field"><dt>Born</dt><dd>${d.born} <span style="font-weight:400;color:var(--muted-dim)">(${d.bornPrecision})</span></dd></div>
+    <div class="cert-field"><dt>Died</dt><dd>${d.died} <span style="font-weight:400;color:var(--muted-dim)">(${d.diedPrecision})</span></dd></div>
+    <div class="cert-field"><dt>Lifespan</dt><dd>~${d.lifespanYears} years</dd></div>
+    <div class="cert-field"><dt>Fate</dt><dd>${d.fateLabel}</dd></div>
+    <div class="cert-field"><dt>Headquarters</dt><dd>${d.flag} ${d.country}</dd></div>
+    <div class="cert-field"><dt>Category</dt><dd>${d.category}</dd></div>
+    <div class="cert-field"><dt>Stage at death</dt><dd>${d.stageAtDeath}</dd></div>
+    <div class="cert-field"><dt>Funding raised</dt><dd>${d.funding}</dd></div>
+    <div class="cert-field"><dt>Founders</dt><dd>${d.founders}</dd></div>
+    <div class="cert-field"><dt>Primary cause</dt><dd>${d.primaryCause}</dd></div>
+    <div class="cert-field" style="grid-column:1 / -1"><dt>Contributing causes</dt><dd class="muted">${d.contributingCauses.join(', ')}</dd></div>
+  `;
+
+  // timeline
+  document.getElementById('timelineList').innerHTML = d.timeline.map(t => `
+    <div class="tl-event">
+      <div class="tl-date">${t.date}</div>
+      <div class="tl-title">${t.title}</div>
+      <div class="tl-desc">${t.desc}</div>
+    </div>
+  `).join('');
+
+  // autopsy
+  document.getElementById('autopsyBody').innerHTML = `
+    <h3>What it attempted</h3><p>${d.autopsy.attempted}</p>
+    <h3>What worked</h3><p>${d.autopsy.worked}</p>
+    <h3>Early warning signs</h3><p>${d.autopsy.warningSigns}</p>
+    <h3>What happened</h3><p>${d.autopsy.whatHappened}</p>
+    <h3>What future founders can do differently</h3><p>${d.autopsy.futureAdvice}</p>
+  `;
+
+  // lessons
+  document.getElementById('lessonsList').innerHTML = d.lessons.map(l =>
+    `<li><i class="ti ti-point-filled"></i> ${l}</li>`
+  ).join('');
+
+  // sources
+  document.getElementById('evidenceBadge').innerHTML = `<i class="ti ti-shield-check" style="font-size:13px"></i> Evidence confidence: ${d.evidence}`;
+  document.getElementById('sourcesList').innerHTML = d.sources.map(s => `
+    <div class="source-card">
+      <div>
+        <div class="source-title">${s.title}</div>
+        <div class="source-meta">${s.publisher} · ${s.date}</div>
+      </div>
+      <a class="source-link" href="${s.url}" target="_blank" rel="noopener">Visit <i class="ti ti-external-link" style="font-size:12px"></i></a>
+    </div>
+  `).join('');
+
+  // surviving alternatives
+  document.getElementById('altNote').textContent =
+    `These active products still address a similar problem. Their survival does not necessarily mean they caused ${d.name}'s shutdown.`;
+  document.getElementById('altGrid').innerHTML = ALTERNATIVES.map(a => `
+    <div class="alt-card">
+      <div class="alt-top">
+        <div class="alt-logo" style="background:${a.color}">${a.initial}</div>
+        <div class="alt-name">${a.name} <span class="alt-active-dot" title="Active"></span></div>
+      </div>
+      <div class="alt-meta">${a.country}</div>
+      <div class="alt-desc">${a.desc}</div>
+      <a class="alt-view" href="${a.url}">View product <i class="ti ti-arrow-right" style="font-size:11px"></i></a>
+    </div>
+  `).join('');
+
+  // ── Verdict voting (localStorage-backed, simulated auth) ──
+  const VOTE_KEY = `liners-graveyard-vote-${slug}`;
+  const BASE = { inevitable: 128, survivable: 79 }; // seed distribution
+  function getVotes() {
+    const stored = JSON.parse(localStorage.getItem(`${VOTE_KEY}-totals`) || 'null') || { ...BASE };
+    return stored;
+  }
+  function setVotes(v) { localStorage.setItem(`${VOTE_KEY}-totals`, JSON.stringify(v)); }
+  function myVote() { return localStorage.getItem(VOTE_KEY); }
+
+  function renderVerdict() {
+    const votes = getVotes();
+    const total = votes.inevitable + votes.survivable;
+    const pctI = Math.round((votes.inevitable / total) * 100);
+    const pctS = 100 - pctI;
+    document.getElementById('pctInevitable').textContent = `${pctI}%`;
+    document.getElementById('pctSurvivable').textContent = `${pctS}%`;
+    document.getElementById('fillInevitable').style.width = `${pctI}%`;
+    document.getElementById('fillSurvivable').style.width = `${pctS}%`;
+    document.getElementById('verdictTotal').textContent = `${total} votes`;
+    document.getElementById('verdictVoteCount').textContent = `${total} people have weighed in`;
+
+    const voted = myVote();
+    document.getElementById('signinGate').style.display = voted ? 'none' : 'flex';
+    document.getElementById('verdictResults').classList.toggle('show', !!voted);
+  }
+  renderVerdict();
+
+  document.querySelectorAll('.verdict-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const choice = btn.dataset.vote;
+      const votes = getVotes();
+      votes[choice]++;
+      setVotes(votes);
+      localStorage.setItem(VOTE_KEY, choice);
+      renderVerdict();
+    });
+  });
+  document.getElementById('changeVoteBtn').addEventListener('click', () => {
+    const prev = myVote();
+    if (prev) { const votes = getVotes(); votes[prev]--; setVotes(votes); }
+    localStorage.removeItem(VOTE_KEY);
+    renderVerdict();
+  });
+
+  // ── Suggest a correction modal ──
+  const modal = document.getElementById('correctionModal');
+  document.getElementById('suggestCorrectionBtn').addEventListener('click', () => {
+    modal.classList.add('open');
+    document.getElementById('correctionForm').style.display = 'block';
+    document.getElementById('correctionSuccess').style.display = 'none';
+    document.getElementById('correctionText').value = '';
+  });
+  document.getElementById('cancelCorrection').addEventListener('click', () => modal.classList.remove('open'));
+  modal.addEventListener('click', e => { if (e.target === modal) modal.classList.remove('open'); });
+  document.getElementById('submitCorrection').addEventListener('click', () => {
+    if (!document.getElementById('correctionText').value.trim()) return;
+    document.getElementById('correctionForm').style.display = 'none';
+    document.getElementById('correctionSuccess').style.display = 'block';
+    setTimeout(() => modal.classList.remove('open'), 1600);
+  });
+
+  // ── Death certificate PNG generation (Canvas) ──
+  function drawCertificate() {
+    const canvas = document.getElementById('certCanvas');
+    const ctx = canvas.getContext('2d');
+    const W = canvas.width, H = canvas.height;
+
+    ctx.fillStyle = '#05060a';
+    ctx.fillRect(0, 0, W, H);
+    ctx.strokeStyle = 'rgba(201,168,118,.5)';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(24, 24, W - 48, H - 48);
+    ctx.strokeStyle = 'rgba(201,168,118,.25)';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(38, 38, W - 76, H - 76);
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = '#c9a876';
+    ctx.font = '700 20px Geist, sans-serif';
+    ctx.fillText('🪦  LINERS GRAVEYARD', W / 2, 90);
+
+    // logo circle
+    ctx.beginPath();
+    ctx.fillStyle = d.color;
+    ctx.arc(W / 2, 160, 42, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#fff';
+    ctx.font = '800 34px Geist, sans-serif';
+    ctx.fillText(d.initial, W / 2, 173);
+
+    ctx.fillStyle = '#eef0f7';
+    ctx.font = '800 40px Geist, sans-serif';
+    ctx.fillText(d.name, W / 2, 250);
+
+    ctx.fillStyle = '#8b93a8';
+    ctx.font = '500 18px Geist, sans-serif';
+    ctx.fillText(`Born ${d.born}  ·  Died ${d.died}`, W / 2, 285);
+    ctx.fillText(`${d.fateLabel}  ·  ${d.primaryCause}`, W / 2, 313);
+
+    ctx.fillStyle = '#d9dce1';
+    ctx.font = 'italic 400 22px Geist, sans-serif';
+    wrapText(ctx, `"${d.epitaph}"`, W / 2, 380, 820, 30);
+
+    ctx.fillStyle = '#5b6378';
+    ctx.font = '600 15px Geist, sans-serif';
+    ctx.fillText(`liners.com/graveyard/${slug}`, W / 2, H - 60);
+  }
+  function wrapText(ctx, text, x, y, maxWidth, lineHeight) {
+    const words = text.split(' ');
+    let line = '', lines = [];
+    words.forEach(word => {
+      const test = line + word + ' ';
+      if (ctx.measureText(test).width > maxWidth && line) { lines.push(line); line = word + ' '; }
+      else line = test;
+    });
+    lines.push(line);
+    const startY = y - ((lines.length - 1) * lineHeight) / 2;
+    lines.forEach((l, i) => ctx.fillText(l.trim(), x, startY + i * lineHeight));
+  }
+
+  function getCertificateBlob(cb) {
+    try {
+      drawCertificate();
+      document.getElementById('certCanvas').toBlob(cb, 'image/png');
+    } catch (e) {
+      cb(null);
+    }
+  }
+
+  document.getElementById('downloadCertBtn').addEventListener('click', () => {
+    const status = document.getElementById('certStatus');
+    getCertificateBlob(blob => {
+      if (!blob) { status.textContent = 'Certificate unavailable. Try again.'; return; }
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `${slug}-death-certificate.png`;
+      document.body.appendChild(a); a.click(); a.remove();
+      URL.revokeObjectURL(url);
+      status.textContent = 'Certificate downloaded.';
+    });
+  });
+
+  document.getElementById('shareCertBtn').addEventListener('click', () => {
+    const status = document.getElementById('certStatus');
+    getCertificateBlob(async blob => {
+      if (!blob) { status.textContent = 'Certificate unavailable. Try again.'; return; }
+      const file = new File([blob], `${slug}-death-certificate.png`, { type: 'image/png' });
+      if (navigator.canShare && navigator.canShare({ files: [file] })) {
+        try {
+          await navigator.share({ files: [file], title: `${d.name} — Liners Graveyard`, text: d.epitaph });
+          status.textContent = 'Shared.';
+        } catch (e) { /* user cancelled share */ }
+      } else {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = `${slug}-death-certificate.png`;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+        navigator.clipboard?.writeText(`https://liners.com/${slug}`).catch(() => {});
+        status.textContent = 'Sharing isn’t supported here — downloaded instead and copied the link.';
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
