@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liners — Product Graveyard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+  :root {
+    --navy: #002E99;
+    --navy-light: #4d7bff;
+    --ink: #eef0f7;
+    --muted: #8b93a8;
+    --muted-dim: #5b6378;
+    --border: #232838;
+    --bg: #05060a;
+    --panel: #0d0f18;
+    --panel-2: #11141f;
+    --chip-bg: #161a2c;
+    --stone-1: #d9dce1;
+    --stone-2: #a9adb6;
+    --stone-3: #6f747c;
+    --moss: #4c8a63;
+    --moss-light: #6fae83;
+    --moon: #a9c4ff;
+  }
+  * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select { font-family: inherit; }
+
+  /* ── ATMOSPHERE ── */
+  .sky {
+    position: fixed; inset: 0; z-index: -3;
+    background:
+      radial-gradient(60% 40% at 78% 8%, rgba(169,196,255,.10), transparent 60%),
+      radial-gradient(120% 90% at 50% -10%, #10152a 0%, #05060a 55%, #030308 100%);
+  }
+  .moon {
+    position: fixed; top: 7%; right: 10%; width: 90px; height: 90px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f4f7ff, var(--moon) 60%, #7d97d1 100%);
+    box-shadow: 0 0 60px 18px rgba(169,196,255,.25), 0 0 140px 50px rgba(169,196,255,.08);
+    z-index: -3; opacity: .85;
+  }
+  .stars {
+    position: fixed; inset: 0; z-index: -3; pointer-events: none;
+    background-image:
+      radial-gradient(1.5px 1.5px at 20% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 30%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 65% 10%, #fff, transparent),
+      radial-gradient(1px 1px at 85% 22%, #fff, transparent),
+      radial-gradient(1px 1px at 10% 35%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 55% 5%, #fff, transparent),
+      radial-gradient(1px 1px at 92% 40%, #fff, transparent);
+    opacity: .5;
+  }
+  .fog-layer {
+    position: fixed; left: -10%; width: 120%; height: 220px; z-index: -2; pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(180,190,210,.05) 40%, rgba(180,190,210,.09) 100%);
+    filter: blur(6px);
+  }
+  .fog-1 { bottom: -40px; animation: drift 40s linear infinite; }
+  .fog-2 { bottom: 20px; height: 160px; opacity: .7; animation: drift 60s linear infinite reverse; }
+  @keyframes drift {
+    0% { transform: translateX(-4%); }
+    50% { transform: translateX(4%); }
+    100% { transform: translateX(-4%); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .fog-1, .fog-2 { animation: none; }
+  }
+
+  /* ── HEADER ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 68px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    position: sticky; top: 0; background: rgba(5,6,10,.82); backdrop-filter: blur(10px);
+    z-index: 30;
+  }
+  .logo { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 17px; flex-shrink: 0; }
+  .logo-mark {
+    width: 30px; height: 30px; border-radius: 8px; background: var(--navy);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; flex-shrink: 0;
+  }
+  .section-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 700; color: var(--moss-light);
+    background: rgba(76,138,99,.12); border: 1px solid rgba(76,138,99,.3);
+    border-radius: 999px; padding: 5px 11px; margin-left: 6px; white-space: nowrap;
+  }
+  .nav-links { display: flex; align-items: center; gap: 24px; flex: 1; padding-left: 28px; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color .15s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--ink); }
+  .header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: var(--panel);
+    display: flex; align-items: center; justify-content: center; color: var(--ink); font-size: 16px;
+    transition: border-color .15s, color .15s;
+  }
+  .icon-btn:hover { border-color: var(--moss-light); }
+  .icon-btn.sound-on { color: var(--moss-light); border-color: rgba(76,138,99,.4); }
+  .icon-btn.sound-on i { animation: pulse-soft 1.6s ease-in-out infinite; }
+  @keyframes pulse-soft { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+  .btn-outline {
+    border: 1px solid var(--border); background: none; color: var(--ink);
+    border-radius: 8px; padding: 9px 14px; font-size: 13.5px; font-weight: 600;
+    display: flex; align-items: center; gap: 5px; transition: border-color .15s, background .15s; white-space: nowrap;
+  }
+  .btn-outline:hover { border-color: var(--moss-light); background: rgba(76,138,99,.08); }
+
+  /* ── HERO ── */
+  .hero { max-width: 1180px; margin: 0 auto; padding: 60px 32px 20px; text-align: center; position: relative; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--moss-light); margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-family: 'Geist', serif; font-size: 48px; font-weight: 800; line-height: 1.18; letter-spacing: -.01em;
+    margin-bottom: 16px; color: var(--stone-1);
+    text-shadow: 0 2px 24px rgba(169,196,255,.1);
+  }
+  .hero p.sub { font-size: 16px; color: var(--muted); max-width: 620px; margin: 0 auto 34px; line-height: 1.6; }
+
+  .search-bar {
+    display: flex; align-items: center; gap: 0;
+    border: 1px solid var(--border); border-radius: 14px;
+    background: var(--panel);
+    box-shadow: 0 10px 40px rgba(0,0,0,.4);
+    padding: 6px; max-width: 560px; margin: 0 auto;
+  }
+  .search-bar i.ti-search { color: var(--muted); font-size: 18px; margin: 0 12px; }
+  .search-input {
+    flex: 1; border: none; outline: none; font-size: 15px; padding: 12px 6px 12px 0; color: var(--ink); background: none;
+  }
+  .search-input::placeholder { color: var(--muted-dim); }
+  .trending { margin-top: 16px; font-size: 13px; color: var(--muted-dim); }
+  .trending a { color: var(--moss-light); font-weight: 500; }
+  .trending a:hover { text-decoration: underline; }
+
+  /* ── STATS ── */
+  .stats-row {
+    display: flex; gap: 14px; max-width: 1180px; margin: 40px auto 0; padding: 0 32px;
+  }
+  .stat-card {
+    flex: 1; border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; background: var(--panel);
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(169,196,255,.04), transparent 60%);
+  }
+  .stat-num { font-size: 28px; font-weight: 800; letter-spacing: -.02em; color: var(--stone-1); position: relative; }
+  .stat-num.accent { color: var(--moss-light); }
+  .stat-label { font-size: 12.5px; color: var(--muted); margin-top: 3px; position: relative; }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); max-width: 1180px; margin: 36px auto 0; }
+
+  /* ── FILTER BAR ── */
+  .filter-bar {
+    max-width: 1180px; margin: 0 auto; padding: 26px 32px 0;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap;
+  }
+  .cat-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .cat-pill {
+    border: 1px solid var(--border); background: var(--panel); color: var(--muted);
+    border-radius: 999px; padding: 8px 15px; font-size: 13px; font-weight: 600;
+    transition: border-color .15s, color .15s, background .15s;
+  }
+  .cat-pill:hover { color: var(--ink); border-color: var(--muted-dim); }
+  .cat-pill.active { background: var(--moss); border-color: var(--moss); color: #fff; }
+  .sort-select {
+    border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px;
+    font-size: 13px; color: var(--ink); background: var(--panel);
+  }
+
+  /* ── CEMETERY ── */
+  .cemetery {
+    max-width: 1180px; margin: 0 auto; padding: 44px 32px 20px;
+    position: relative;
+  }
+  .cemetery::before {
+    content: ''; position: absolute; left: -100vw; right: -100vw; top: 30px; bottom: 0; z-index: -1;
+    background:
+      radial-gradient(ellipse 60% 40% at 30% 100%, rgba(76,138,99,.05), transparent),
+      linear-gradient(180deg, transparent, rgba(10,16,12,.55) 30%, rgba(6,10,8,.85));
+  }
+  .grid-count { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+  .grid-count strong { color: var(--ink); }
+  .grave-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px 20px;
+  }
+  .grave-plot:nth-child(3n+2) { transform: translateY(14px); }
+  .grave-plot:nth-child(4n+3) { transform: translateY(-8px); }
+
+  .grave-plot { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .grave-link { display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+  .tombstone {
+    width: 148px; height: 176px; position: relative; flex-shrink: 0;
+    background: linear-gradient(155deg, #e2e4e8 0%, #b7bbc2 50%, #888d95 100%);
+    border-radius: 50% 50% 8px 8px / 40% 40% 8px 8px;
+    box-shadow: 0 18px 34px -6px rgba(0,0,0,.6), inset 0 0 0 1px rgba(0,0,0,.12);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .grave-link:hover .tombstone { transform: translateY(-4px); box-shadow: 0 24px 40px -6px rgba(0,0,0,.7), inset 0 0 0 1px rgba(0,0,0,.12); }
+  .tombstone::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit;
+    background-image: repeating-linear-gradient(115deg, rgba(0,0,0,.05) 0 1.5px, transparent 1.5px 7px);
+    mix-blend-mode: multiply;
+  }
+  .tombstone::after {
+    content: ''; position: absolute; top: 18%; left: 62%; width: 2px; height: 55%;
+    background: rgba(0,0,0,.14); transform: rotate(9deg); border-radius: 2px;
+  }
+  .tombstone .crack2 {
+    position: absolute; top: 55%; left: 22%; width: 40%; height: 2px;
+    background: rgba(0,0,0,.12); transform: rotate(-12deg); border-radius: 2px;
+  }
+  .grave-logo {
+    position: absolute; top: 26px; left: 50%; transform: translateX(-50%);
+    width: 44px; height: 44px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 17px;
+    box-shadow: inset 0 2px 5px rgba(0,0,0,.35), 0 3px 8px rgba(0,0,0,.5), 0 0 0 3px rgba(0,0,0,.18);
+  }
+  .grave-epitaph {
+    position: absolute; top: 80px; left: 12px; right: 12px;
+    font-size: 10.5px; font-style: italic; line-height: 1.35; color: #4a4e55;
+    text-shadow: 0 1px 0 rgba(255,255,255,.25);
+  }
+  .grave-mound {
+    width: 172px; height: 26px; margin-top: -8px; position: relative; z-index: -1;
+    background: radial-gradient(ellipse at center, #16221a 0%, #0a120d 75%, transparent 100%);
+    border-radius: 50%;
+  }
+  .grave-mound .blade {
+    position: absolute; bottom: 10px; width: 3px; height: 12px; background: var(--moss);
+    border-radius: 3px 3px 0 0; opacity: .8;
+  }
+
+  .grave-info { margin-top: 10px; width: 100%; }
+  .grave-name { font-size: 15px; font-weight: 700; color: var(--stone-1); letter-spacing: .01em; }
+  .grave-years { font-size: 12px; color: var(--muted-dim); margin-top: 2px; font-variant-numeric: tabular-nums; }
+  .grave-meta { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .grave-tag {
+    font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 999px; background: var(--chip-bg); color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .grave-tag.cause { color: #e8a33d; background: rgba(232,163,61,.1); border-color: rgba(232,163,61,.25); }
+  .grave-funding { font-size: 12px; color: var(--muted); margin-top: 8px; }
+  .grave-funding b { color: var(--stone-2); }
+  .grave-view {
+    font-size: 12px; font-weight: 600; color: var(--moss-light); margin-top: 10px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .grave-link:hover .grave-view { text-decoration: underline; }
+
+  .no-results { display: none; text-align: center; padding: 60px 0; color: var(--muted); font-size: 14px; grid-column: 1 / -1; }
+
+  /* ── CTA ── */
+  .cta-band { max-width: 1180px; margin: 50px auto 0; padding: 0 32px; }
+  .cta-inner {
+    background: linear-gradient(120deg, #0d1a14, #10241a);
+    border: 1px solid rgba(76,138,99,.25);
+    border-radius: 18px; padding: 34px 38px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  }
+  .cta-inner h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--stone-1); }
+  .cta-inner p { font-size: 13.5px; color: var(--muted); max-width: 440px; }
+  .btn-bury {
+    background: var(--moss); color: #fff; border: none; border-radius: 8px;
+    padding: 11px 20px; font-size: 14px; font-weight: 700; white-space: nowrap; transition: background .15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-bury:hover { background: var(--moss-light); }
+
+  /* ── FOOTER ── */
+  .footer { max-width: 1180px; margin: 56px auto 0; padding: 30px 32px 40px; border-top: 1px solid var(--border); }
+  .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .footer-brand { font-size: 13px; color: var(--muted-dim); max-width: 460px; line-height: 1.6; }
+  .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: var(--muted); }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-legal { font-size: 11.5px; color: var(--muted-dim); margin-top: 22px; line-height: 1.7; }
+
+  @media (max-width: 980px) {
+    .grave-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    .stats-row { flex-wrap: wrap; }
+    .stat-card { min-width: 45%; }
+    .grave-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero h1 { font-size: 34px; }
+  }
+  @media (max-width: 520px) {
+    .grave-grid { grid-template-columns: 1fr 1fr; gap: 24px 12px; }
+    .tombstone { width: 120px; height: 144px; }
+    .grave-mound { width: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky"></div>
+<div class="moon"></div>
+<div class="stars"></div>
+<div class="fog-layer fog-1"></div>
+<div class="fog-layer fog-2"></div>
+
+<audio id="graveAudio" loop preload="none">
+  <!-- Replace with the real graveyard-ambience track, e.g. src="audio/graveyard-ambience.mp3" -->
+  <source src="audio/graveyard-ambience.mp3" type="audio/mpeg" />
+</audio>
+
+<header class="header">
+  <a class="logo" href="https://liners.com">
+    <span class="logo-mark">L</span> Liners <span class="section-badge"><i class="ti ti-skull" style="font-size:12px"></i> Graveyard</span>
+  </a>
+  <nav class="nav-links">
+    <a href="https://liners.com"><i class="ti ti-arrow-left" style="font-size:12px"></i> Back to Liners</a>
+    <a href="#">All Products</a>
+    <a href="#">Categories</a>
+  </nav>
+  <div class="header-right">
+    <button class="icon-btn" id="soundToggle" aria-label="Toggle graveyard ambience" aria-pressed="false" title="Toggle sound">
+      <i class="ti ti-volume-3"></i>
+    </button>
+    <button class="btn-outline"><i class="ti ti-plus" style="font-size:13px"></i> Submit a shutdown</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="eyebrow"><i class="ti ti-skull"></i> Product Graveyard</div>
+  <h1>Here Lies What<br>Africa Built.</h1>
+  <p class="sub">Every discontinued, shut down, and acquired-into-oblivion product from the African tech ecosystem — laid to rest with its cause of death, funding raised, and the lesson it left behind.</p>
+
+  <div class="search-bar">
+    <i class="ti ti-search"></i>
+    <input class="search-input" id="graveSearch" type="text" placeholder="Search the graveyard, e.g. &quot;Gigbanc&quot; or &quot;Fintech&quot;..." />
+  </div>
+  <div class="trending">
+    <span id="recentlyBuried">Recently buried: …</span>
+  </div>
+</section>
+
+<div class="stats-row" id="statsRow"></div>
+
+<hr class="divider" />
+
+<div class="filter-bar">
+  <div class="cat-pills" id="catPills"></div>
+  <select class="sort-select" id="sortSelect">
+    <option value="recent">Recently buried</option>
+    <option value="oldest">Oldest first</option>
+    <option value="funding">Most funded</option>
+    <option value="az">A – Z</option>
+  </select>
+</div>
+
+<div class="cemetery">
+  <div class="grid-count"><strong id="visibleCount">0</strong> products buried here</div>
+  <div class="grave-grid" id="graveGrid"></div>
+  <div class="no-results" id="noResults">Nothing here matches. Try another search or category.</div>
+</div>
+
+<div class="cta-band">
+  <div class="cta-inner">
+    <div>
+      <h2>Know a product that didn't make it?</h2>
+      <p>Help us give it a proper burial. Submit a shutdown and our researchers will verify it before it's laid to rest.</p>
+    </div>
+    <button class="btn-bury"><i class="ti ti-plant-2" style="font-size:15px"></i> Submit a shutdown</button>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-row">
+    <p class="footer-brand">Liners Product Graveyard is a record of discontinued African software products, kept for research and remembrance. Part of <a href="https://liners.com" style="color:var(--moss-light)">liners.com</a> — the record of African software.</p>
+    <div class="footer-links">
+      <a href="#">Submit a shutdown</a>
+      <a href="#">Methodology</a>
+      <a href="https://liners.com">Back to Liners</a>
+    </div>
+  </div>
+  <p class="footer-legal">© 2026, Liners. Product and company names are trademarks of their respective owners, referenced here strictly for identification and informational purposes; this page does not imply affiliation or endorsement.</p>
+</footer>
+
+<script>
+  const GRAVES = [
+    {
+      name: "Gigbanc", tagline: "Global bank account", initial: "G", color: "#0bb4b0",
+      category: "Fintech", country: "Nigeria", flag: "🇳🇬",
+      founded: 2023, died: "Jul 2026",
+      cause: "High infrastructure & compliance costs",
+      epitaph: "Global by ambition, buried by compliance costs.",
+      funding: "$735K"
+    },
+    {
+      name: "Brass", tagline: "Banking for local businesses", initial: "B", color: "#f5a623",
+      category: "Fintech", country: "Nigeria", flag: "🇳🇬",
+      founded: 2020, died: "Jun 2026",
+      cause: "Acquired by Paystack after operational challenges",
+      epitaph: "Rescued for two years, then quietly absorbed.",
+      funding: "$1.7M"
+    },
+    {
+      name: "Chimoney", tagline: "API for cross-border payments", initial: "C", color: "#7b2fbe",
+      category: "Fintech", country: "Nigeria", flag: "🇳🇬",
+      founded: 2022, died: "May 2026",
+      cause: "Lack of funding / weak customer acquisition",
+      epitaph: "Built the rails. Nobody knew to ride them.",
+      funding: "$300K"
+    },
+    {
+      name: "Livestock Wealth", tagline: "Crowdfarming company", initial: "L", color: "#2f9e44",
+      category: "Agriculture", country: "South Africa", flag: "🇿🇦",
+      founded: 2015, died: "May 2026",
+      cause: "Liquidity crisis / insolvency",
+      epitaph: "Covered every farmer's default until it couldn't.",
+      funding: "$700K"
+    },
+    {
+      name: "FoodCourt", tagline: "Cloud kitchen", initial: "F", color: "#e8590c",
+      category: "FoodTech", country: "Nigeria", flag: "🇳🇬",
+      founded: 2021, died: "Apr 2026",
+      cause: "Unpaid salaries & vendor debts",
+      epitaph: "The kitchens went quiet when the wages stopped.",
+      funding: "$2.2M"
+    },
+    {
+      name: "Zarttech", tagline: "Talent outsourcing", initial: "Z", color: "#495057",
+      category: "Other", country: "Pan-African", flag: "🌍",
+      founded: 2020, died: "Mar 2026",
+      cause: "Governance & operational friction",
+      epitaph: "A mission worth funding. A team that couldn't hold together.",
+      funding: "$1.5M"
+    },
+    {
+      name: "KOKO Networks", tagline: "Smart commerce platform", initial: "K", color: "#12b886",
+      category: "Other", country: "Kenya", flag: "🇰🇪",
+      founded: 2013, died: "Jan 2026",
+      cause: "Loss of carbon credit revenue",
+      epitaph: "When the carbon credits died, so did the company.",
+      funding: "$125M"
+    }
+  ];
+
+  const CATEGORIES = ["All", ...Array.from(new Set(GRAVES.map(g => g.category)))];
+
+  const catPills = document.getElementById('catPills');
+  catPills.innerHTML = CATEGORIES.map((c, i) =>
+    `<button class="cat-pill${i === 0 ? ' active' : ''}" data-cat="${c}">${c}</button>`
+  ).join('');
+
+  let activeCategory = "All";
+  let sortMode = "recent";
+
+  function monthOrder(str) {
+    const [mon, yr] = str.split(" ");
+    const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+    return parseInt(yr, 10) * 12 + months.indexOf(mon);
+  }
+  function fundingValue(str) {
+    const n = parseFloat(str.replace(/[^0-9.]/g, ""));
+    return str.includes("M") ? n * 1_000_000 : n * 1_000;
+  }
+
+  function render() {
+    const q = document.getElementById('graveSearch').value.trim().toLowerCase();
+    let list = GRAVES.filter(g =>
+      (activeCategory === "All" || g.category === activeCategory) &&
+      (g.name.toLowerCase().includes(q) || g.tagline.toLowerCase().includes(q) || g.category.toLowerCase().includes(q))
+    );
+
+    if (sortMode === "recent") list.sort((a, b) => monthOrder(b.died) - monthOrder(a.died));
+    else if (sortMode === "oldest") list.sort((a, b) => monthOrder(a.died) - monthOrder(b.died));
+    else if (sortMode === "funding") list.sort((a, b) => fundingValue(b.funding) - fundingValue(a.funding));
+    else if (sortMode === "az") list.sort((a, b) => a.name.localeCompare(b.name));
+
+    const grid = document.getElementById('graveGrid');
+    const noResults = document.getElementById('noResults');
+
+    grid.innerHTML = list.map(g => `
+      <div class="grave-plot">
+        <a class="grave-link" href="#" data-slug="${g.name.toLowerCase().replace(/\s+/g,'-')}">
+          <div class="tombstone">
+            <div class="crack2"></div>
+            <div class="grave-logo" style="background:${g.color}">${g.initial}</div>
+            <div class="grave-epitaph">"${g.epitaph}"</div>
+          </div>
+          <div class="grave-mound"></div>
+          <div class="grave-info">
+            <div class="grave-name">${g.name}</div>
+            <div class="grave-years">${g.founded} – ${g.died}</div>
+            <div class="grave-meta">
+              <span class="grave-tag">${g.flag} ${g.country}</span>
+              <span class="grave-tag">${g.category}</span>
+            </div>
+            <div class="grave-meta">
+              <span class="grave-tag cause">${g.cause}</span>
+            </div>
+            <div class="grave-funding">Raised <b>${g.funding}</b>, buried anyway</div>
+            <div class="grave-view">Read the epitaph <i class="ti ti-arrow-right" style="font-size:11px"></i></div>
+          </div>
+        </a>
+      </div>
+    `).join('');
+
+    document.getElementById('visibleCount').textContent = list.length;
+    noResults.style.display = list.length ? 'none' : 'block';
+    grid.style.display = list.length ? 'grid' : 'block';
+  }
+
+  document.getElementById('graveSearch').addEventListener('input', render);
+  document.getElementById('sortSelect').addEventListener('change', e => { sortMode = e.target.value; render(); });
+  catPills.addEventListener('click', e => {
+    const btn = e.target.closest('.cat-pill');
+    if (!btn) return;
+    document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeCategory = btn.dataset.cat;
+    render();
+  });
+
+  render();
+
+  // stats
+  const totalFunding = GRAVES.reduce((sum, g) => sum + fundingValue(g.funding), 0);
+  const fmtFunding = totalFunding >= 1_000_000
+    ? `$${(totalFunding / 1_000_000).toFixed(1)}M`
+    : `$${Math.round(totalFunding / 1000)}K`;
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${GRAVES.length}</div><div class="stat-label">products buried</div></div>
+    <div class="stat-card"><div class="stat-num accent">${fmtFunding}</div><div class="stat-label">raised, buried anyway</div></div>
+    <div class="stat-card"><div class="stat-num">${CATEGORIES.length - 1}</div><div class="stat-label">categories affected</div></div>
+    <div class="stat-card"><div class="stat-num">${new Set(GRAVES.map(g=>g.country)).size}</div><div class="stat-label">countries represented</div></div>
+  `;
+
+  // recently buried trending line
+  const recent = [...GRAVES].sort((a,b) => monthOrder(b.died) - monthOrder(a.died)).slice(0,3);
+  document.getElementById('recentlyBuried').innerHTML =
+    'Recently buried: ' + recent.map(g => `<a href="#">${g.name}</a>`).join(' · ');
+
+  // sound toggle
+  const soundBtn = document.getElementById('soundToggle');
+  const audio = document.getElementById('graveAudio');
+  let soundOn = false;
+  soundBtn.addEventListener('click', () => {
+    soundOn = !soundOn;
+    if (soundOn) {
+      audio.play().catch(() => { /* browser blocked playback or file not found; icon still reflects intent */ });
+      soundBtn.classList.add('sound-on');
+      soundBtn.innerHTML = '<i class="ti ti-volume"></i>';
+      soundBtn.setAttribute('aria-pressed', 'true');
+    } else {
+      audio.pause();
+      soundBtn.classList.remove('sound-on');
+      soundBtn.innerHTML = '<i class="ti ti-volume-3"></i>';
+      soundBtn.setAttribute('aria-pressed', 'false');
+    }
+  });
+</script>
+
+</body>
+</html>
