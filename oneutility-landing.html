@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>OneUtility — Your Day Starts Here</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<style>
+:root {
+  --blue-deep: #2237B4;
+  --blue-deep-dark: #1A2C8F;
+  --blue-accent: #0361F0;
+  --tint-100: #F5F8FF;
+  --tint-200: #EDF4FF;
+  --tint-300: #E0EDFF;
+  --tint-400: #DFEAFB;
+  --ink: #0B1030;
+  --ink-soft: #2B3157;
+  --muted: #6B7190;
+  --line: #E7ECF7;
+  --navy-deep: #0A1338;
+  --navy-mid: #121C4A;
+  --radius-lg: 28px;
+  --radius-md: 18px;
+  --radius-sm: 12px;
+  --shadow-soft: 0 20px 60px -20px rgba(15, 26, 84, .18);
+  --shadow-btn: 0 12px 28px -10px rgba(34, 55, 180, .45);
+}
+* , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: var(--ink);
+  background: #fff;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; }
+.wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: var(--blue-accent);
+}
+.eyebrow::before { content: ''; width: 18px; height: 2px; background: var(--blue-accent); border-radius: 2px; }
+h1, h2, h3 { font-weight: 800; letter-spacing: -.02em; line-height: 1.08; }
+p { line-height: 1.6; }
+
+/* reveal */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity .8s cubic-bezier(.2,.7,.2,1), transform .8s cubic-bezier(.2,.7,.2,1); }
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: .08s; }
+.reveal-delay-2 { transition-delay: .16s; }
+.reveal-delay-3 { transition-delay: .24s; }
+
+/* buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 16px 30px; border-radius: 999px; font-size: 15px; font-weight: 700;
+  transition: transform .25s ease, box-shadow .25s ease, background .25s ease;
+  white-space: nowrap;
+}
+.btn-primary { background: var(--blue-deep); color: #fff; box-shadow: var(--shadow-btn); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 16px 34px -10px rgba(34, 55, 180, .55); }
+.btn-ghost-light { background: rgba(255,255,255,.14); color: #fff; border: 1.5px solid rgba(255,255,255,.55); backdrop-filter: blur(6px); }
+.btn-ghost-light:hover { background: rgba(255,255,255,.24); }
+.btn-outline { border: 1.5px solid var(--blue-deep); color: var(--blue-deep); }
+.btn-outline:hover { background: var(--tint-200); }
+.btn-sm { padding: 12px 22px; font-size: 14px; }
+
+/* ============ NAV ============ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 22px 40px;
+  transition: background .35s ease, box-shadow .35s ease, padding .35s ease;
+}
+.nav.scrolled { background: rgba(255,255,255,.85); backdrop-filter: blur(14px); box-shadow: 0 1px 0 var(--line); padding: 14px 40px; }
+.nav-logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 20px; color: #fff; transition: color .35s ease; }
+.nav.scrolled .nav-logo { color: var(--ink); }
+.nav-logo-mark {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: linear-gradient(135deg, var(--blue-accent), var(--blue-deep));
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-size: 15px; font-weight: 800;
+  box-shadow: 0 6px 16px -4px rgba(34,55,180,.5);
+}
+.nav-links { display: flex; align-items: center; gap: 36px; }
+.nav-links a { font-size: 14.5px; font-weight: 600; color: rgba(255,255,255,.92); transition: color .35s ease, opacity .2s; opacity: .92; }
+.nav-links a:hover { opacity: 1; }
+.nav.scrolled .nav-links a { color: var(--ink-soft); }
+.nav-actions { display: flex; align-items: center; gap: 14px; }
+.nav-actions .btn-outline { color: #fff; border-color: rgba(255,255,255,.55); transition: color .35s ease, border-color .35s ease, background .2s; }
+.nav.scrolled .nav-actions .btn-outline { color: var(--blue-deep); border-color: var(--blue-deep); }
+.nav.scrolled .nav-actions .btn-outline:hover { background: var(--tint-200); }
+.nav-burger { display: none; width: 40px; height: 40px; border-radius: 10px; align-items: center; justify-content: center; }
+.nav-burger span, .nav-burger span::before, .nav-burger span::after { content:''; display:block; width: 20px; height: 2px; background: currentColor; border-radius: 2px; position: relative; }
+.nav-burger span::before { position: absolute; top: -7px; }
+.nav-burger span::after { position: absolute; top: 7px; }
+.nav.scrolled .nav-burger, .nav .nav-burger { color: #fff; }
+.nav.scrolled .nav-burger { color: var(--ink); }
+
+/* ============ HERO ============ */
+.hero {
+  position: relative; height: 100vh; min-height: 720px;
+  display: flex; align-items: flex-end;
+  overflow: hidden;
+}
+.hero-media { position: absolute; inset: 0; }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.06); animation: heroZoom 16s ease-out forwards; }
+@keyframes heroZoom { to { transform: scale(1); } }
+.hero-media::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(180deg, rgba(10,16,50,.35) 0%, rgba(10,16,50,.15) 35%, rgba(9,13,38,.86) 100%);
+}
+.hero-content { position: relative; z-index: 2; width: 100%; padding: 0 40px 96px; color: #fff; }
+.hero-content .eyebrow { color: #B9D0FF; }
+.hero-content .eyebrow::before { background: #B9D0FF; }
+.hero-content h1 { font-size: clamp(40px, 6.6vw, 84px); margin: 18px 0 20px; max-width: 900px; }
+.hero-content p { font-size: 18px; max-width: 560px; color: rgba(255,255,255,.85); margin-bottom: 34px; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.scroll-cue {
+  position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(255,255,255,.75); font-size: 12px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+  z-index: 2;
+}
+.scroll-cue-line { width: 1px; height: 34px; background: rgba(255,255,255,.5); position: relative; overflow: hidden; }
+.scroll-cue-line::after { content:''; position:absolute; top:-100%; left:0; width:100%; height:100%; background: #fff; animation: scrollDown 1.8s ease-in-out infinite; }
+@keyframes scrollDown { 0% { top: -100%; } 60% { top: 100%; } 100% { top: 100%; } }
+
+/* ============ SECTION SHELL ============ */
+section { position: relative; }
+.section-pad { padding: 130px 0; }
+.section-tint { background: var(--tint-100); }
+
+/* ============ PAIN POINT ============ */
+.pain {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 70px; align-items: center;
+}
+.pain h2 { font-size: clamp(30px, 3.6vw, 46px); margin: 16px 0 20px; color: var(--ink); }
+.pain p { color: var(--muted); font-size: 17px; max-width: 480px; }
+.mock-phone {
+  position: relative; background: var(--navy-deep); border-radius: 32px; padding: 14px;
+  box-shadow: var(--shadow-soft); max-width: 340px; margin: 0 auto;
+  border: 1px solid rgba(255,255,255,.06);
+}
+.mock-screen { background: linear-gradient(160deg, #101a44, #0a1130); border-radius: 22px; padding: 26px 20px 30px; color: #fff; min-height: 480px; display: flex; flex-direction: column; }
+.mock-topbar { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,.5); margin-bottom: 26px; }
+.mock-balance-label { font-size: 12px; color: rgba(255,255,255,.55); margin-bottom: 6px; }
+.mock-balance { font-size: 30px; font-weight: 800; margin-bottom: 26px; }
+.mock-btn-row { display: flex; gap: 10px; margin-bottom: 30px; }
+.mock-pill { flex: 1; text-align: center; font-size: 11.5px; font-weight: 700; padding: 12px 6px; border-radius: 12px; background: rgba(255,255,255,.06); color: rgba(255,255,255,.75); }
+.mock-pill.active { background: var(--blue-accent); color: #fff; box-shadow: 0 10px 24px -8px rgba(3,97,240,.7); animation: pillPulse 2.6s ease-in-out infinite; }
+@keyframes pillPulse { 0%,100% { box-shadow: 0 10px 24px -8px rgba(3,97,240,.7);} 50% { box-shadow: 0 10px 30px -4px rgba(3,97,240,1);} }
+.mock-list-label { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.4); margin-bottom: 12px; }
+.mock-row { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid rgba(255,255,255,.06); opacity: 0; animation: rowIn .5s ease forwards; }
+.mock-row:nth-child(1) { animation-delay: .4s; }
+.mock-row:nth-child(2) { animation-delay: .8s; }
+.mock-row:nth-child(3) { animation-delay: 1.2s; }
+.mock-row:nth-child(4) { animation-delay: 1.6s; }
+.mock-row:nth-child(5) { animation-delay: 2s; }
+@keyframes rowIn { from { opacity: 0; transform: translateX(-8px);} to { opacity: 1; transform: translateX(0);} }
+.mock-icon { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+.mock-row-body { flex: 1; }
+.mock-row-title { font-size: 13px; font-weight: 700; }
+.mock-row-sub { font-size: 11px; color: rgba(255,255,255,.45); }
+.mock-row-status { font-size: 10.5px; font-weight: 700; color: #6EE7A8; }
+
+/* ============ HORIZONTAL SCROLL PIN ============ */
+.pin-outer { height: 340vh; position: relative; background: var(--ink); }
+.pin-inner { position: sticky; top: 0; height: 100vh; overflow: hidden; display: flex; }
+.pin-track { display: flex; height: 100%; will-change: transform; }
+.pin-panel { width: 100vw; height: 100%; flex-shrink: 0; position: relative; display: flex; align-items: center; }
+.pin-panel-media { position: absolute; inset: 0; }
+.pin-panel-media img { width: 100%; height: 100%; object-fit: cover; }
+.pin-panel-media::after { content:''; position:absolute; inset:0; background: linear-gradient(90deg, rgba(6,10,32,.88) 0%, rgba(6,10,32,.55) 45%, rgba(6,10,32,.15) 100%); }
+.pin-panel-body { position: relative; z-index: 2; color: #fff; max-width: 560px; padding: 0 60px; }
+.pin-panel .eyebrow { color: #9FC1FF; }
+.pin-panel .eyebrow::before { background: #9FC1FF; }
+.pin-panel-body h2 { font-size: clamp(30px, 4.2vw, 52px); margin: 16px 0 18px; }
+.pin-panel-body p { font-size: 16.5px; color: rgba(255,255,255,.8); margin-bottom: 30px; max-width: 460px; }
+.pin-progress { position: absolute; bottom: 46px; left: 60px; z-index: 3; display: flex; gap: 10px; }
+.pin-dot { width: 34px; height: 4px; border-radius: 3px; background: rgba(255,255,255,.28); overflow: hidden; }
+.pin-dot-fill { display: block; height: 100%; width: 0%; background: #fff; }
+.pin-counter { position: absolute; top: 46px; right: 60px; z-index: 3; color: rgba(255,255,255,.6); font-size: 13px; font-weight: 700; letter-spacing: .05em; }
+
+/* ============ SECURITY ============ */
+.security { background: var(--navy-deep); color: #fff; }
+.security-head { max-width: 620px; margin-bottom: 60px; }
+.security-head h2 { font-size: clamp(28px, 3.4vw, 42px); margin: 16px 0 16px; }
+.security-head p { color: rgba(255,255,255,.6); font-size: 16.5px; }
+.security-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
+.security-card {
+  background: rgba(255,255,255,.045); border: 1px solid rgba(255,255,255,.09);
+  border-radius: var(--radius-md); padding: 34px 26px; transition: transform .3s ease, background .3s ease, border-color .3s ease;
+}
+.security-card:hover { transform: translateY(-6px); background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.2); }
+.security-icon { width: 50px; height: 50px; border-radius: 14px; background: linear-gradient(135deg, var(--blue-accent), var(--blue-deep)); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 22px; }
+.security-card h3 { font-size: 17px; margin-bottom: 10px; font-weight: 700; }
+.security-card p { font-size: 14px; color: rgba(255,255,255,.55); }
+
+/* ============ KIDDIES ============ */
+.kiddies { padding: 0; }
+.kiddies-grid { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 620px; }
+.kiddies-media { position: relative; overflow: hidden; }
+.kiddies-media img { width: 100%; height: 100%; object-fit: cover; }
+.kiddies-body { display: flex; flex-direction: column; justify-content: center; padding: 80px; background: var(--tint-200); }
+.kiddies-body h2 { font-size: clamp(28px, 3.4vw, 44px); margin: 16px 0 18px; }
+.kiddies-body p { color: var(--muted); font-size: 16.5px; max-width: 440px; margin-bottom: 32px; }
+
+/* ============ CARD (3D floating) ============ */
+.card-section { text-align: center; padding-bottom: 170px; }
+.card-section .eyebrow { justify-content: center; }
+.card-section h2 { font-size: clamp(30px, 3.8vw, 50px); margin: 16px auto 60px; max-width: 640px; }
+.card-3d-stage { perspective: 1400px; display: flex; justify-content: center; margin-bottom: 54px; }
+.card-3d {
+  width: 380px; aspect-ratio: 1.586; border-radius: 22px;
+  background: linear-gradient(135deg, #16224f 0%, var(--blue-deep) 55%, var(--blue-accent) 100%);
+  box-shadow: 0 40px 80px -24px rgba(15,26,84,.5);
+  position: relative; overflow: hidden;
+  transform: rotateY(-18deg) rotateX(6deg);
+  transition: transform .5s cubic-bezier(.2,.7,.2,1);
+  padding: 28px 30px;
+  display: flex; flex-direction: column; justify-content: space-between;
+  color: #fff;
+}
+.card-3d-stage:hover .card-3d { transform: rotateY(0deg) rotateX(0deg) scale(1.03); }
+.card-3d::before { content:''; position:absolute; top:-60%; right:-30%; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,.16), transparent 70%); }
+.card-3d-top { display: flex; justify-content: space-between; align-items: flex-start; position: relative; z-index: 2; }
+.card-3d-chip { width: 40px; height: 30px; border-radius: 6px; background: linear-gradient(135deg,#F3D98B,#C9A24B); }
+.card-3d-brand { font-weight: 800; font-size: 16px; letter-spacing: .02em; }
+.card-3d-number { font-size: 19px; letter-spacing: .12em; font-weight: 600; position: relative; z-index: 2; }
+.card-3d-bottom { display: flex; justify-content: space-between; align-items: flex-end; font-size: 12px; color: rgba(255,255,255,.7); position: relative; z-index: 2; }
+.card-3d-bottom b { color: #fff; display:block; font-size: 13px; margin-top: 3px; letter-spacing: .04em; }
+
+/* ============ LOANS ============ */
+.loans-grid { display: grid; grid-template-columns: 1fr 1.05fr; gap: 70px; align-items: center; }
+.loans-media { border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--shadow-soft); aspect-ratio: 4/5; }
+.loans-media img { width: 100%; height: 100%; object-fit: cover; }
+.loans-body h2 { font-size: clamp(28px, 3.6vw, 46px); margin: 16px 0 18px; color: var(--ink); }
+.loans-body p { color: var(--muted); font-size: 16.5px; max-width: 480px; margin-bottom: 30px; }
+
+/* ============ OMNICHANNEL ============ */
+.channels-head { text-align: center; max-width: 640px; margin: 0 auto 60px; }
+.channels-head h2 { font-size: clamp(28px, 3.6vw, 46px); margin: 16px 0 16px; color: var(--ink); }
+.channels-head p { color: var(--muted); font-size: 16.5px; }
+.channels-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; }
+.channel-card {
+  aspect-ratio: 3/3.6; border-radius: var(--radius-md); background: var(--tint-100); border: 1px solid var(--line);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px;
+  transition: transform .35s cubic-bezier(.2,.7,.2,1), box-shadow .35s ease, background .35s ease, z-index 0s;
+  position: relative; cursor: pointer;
+}
+.channel-card:hover { transform: scale(1.12); box-shadow: var(--shadow-soft); background: #fff; z-index: 5; }
+.channel-icon { width: 54px; height: 54px; border-radius: 14px; background: linear-gradient(135deg, var(--blue-accent), var(--blue-deep)); display: flex; align-items: center; justify-content: center; font-size: 24px; color: #fff; transition: transform .35s ease; }
+.channel-card:hover .channel-icon { transform: scale(1.1) rotate(-4deg); }
+.channel-card span { font-size: 13.5px; font-weight: 700; color: var(--ink-soft); }
+
+/* ============ APP DOWNLOAD ============ */
+.appdl { background: linear-gradient(155deg, var(--navy-deep) 0%, var(--blue-deep-dark) 60%, var(--blue-accent) 130%); color: #fff; overflow: hidden; }
+.appdl-grid { display: grid; grid-template-columns: 1fr 0.9fr; align-items: center; gap: 40px; }
+.appdl-body .eyebrow { color: #B9D0FF; }
+.appdl-body .eyebrow::before { background: #B9D0FF; }
+.appdl-body h2 { font-size: clamp(30px, 3.8vw, 48px); margin: 16px 0 18px; }
+.appdl-body p { color: rgba(255,255,255,.75); font-size: 16.5px; max-width: 460px; margin-bottom: 34px; }
+.store-badges { display: flex; gap: 14px; }
+.store-badge { display: flex; align-items: center; gap: 10px; padding: 12px 20px; border-radius: 14px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.2); transition: background .25s ease, transform .25s ease; }
+.store-badge:hover { background: rgba(255,255,255,.18); transform: translateY(-2px); }
+.store-badge-icon { font-size: 20px; }
+.store-badge-text b { display: block; font-size: 14px; font-weight: 700; }
+.store-badge-text span { font-size: 11px; color: rgba(255,255,255,.6); }
+.appdl-phone-wrap { position: relative; display: flex; justify-content: center; }
+.appdl-phone { width: 260px; border-radius: 38px; background: #0c1230; border: 8px solid #10173b; box-shadow: 0 50px 90px -20px rgba(0,0,0,.55); overflow: hidden; }
+.appdl-phone-screen { aspect-ratio: 9/19; background: linear-gradient(170deg, #16224f, #0a0f2c); padding: 28px 18px; display: flex; flex-direction: column; gap: 14px; }
+.appdl-notch { width: 60px; height: 6px; border-radius: 4px; background: rgba(255,255,255,.15); margin: 0 auto 10px; }
+.appdl-card-mini { background: rgba(255,255,255,.06); border-radius: 16px; padding: 16px; }
+.appdl-card-mini .lab { font-size: 10px; color: rgba(255,255,255,.45); margin-bottom: 6px; }
+.appdl-card-mini .val { font-size: 20px; font-weight: 800; color: #fff; }
+.appdl-mini-row { display: flex; gap: 10px; }
+.appdl-mini-tile { flex: 1; background: rgba(255,255,255,.05); border-radius: 12px; padding: 12px; text-align: center; }
+.appdl-mini-tile div:first-child { font-size: 17px; margin-bottom: 6px; }
+.appdl-mini-tile div:last-child { font-size: 9.5px; color: rgba(255,255,255,.55); font-weight: 600; }
+.float-badge { position: absolute; background: #fff; color: var(--ink); border-radius: 16px; padding: 12px 16px; box-shadow: var(--shadow-soft); font-size: 12.5px; font-weight: 700; display: flex; align-items: center; gap: 8px; animation: floatY 4.5s ease-in-out infinite; }
+.float-badge.b1 { top: 10%; left: -10px; animation-delay: 0s; }
+.float-badge.b2 { bottom: 16%; right: -20px; animation-delay: 1.4s; }
+@keyframes floatY { 0%,100% { transform: translateY(0);} 50% { transform: translateY(-12px);} }
+
+/* ============ ECOSYSTEM FOOTER ============ */
+.ecosystem { padding: 150px 0 100px; text-align: center; overflow: hidden; }
+.ecosystem h2 { font-size: clamp(28px, 3.6vw, 46px); margin: 16px auto 10px; max-width: 640px; color: var(--ink); }
+.ecosystem p { color: var(--muted); font-size: 16.5px; max-width: 520px; margin: 0 auto 70px; }
+.orbit-wrap { position: relative; width: 520px; height: 520px; margin: 0 auto; }
+.orbit-ring { position: absolute; inset: 0; border-radius: 50%; border: 1.5px dashed var(--line); }
+.orbit-ring.r2 { inset: 60px; }
+.orbit-center {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
+  width: 116px; height: 116px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--blue-accent), var(--blue-deep));
+  display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 15px;
+  box-shadow: 0 20px 50px -12px rgba(34,55,180,.55);
+  text-align: center; z-index: 3;
+}
+.orbit-spin { position: absolute; inset: 0; animation: spin 34s linear infinite; }
+.orbit-item {
+  position: absolute; top: 50%; left: 50%;
+  width: 92px; height: 92px; margin: -46px;
+  border-radius: 50%; background: #fff; box-shadow: var(--shadow-soft);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+  animation: counterspin 34s linear infinite;
+}
+.orbit-item span.ic { font-size: 22px; }
+.orbit-item span.lb { font-size: 10.5px; font-weight: 700; color: var(--ink-soft); }
+@keyframes spin { from { transform: rotate(0deg);} to { transform: rotate(360deg);} }
+@keyframes counterspin { from { transform: rotate(0deg);} to { transform: rotate(-360deg);} }
+.ecosystem-cta { margin-top: 60px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+
+/* ============ FOOTER ============ */
+footer { background: var(--navy-deep); color: rgba(255,255,255,.6); padding: 70px 0 30px; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr repeat(4, 1fr); gap: 40px; padding-bottom: 50px; border-bottom: 1px solid rgba(255,255,255,.1); }
+.footer-brand { display: flex; align-items: center; gap: 10px; color: #fff; font-weight: 800; font-size: 19px; margin-bottom: 16px; }
+.footer-grid p { font-size: 14px; max-width: 260px; }
+.footer-col h4 { color: #fff; font-size: 13.5px; margin-bottom: 18px; letter-spacing: .03em; }
+.footer-col a { display: block; font-size: 14px; margin-bottom: 12px; color: rgba(255,255,255,.6); transition: color .2s; }
+.footer-col a:hover { color: #fff; }
+.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 26px; font-size: 13px; flex-wrap: wrap; gap: 12px; }
+.footer-social { display: flex; gap: 12px; }
+.footer-social a { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,.08); display: flex; align-items: center; justify-content: center; font-size: 14px; }
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 980px) {
+  .nav-links, .nav-actions .btn-outline { display: none; }
+  .nav-burger { display: flex; }
+  .pain, .loans-grid, .kiddies-grid, .appdl-grid { grid-template-columns: 1fr; }
+  .kiddies-body { padding: 56px 32px; }
+  .security-row { grid-template-columns: repeat(2, 1fr); }
+  .channels-grid { grid-template-columns: repeat(3, 1fr); }
+  .orbit-wrap { width: 380px; height: 380px; }
+  .orbit-item { width: 74px; height: 74px; margin: -37px; }
+  .footer-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 620px) {
+  .wrap { padding: 0 22px; }
+  .section-pad { padding: 90px 0; }
+  .hero-content { padding: 0 22px 70px; }
+  .pin-panel-body { padding: 0 28px; }
+  .pin-progress, .pin-counter { left: 28px; right: 28px; }
+  .security-row, .channels-grid { grid-template-columns: repeat(2, 1fr); }
+  .card-3d { width: 300px; }
+  .footer-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav class="nav" id="nav">
+  <a href="#" class="nav-logo">
+    <span class="nav-logo-mark">1U</span>
+    OneUtility
+  </a>
+  <div class="nav-links">
+    <a href="#personal">Personal</a>
+    <a href="#business">Business</a>
+    <a href="#utility">Utility Payments</a>
+    <a href="#security">Security</a>
+    <a href="#app">Get the App</a>
+  </div>
+  <div class="nav-actions">
+    <a href="#" class="btn btn-outline btn-sm">Log In</a>
+    <a href="#" class="btn btn-primary btn-sm">Open an Account</a>
+  </div>
+  <button class="nav-burger"><span></span></button>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="hero-media">
+    <img src="https://images.unsplash.com/photo-1635192202015-b7cc32907ae9?auto=format&fit=crop&w=1800&q=80" alt="Someone starting their morning peacefully by a sunlit window" />
+  </div>
+  <div class="hero-content">
+    <span class="eyebrow">OneUtility</span>
+    <h1>Your Day<br />Starts Here.</h1>
+    <p>From the first light switch in the morning to the last phone call at night, life is powered by the little things. OneUtility brings them together in one simple experience.</p>
+    <div class="hero-actions">
+      <a href="#" class="btn btn-primary">Open an Account</a>
+      <a href="#utility" class="btn btn-ghost-light">See how it works</a>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><span class="scroll-cue-line"></span></div>
+</header>
+
+<!-- ============ PAIN POINT ============ -->
+<section class="section-pad" id="pain">
+  <div class="wrap pain">
+    <div class="reveal">
+      <span class="eyebrow">The problem</span>
+      <h2>Life's complicated enough.</h2>
+      <p>Managing your money shouldn't mean switching between apps, remembering due dates, or chasing payments. OneUtility brings everything together in one place, making everyday banking simpler, faster, and more convenient.</p>
+      <div style="margin-top:32px;">
+        <a href="#utility" class="btn btn-primary">See One Transfer in Action</a>
+      </div>
+    </div>
+    <div class="reveal reveal-delay-2">
+      <div class="mock-phone">
+        <div class="mock-screen">
+          <div class="mock-topbar"><span>9:41</span><span>●●●●● OneUtility</span></div>
+          <div class="mock-balance-label">Available balance</div>
+          <div class="mock-balance">₦248,650.00</div>
+          <div class="mock-btn-row">
+            <div class="mock-pill">Save</div>
+            <div class="mock-pill active">Transfer</div>
+            <div class="mock-pill">Automate</div>
+          </div>
+          <div class="mock-list-label">Just now · One transfer</div>
+          <div class="mock-row"><div class="mock-icon" style="background:#2E3A66;">⚡</div><div class="mock-row-body"><div class="mock-row-title">Electricity — IKEDC</div><div class="mock-row-sub">Prepaid meter top-up</div></div><div class="mock-row-status">Paid</div></div>
+          <div class="mock-row"><div class="mock-icon" style="background:#2E3A66;">📶</div><div class="mock-row-body"><div class="mock-row-title">Airtime — MTN</div><div class="mock-row-sub">Self top-up</div></div><div class="mock-row-status">Paid</div></div>
+          <div class="mock-row"><div class="mock-icon" style="background:#2E3A66;">🌐</div><div class="mock-row-body"><div class="mock-row-title">Internet — Spectranet</div><div class="mock-row-sub">Monthly data plan</div></div><div class="mock-row-status">Paid</div></div>
+          <div class="mock-row"><div class="mock-icon" style="background:#2E3A66;">💧</div><div class="mock-row-body"><div class="mock-row-title">Water — Lagos Water Corp</div><div class="mock-row-sub">Quarterly bill</div></div><div class="mock-row-status">Paid</div></div>
+          <div class="mock-row" style="border-bottom:none;"><div class="mock-icon" style="background:#2E3A66;">📺</div><div class="mock-row-body"><div class="mock-row-title">Cable — DStv</div><div class="mock-row-sub">Compact bundle</div></div><div class="mock-row-status">Paid</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HORIZONTAL PIN SCROLL ============ -->
+<div class="pin-outer" id="pinOuter">
+  <div class="pin-inner">
+    <div class="pin-track" id="pinTrack">
+
+      <div class="pin-panel" id="utility">
+        <div class="pin-panel-media"><img src="https://images.unsplash.com/photo-1755075382259-1e86368e5a71?auto=format&fit=crop&w=1800&q=80" alt="City skyline with power lines, representing everyday utility services" /></div>
+        <div class="pin-panel-body">
+          <span class="eyebrow">One Bank Transfer</span>
+          <h2>Pay all your bills with One Bank Transfer.</h2>
+          <p>Electricity, water, cable, airtime, internet and more. Pay everyday bills with a single bank transfer, with every payment reconciled instantly. No juggling apps, no repeated logins, and no wondering whether your payment went through. Just one transfer, and you're done.</p>
+          <a href="#" class="btn btn-primary">Open a Utility Account</a>
+        </div>
+        <div class="pin-progress"><div class="pin-dot"><span class="pin-dot-fill" id="dot0"></span></div><div class="pin-dot"><span class="pin-dot-fill" id="dot1"></span></div><div class="pin-dot"><span class="pin-dot-fill" id="dot2"></span></div></div>
+        <div class="pin-counter" id="pinCounter">01 / 03</div>
+      </div>
+
+      <div class="pin-panel" id="personal">
+        <div class="pin-panel-media"><img src="https://images.unsplash.com/photo-1758524944226-461a52709c1a?auto=format&fit=crop&w=1800&q=80" alt="Young woman checking her banking app and card on her phone" /></div>
+        <div class="pin-panel-body">
+          <span class="eyebrow">Personal Banking</span>
+          <h2>Your money, your way.</h2>
+          <p>Everything you need to manage daily life in one place — finally working the way it should. Save. Transfer. Automate. All in one simple, beautifully designed account.</p>
+          <a href="#" class="btn btn-primary">Open a Personal Account</a>
+        </div>
+      </div>
+
+      <div class="pin-panel" id="business">
+        <div class="pin-panel-media"><img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1800&q=80" alt="Small business owner collecting a contactless payment from a customer" /></div>
+        <div class="pin-panel-body">
+          <span class="eyebrow">Business Banking</span>
+          <h2>Run your business, not the paperwork.</h2>
+          <p>Running a business is hard enough. Collect payments, pay your team, reconcile automatically, and stay in control from one dashboard. Less admin. More growth.</p>
+          <a href="#" class="btn btn-primary">Open a Business Account</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============ SECURITY ============ -->
+<section class="section-pad security" id="security">
+  <div class="wrap">
+    <div class="security-head reveal">
+      <span class="eyebrow">Peace of mind</span>
+      <h2>Security that works quietly in the background.</h2>
+      <p>Your money deserves more than just a password. Every transaction is protected by intelligent security designed to help keep your account safe, while giving you the confidence to bank whenever and wherever you choose.</p>
+    </div>
+    <div class="security-row">
+      <div class="security-card reveal"><div class="security-icon">🛡️</div><h3>Fraud Protection</h3><p>Real-time monitoring helps detect suspicious activity before it becomes a problem.</p></div>
+      <div class="security-card reveal reveal-delay-1"><div class="security-icon">📍</div><h3>Location Protection</h3><p>Verify transactions using your trusted, familiar locations.</p></div>
+      <div class="security-card reveal reveal-delay-2"><div class="security-icon">🌙</div><h3>Night Protection</h3><p>Extra layers of security automatically applied to after-hours transactions.</p></div>
+      <div class="security-card reveal reveal-delay-3"><div class="security-icon">💳</div><h3>Card Controls</h3><p>Freeze, unfreeze, and manage your cards instantly from the app.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ KIDDIES ============ -->
+<section class="kiddies">
+  <div class="kiddies-grid">
+    <div class="kiddies-media"><img src="https://images.unsplash.com/photo-1624272864537-8ecc72b67958?auto=format&fit=crop&w=1200&q=80" alt="A father laughing with his young daughter, building good habits together" /></div>
+    <div class="kiddies-body reveal">
+      <span class="eyebrow">Kiddies Account</span>
+      <h2>Teach money habits that last a lifetime.</h2>
+      <p>Help your children learn how to save, spend, and manage money responsibly in a safe environment. While they build confidence, you stay in control with tools that help guide every step of their financial journey.</p>
+      <div><a href="#" class="btn btn-primary">Open a Kiddies Account</a></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CARD 3D ============ -->
+<section class="section-pad card-section">
+  <div class="wrap">
+    <span class="eyebrow">Your wallet, simplified</span>
+    <h2>One card. Everyday spending. Instant controls. Done.</h2>
+    <div class="card-3d-stage">
+      <div class="card-3d">
+        <div class="card-3d-top"><div class="card-3d-chip"></div><div class="card-3d-brand">OneUtility</div></div>
+        <div class="card-3d-number">•••• •••• •••• 4471</div>
+        <div class="card-3d-bottom"><div>Card holder<b>A. OLUYEGE</b></div><div>Expires<b>09/29</b></div></div>
+      </div>
+    </div>
+    <a href="#" class="btn btn-primary">Request Your OneUtility Card</a>
+  </div>
+</section>
+
+<!-- ============ LOANS ============ -->
+<section class="section-pad section-tint">
+  <div class="wrap loans-grid">
+    <div class="loans-media reveal"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=80" alt="A warm modern home, representing life goals financed through loans" /></div>
+    <div class="loans-body reveal reveal-delay-2">
+      <span class="eyebrow">Financing</span>
+      <h2>Sometimes, life happens.</h2>
+      <p>Whether it's covering an unexpected expense, paying an important bill, or giving your business room to grow, OneUtility provides simple, transparent financing designed to keep life moving forward.</p>
+      <a href="#" class="btn btn-primary">Discover Our Loan Options</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ OMNICHANNEL ============ -->
+<section class="section-pad" id="channels">
+  <div class="wrap">
+    <div class="channels-head reveal">
+      <span class="eyebrow">Bank your way</span>
+      <h2>Wherever life takes you, we're right there with you.</h2>
+      <p>Whether you prefer using our mobile app, chatting on WhatsApp, dialing USSD, banking online, or visiting an agent nearby, OneUtility makes banking accessible whenever and however you need it.</p>
+    </div>
+    <div class="channels-grid">
+      <div class="channel-card reveal"><div class="channel-icon">📱</div><span>Mobile App</span></div>
+      <div class="channel-card reveal reveal-delay-1"><div class="channel-icon">💬</div><span>WhatsApp</span></div>
+      <div class="channel-card reveal reveal-delay-2"><div class="channel-icon">☎️</div><span>USSD</span></div>
+      <div class="channel-card reveal reveal-delay-3"><div class="channel-icon">💻</div><span>Online Banking</span></div>
+      <div class="channel-card reveal"><div class="channel-icon">🏢</div><span>Agent Banking</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ APP DOWNLOAD ============ -->
+<section class="section-pad appdl" id="app">
+  <div class="wrap appdl-grid">
+    <div class="appdl-body reveal">
+      <span class="eyebrow">Download the app</span>
+      <h2>Everything you need. Right in your pocket.</h2>
+      <p>Open accounts, pay bills, send money, manage your business, control your cards, and much more — all from one beautifully simple app.</p>
+      <div class="store-badges">
+        <div class="store-badge"><span class="store-badge-icon"></span><div class="store-badge-text"><span>Download on the</span><b>App Store</b></div></div>
+        <div class="store-badge"><span class="store-badge-icon">▶</span><div class="store-badge-text"><span>Get it on</span><b>Google Play</b></div></div>
+      </div>
+    </div>
+    <div class="appdl-phone-wrap reveal reveal-delay-2">
+      <div class="float-badge b1">⚡ Bill paid</div>
+      <div class="float-badge b2">🔒 Card frozen</div>
+      <div class="appdl-phone">
+        <div class="appdl-phone-screen">
+          <div class="appdl-notch"></div>
+          <div class="appdl-card-mini"><div class="lab">Total balance</div><div class="val">₦1,204,300</div></div>
+          <div class="appdl-mini-row">
+            <div class="appdl-mini-tile"><div>💸</div><div>SEND</div></div>
+            <div class="appdl-mini-tile"><div>⚡</div><div>BILLS</div></div>
+            <div class="appdl-mini-tile"><div>💳</div><div>CARD</div></div>
+          </div>
+          <div class="appdl-card-mini"><div class="lab">This month</div><div class="val" style="font-size:15px;">5 bills automated</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ECOSYSTEM ============ -->
+<section class="ecosystem">
+  <div class="wrap">
+    <span class="eyebrow" style="justify-content:center;">The full picture</span>
+    <h2>Everything connects back to OneUtility.</h2>
+    <p>Home, family, business, savings, travel and the little joys — not a list of icons, but an ecosystem that all runs through one account.</p>
+    <div class="orbit-wrap">
+      <div class="orbit-ring"></div>
+      <div class="orbit-ring r2"></div>
+      <div class="orbit-center">You</div>
+      <div class="orbit-spin" id="orbitSpin">
+        <div class="orbit-item" style="top:0; left:50%;"><span class="ic">🏠</span><span class="lb">Home</span></div>
+        <div class="orbit-item" style="top:25%; left:93%;"><span class="ic">👨‍👩‍👧</span><span class="lb">Family</span></div>
+        <div class="orbit-item" style="top:75%; left:93%;"><span class="ic">🎉</span><span class="lb">Fun</span></div>
+        <div class="orbit-item" style="top:100%; left:50%;"><span class="ic">✈️</span><span class="lb">Travel</span></div>
+        <div class="orbit-item" style="top:75%; left:7%;"><span class="ic">💰</span><span class="lb">Savings</span></div>
+        <div class="orbit-item" style="top:25%; left:7%;"><span class="ic">⚡</span><span class="lb">Bills</span></div>
+        <div class="orbit-item" style="top:0%; left:20%;"><span class="ic">💼</span><span class="lb">Business</span></div>
+      </div>
+    </div>
+    <div class="ecosystem-cta">
+      <a href="#" class="btn btn-primary">Open an Account</a>
+      <a href="#app" class="btn btn-outline">Download the App</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand"><span class="nav-logo-mark">1U</span>OneUtility</div>
+        <p>A simpler way to bank — bills, savings, cards, and business, all in one place.</p>
+      </div>
+      <div class="footer-col"><h4>Personal</h4><a href="#">Personal Account</a><a href="#">Kiddies Account</a><a href="#">Savings</a><a href="#">Loans</a></div>
+      <div class="footer-col"><h4>Business</h4><a href="#">Business Account</a><a href="#">POS</a><a href="#">APIs</a><a href="#">Virtual Accounts</a></div>
+      <div class="footer-col"><h4>Company</h4><a href="#">About Us</a><a href="#">Careers</a><a href="#">Security</a><a href="#">Support</a></div>
+      <div class="footer-col"><h4>Get the App</h4><a href="#">App Store</a><a href="#">Google Play</a><a href="#">USSD Codes</a></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 OneUtility Microfinance Bank. All rights reserved.</span>
+      <div class="footer-social">
+        <a href="#">𝕏</a><a href="#">in</a><a href="#">ig</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// nav scroll state
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 40);
+});
+
+// reveal on scroll
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('is-visible'); });
+}, { threshold: 0.15 });
+revealEls.forEach(el => io.observe(el));
+
+// horizontal pin-scroll for utility/personal/business panels
+const pinOuter = document.getElementById('pinOuter');
+const pinTrack = document.getElementById('pinTrack');
+const panelCount = 3;
+const dots = [document.getElementById('dot0'), document.getElementById('dot1'), document.getElementById('dot2')];
+const pinCounter = document.getElementById('pinCounter');
+
+function updatePin() {
+  const rect = pinOuter.getBoundingClientRect();
+  const total = pinOuter.offsetHeight - window.innerHeight;
+  let progress = -rect.top / total;
+  progress = Math.max(0, Math.min(1, progress));
+  const translate = progress * (panelCount - 1) * 100;
+  pinTrack.style.transform = `translateX(-${translate}vw)`;
+
+  const activeIndex = Math.min(panelCount - 1, Math.floor(progress * panelCount));
+  pinCounter.textContent = String(activeIndex + 1).padStart(2, '0') + ' / 0' + panelCount;
+
+  dots.forEach((dot, i) => {
+    const segStart = i / panelCount, segEnd = (i + 1) / panelCount;
+    let fill = (progress - segStart) / (segEnd - segStart);
+    fill = Math.max(0, Math.min(1, fill)) * 100;
+    dot.style.width = fill + '%';
+  });
+}
+let pinTicking = false;
+function onPinScroll() {
+  if (!pinTicking) {
+    requestAnimationFrame(() => { updatePin(); pinTicking = false; });
+    pinTicking = true;
+  }
+}
+window.addEventListener('scroll', onPinScroll, { passive: true });
+window.addEventListener('resize', updatePin);
+updatePin();
+</script>
+</body>
+</html>
