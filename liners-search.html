@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liners — Search</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+  :root {
+    --navy: #002E99;
+    --navy-dark: #001f6b;
+    --ink: #111111;
+    --muted: #6B7280;
+    --border: #e0e4ef;
+    --bg: #f7f8fc;
+    --chip-bg: #eef3ff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select { font-family: inherit; }
+
+  /* ── HEADER ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 72px;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; background: #fff; z-index: 20;
+  }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
+  .logo-mark {
+    width: 32px; height: 32px; border-radius: 8px; background: var(--navy);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+  }
+  .nav-links { display: flex; align-items: center; gap: 32px; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--ink); transition: color .15s; }
+  .nav-links a:hover { color: var(--navy); }
+  .header-right { display: flex; align-items: center; gap: 16px; }
+  .btn-primary {
+    background: var(--navy); color: #fff; border: none; border-radius: 8px;
+    padding: 10px 18px; font-size: 14px; font-weight: 600; transition: background .15s;
+  }
+  .btn-primary:hover { background: var(--navy-dark); }
+
+  /* ── HERO ── */
+  .hero {
+    max-width: 1200px; margin: 0 auto;
+    padding: 56px 32px 32px;
+    display: grid; grid-template-columns: 1fr 320px; gap: 40px; align-items: start;
+  }
+  .eyebrow {
+    font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--navy); margin-bottom: 12px;
+  }
+  .hero h1 {
+    font-size: 44px; font-weight: 700; line-height: 1.15; letter-spacing: -.01em;
+    margin-bottom: 28px;
+  }
+  .hero h1 .accent { color: var(--navy); }
+
+  .search-bar {
+    display: flex; align-items: center; gap: 0;
+    border: 1px solid var(--border); border-radius: 14px;
+    box-shadow: 0 1px 8px rgba(0,0,0,.05);
+    padding: 6px; max-width: 620px;
+  }
+  .search-mode {
+    display: flex; align-items: center; gap: 6px;
+    background: var(--chip-bg); color: var(--navy);
+    border: none; border-radius: 10px; padding: 12px 14px;
+    font-size: 14px; font-weight: 600; white-space: nowrap; flex-shrink: 0;
+  }
+  .search-input {
+    flex: 1; border: none; outline: none; font-size: 15px; padding: 12px 14px; color: var(--ink);
+  }
+  .kbd {
+    border: 1px solid var(--border); border-radius: 6px; padding: 4px 8px;
+    font-size: 12px; color: var(--muted); flex-shrink: 0; margin-right: 4px;
+  }
+  .trending { margin-top: 16px; font-size: 13px; color: var(--muted); }
+  .trending b { color: var(--ink); font-weight: 500; }
+  .trending a { color: var(--navy); font-weight: 500; }
+  .trending a:hover { text-decoration: underline; }
+
+  .stats { display: flex; flex-direction: column; gap: 14px; }
+  .stat-card {
+    border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; background: #fff;
+  }
+  .stat-num { font-size: 30px; font-weight: 700; letter-spacing: -.02em; }
+  .stat-label { font-size: 13px; color: var(--muted); margin-top: 2px; }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); max-width: 1200px; margin: 8px auto 0; }
+
+  /* ── LAYOUT ── */
+  .layout {
+    max-width: 1200px; margin: 0 auto; padding: 32px 32px 80px;
+    display: grid; grid-template-columns: 260px 1fr; gap: 32px; align-items: start;
+  }
+
+  /* sidebar */
+  .sidebar-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .sidebar-head h3 { font-size: 16px; font-weight: 600; }
+  .link-btn { font-size: 13px; font-weight: 600; color: var(--navy); background: none; border: none; }
+  .link-btn:hover { text-decoration: underline; }
+  .filter-group { margin-bottom: 26px; }
+  .filter-group-title {
+    font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 12px;
+  }
+  .filter-search {
+    display: flex; align-items: center; gap: 8px;
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+    font-size: 13px; color: var(--muted); margin-bottom: 12px;
+  }
+  .filter-search input { border: none; outline: none; font-size: 13px; flex: 1; color: var(--ink); }
+  .filter-row {
+    display: flex; align-items: center; gap: 10px; padding: 6px 0;
+    font-size: 14px; cursor: pointer;
+  }
+  .filter-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--navy); cursor: pointer; }
+  .filter-row label { flex: 1; cursor: pointer; }
+  .filter-row .count { color: var(--muted); font-size: 13px; }
+  .show-all { font-size: 13px; font-weight: 600; color: var(--navy); background: none; border: none; margin-top: 4px; display: inline-flex; align-items: center; gap: 4px; }
+  .show-all:hover { text-decoration: underline; }
+
+  /* chips */
+  .chips { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--chip-bg); color: var(--navy); font-size: 13px; font-weight: 600;
+    border-radius: 999px; padding: 8px 12px 8px 14px; border: none;
+  }
+  .chip button { background: none; border: none; color: var(--navy); display: flex; opacity: .7; }
+  .chip button:hover { opacity: 1; }
+  .chip.hidden { display: none; }
+  .clear-all { font-size: 13px; font-weight: 600; color: var(--muted); background: none; border: none; }
+  .clear-all:hover { color: var(--ink); }
+
+  /* top match */
+  .top-match {
+    display: flex; align-items: center; gap: 16px;
+    background: var(--chip-bg); border: 1px solid #cddcff; border-radius: 14px;
+    padding: 20px 22px; margin-bottom: 24px;
+  }
+  .avatar {
+    width: 48px; height: 48px; border-radius: 12px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 700; font-size: 18px;
+  }
+  .result-body { flex: 1; min-width: 0; }
+  .top-label { font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--navy); margin-bottom: 4px; }
+  .result-title { display: flex; align-items: center; gap: 6px; font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+  .result-title .ti-circle-check-filled { color: #16a34a; font-size: 16px; }
+  .result-desc { font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .result-desc .rating { color: var(--ink); font-weight: 600; display: inline-flex; align-items: center; gap: 3px; }
+  .result-desc .ti-star-filled { color: #f59e0b; font-size: 13px; }
+  .btn-view {
+    background: var(--navy); color: #fff; border: none; border-radius: 8px;
+    padding: 10px 18px; font-size: 14px; font-weight: 600; white-space: nowrap; transition: background .15s;
+  }
+  .btn-view:hover { background: var(--navy-dark); }
+
+  /* results head */
+  .results-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .results-count { font-size: 15px; font-weight: 600; }
+  .results-controls { display: flex; align-items: center; gap: 10px; }
+  .sort-select {
+    border: 1px solid var(--border); border-radius: 8px; padding: 8px 12px;
+    font-size: 13px; color: var(--ink); background: #fff;
+  }
+  .view-toggle { display: flex; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .view-toggle button { border: none; background: #fff; padding: 8px 10px; color: var(--muted); display: flex; }
+  .view-toggle button.active { background: var(--navy); color: #fff; }
+
+  /* result rows */
+  .result-list { display: flex; flex-direction: column; }
+  .result-row {
+    display: flex; align-items: center; gap: 16px;
+    padding: 18px 4px; border-bottom: 1px solid var(--border);
+  }
+  .result-row:last-child { border-bottom: none; }
+  .row-name { font-size: 15px; font-weight: 700; }
+  .row-flag { font-size: 13px; color: var(--muted); font-weight: 500; }
+  .row-desc { font-size: 14px; color: var(--muted); margin-top: 2px; }
+  .row-alts { display: flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 12px; color: var(--muted); }
+  .mini-avatar {
+    width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center;
+    color: #fff; font-size: 10px; font-weight: 700; margin-right: -6px; border: 2px solid #fff;
+  }
+  .row-tags { display: flex; align-items: center; gap: 6px; }
+  .tag { font-size: 12px; font-weight: 600; padding: 4px 9px; border-radius: 999px; background: var(--bg); color: var(--muted); }
+  .tag.freemium { background: #ecfdf5; color: #059669; }
+  .row-right { text-align: right; flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 10px; }
+  .row-rating { font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+  .row-rating .ti-star-filled { color: #f59e0b; font-size: 13px; }
+  .visit-link { font-size: 13px; font-weight: 600; color: var(--navy); display: inline-flex; align-items: center; gap: 4px; }
+  .visit-link:hover { text-decoration: underline; }
+
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    .hero { grid-template-columns: 1fr; }
+    .stats { flex-direction: row; overflow-x: auto; }
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { order: 2; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="#">
+    <span class="logo-mark">L</span> Liners
+  </a>
+  <nav class="nav-links">
+    <a href="#">Products</a>
+    <a href="#">Categories</a>
+    <a href="#">News</a>
+    <a href="#">Events</a>
+  </nav>
+  <div class="header-right">
+    <button class="btn-primary">Submit product</button>
+  </div>
+</header>
+
+<section class="hero">
+  <div>
+    <div class="eyebrow">Search</div>
+    <h1>Every African software<br>product. <span class="accent">One search.</span></h1>
+
+    <div class="search-bar">
+      <button class="search-mode">I know the product <i class="ti ti-chevron-down" style="font-size:13px"></i></button>
+      <input class="search-input" id="searchInput" type="text" value="paystack" placeholder="Search for a product..." />
+      <span class="kbd">⌘K</span>
+    </div>
+    <div class="trending">
+      <b>Trending:</b> <a href="#">virtual dollar card</a> · <a href="#">POS terminal</a> · <a href="#">payroll</a> · <a href="#">buy bitcoin</a>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-card"><div class="stat-num">912</div><div class="stat-label">products listed</div></div>
+    <div class="stat-card"><div class="stat-num">42</div><div class="stat-label">categories</div></div>
+    <div class="stat-card"><div class="stat-num">30</div><div class="stat-label">countries covered</div></div>
+  </div>
+</section>
+
+<hr class="divider" />
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-head">
+      <h3>Advanced filters</h3>
+      <button class="link-btn" id="clearFiltersBtn">Clear all</button>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-title">Country</div>
+      <div class="filter-search">
+        <i class="ti ti-search"></i>
+        <input type="text" placeholder="Search countries..." />
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="c-ng" checked />
+        <label for="c-ng">🇳🇬 Nigeria</label>
+        <span class="count">64</span>
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="c-ke" />
+        <label for="c-ke">🇰🇪 Kenya</label>
+        <span class="count">22</span>
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="c-za" />
+        <label for="c-za">🇿🇦 South Africa</label>
+        <span class="count">18</span>
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="c-pan" />
+        <label for="c-pan">🌍 Pan-African</label>
+        <span class="count">15</span>
+      </div>
+      <button class="show-all">Show all 30 <i class="ti ti-arrow-right" style="font-size:12px"></i></button>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-title">Category</div>
+      <div class="filter-row">
+        <input type="checkbox" id="cat-pay" checked />
+        <label for="cat-pay">💳 Payments</label>
+        <span class="count">127</span>
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="cat-lend" />
+        <label for="cat-lend">🏦 Lending</label>
+        <span class="count">54</span>
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="cat-cross" />
+        <label for="cat-cross">💱 Cross-border</label>
+        <span class="count">38</span>
+      </div>
+      <button class="show-all">Show all 42 <i class="ti ti-arrow-right" style="font-size:12px"></i></button>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-title">Pricing</div>
+      <div class="filter-row">
+        <input type="checkbox" id="p-free" checked />
+        <label for="p-free">Free</label>
+        <span class="count">210</span>
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="p-freemium" />
+        <label for="p-freemium">Freemium</label>
+        <span class="count">340</span>
+      </div>
+      <div class="filter-row">
+        <input type="checkbox" id="p-paid" />
+        <label for="p-paid">Paid</label>
+        <span class="count">362</span>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="chips" id="chips">
+      <span class="chip" data-chip="nigeria">🇳🇬 Nigeria <button aria-label="Remove Nigeria filter"><i class="ti ti-x"></i></button></span>
+      <span class="chip" data-chip="payments">💳 Payments <button aria-label="Remove Payments filter"><i class="ti ti-x"></i></button></span>
+      <span class="chip" data-chip="free">Free <button aria-label="Remove Free filter"><i class="ti ti-x"></i></button></span>
+      <span class="chip" data-chip="verified">✔ Verified <button aria-label="Remove Verified filter"><i class="ti ti-x"></i></button></span>
+      <button class="clear-all" id="chipsClearAll">Clear all</button>
+    </div>
+
+    <div class="top-match">
+      <div class="avatar" style="background:#0bb4b0">P</div>
+      <div class="result-body">
+        <div class="top-label">Top match</div>
+        <div class="result-title">Paystack <i class="ti ti-circle-check-filled"></i></div>
+        <div class="result-desc">
+          Accept payments from anyone, anywhere in the world.
+          <span class="rating"><i class="ti ti-star-filled"></i> 4.7 (218)</span> · 🇳🇬 Nigeria
+        </div>
+      </div>
+      <button class="btn-view">View product</button>
+    </div>
+
+    <div class="results-head">
+      <div class="results-count">127 more products</div>
+      <div class="results-controls">
+        <span style="font-size:13px;color:var(--muted)">Sort:</span>
+        <select class="sort-select" id="sortSelect">
+          <option>Relevance</option>
+          <option>Highest rated</option>
+          <option>Most reviewed</option>
+          <option>Newest</option>
+        </select>
+        <div class="view-toggle">
+          <button id="gridViewBtn" aria-label="Grid view"><i class="ti ti-layout-grid"></i></button>
+          <button id="listViewBtn" class="active" aria-label="List view"><i class="ti ti-list"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-list" id="resultList">
+      <div class="result-row">
+        <div class="avatar" style="background:#f5a623">F</div>
+        <div class="result-body">
+          <div class="result-title" style="font-size:15px">Flutterwave <i class="ti ti-circle-check-filled" style="font-size:14px"></i></div>
+          <div class="row-desc">One API for payments across Africa.</div>
+          <div class="row-alts">
+            Alternatives:
+            <span class="mini-avatar" style="background:#0bb4b0">P</span>
+            <span class="mini-avatar" style="background:#400080">M</span>
+            <span class="mini-avatar" style="background:#7b2fbe">I</span>
+            <span style="margin-left:10px">+9</span>
+          </div>
+        </div>
+        <div class="row-right">
+          <span class="row-rating"><i class="ti ti-star-filled"></i> 4.5 (183)</span>
+          <div class="row-tags">
+            <span class="tag">Payments</span>
+            <span class="tag">+2</span>
+            <span class="tag freemium">Freemium</span>
+          </div>
+          <a class="visit-link" href="#">Visit <i class="ti ti-external-link" style="font-size:12px"></i></a>
+        </div>
+      </div>
+
+      <div class="result-row">
+        <div class="avatar" style="background:#400080">M</div>
+        <div class="result-body">
+          <div class="result-title" style="font-size:15px">Moniepoint <i class="ti ti-circle-check-filled" style="font-size:14px"></i></div>
+          <div class="row-desc">Banking and payments for businesses.</div>
+          <div class="row-alts">
+            Alternatives:
+            <span class="mini-avatar" style="background:#0bb4b0">P</span>
+            <span class="mini-avatar" style="background:#f5a623">F</span>
+            <span style="margin-left:10px">+5</span>
+          </div>
+        </div>
+        <div class="row-right">
+          <span class="row-rating"><i class="ti ti-star-filled"></i> 4.6 (142)</span>
+          <div class="row-tags">
+            <span class="tag">Payments</span>
+            <span class="tag freemium">Freemium</span>
+          </div>
+          <a class="visit-link" href="#">Visit <i class="ti ti-external-link" style="font-size:12px"></i></a>
+        </div>
+      </div>
+
+      <div class="result-row">
+        <div class="avatar" style="background:#7b2fbe">C</div>
+        <div class="result-body">
+          <div class="result-title" style="font-size:15px">Chipper Cash <i class="ti ti-circle-check-filled" style="font-size:14px"></i></div>
+          <div class="row-desc">Free cross-border money transfers.</div>
+          <div class="row-alts">
+            Alternatives:
+            <span class="mini-avatar" style="background:#0bb4b0">P</span>
+            <span class="mini-avatar" style="background:#f5a623">F</span>
+            <span style="margin-left:10px">+7</span>
+          </div>
+        </div>
+        <div class="row-right">
+          <span class="row-rating"><i class="ti ti-star-filled"></i> 4.4 (96)</span>
+          <div class="row-tags">
+            <span class="tag">Payments</span>
+            <span class="tag">Free</span>
+          </div>
+          <a class="visit-link" href="#">Visit <i class="ti ti-external-link" style="font-size:12px"></i></a>
+        </div>
+      </div>
+
+      <div class="result-row">
+        <div class="avatar" style="background:#12b886">K</div>
+        <div class="result-body">
+          <div class="result-title" style="font-size:15px">Kuda <i class="ti ti-circle-check-filled" style="font-size:14px"></i></div>
+          <div class="row-desc">The money app for Africans.</div>
+          <div class="row-alts">
+            Alternatives:
+            <span class="mini-avatar" style="background:#0bb4b0">P</span>
+            <span class="mini-avatar" style="background:#400080">M</span>
+            <span style="margin-left:10px">+4</span>
+          </div>
+        </div>
+        <div class="row-right">
+          <span class="row-rating"><i class="ti ti-star-filled"></i> 4.7 (211)</span>
+          <div class="row-tags">
+            <span class="tag">Payments</span>
+            <span class="tag freemium">Freemium</span>
+          </div>
+          <a class="visit-link" href="#">Visit <i class="ti ti-external-link" style="font-size:12px"></i></a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  document.querySelectorAll('.chip button').forEach(btn => {
+    btn.addEventListener('click', () => btn.closest('.chip').classList.add('hidden'));
+  });
+  document.getElementById('chipsClearAll').addEventListener('click', () => {
+    document.querySelectorAll('.chip').forEach(c => c.classList.add('hidden'));
+  });
+  document.getElementById('clearFiltersBtn').addEventListener('click', () => {
+    document.querySelectorAll('.sidebar input[type="checkbox"]').forEach(cb => cb.checked = false);
+    document.querySelectorAll('.chip').forEach(c => c.classList.add('hidden'));
+  });
+
+  const gridBtn = document.getElementById('gridViewBtn');
+  const listBtn = document.getElementById('listViewBtn');
+  const resultList = document.getElementById('resultList');
+  gridBtn.addEventListener('click', () => {
+    gridBtn.classList.add('active'); listBtn.classList.remove('active');
+    resultList.style.display = 'grid';
+    resultList.style.gridTemplateColumns = 'repeat(auto-fill, minmax(260px, 1fr))';
+    resultList.style.gap = '16px';
+    document.querySelectorAll('.result-row').forEach(r => {
+      r.style.flexDirection = 'column'; r.style.alignItems = 'flex-start';
+      r.style.border = '1px solid var(--border)'; r.style.borderRadius = '12px'; r.style.padding = '16px';
+    });
+  });
+  listBtn.addEventListener('click', () => {
+    listBtn.classList.add('active'); gridBtn.classList.remove('active');
+    resultList.style.display = 'flex';
+    resultList.style.flexDirection = 'column';
+    document.querySelectorAll('.result-row').forEach(r => {
+      r.style.flexDirection = 'row'; r.style.alignItems = 'center';
+      r.style.border = 'none'; r.style.borderRadius = '0'; r.style.padding = '18px 4px';
+      r.style.borderBottom = '1px solid var(--border)';
+    });
+  });
+</script>
+
+</body>
+</html>

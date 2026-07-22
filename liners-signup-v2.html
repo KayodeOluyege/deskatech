@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liners — Sign Up (v2)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+:root {
+  --navy: #0B63C4;
+  --navy-dark: #001233;
+  --teal: #22D3EE;
+  --ink: #111111;
+  --muted: #6B7280;
+  --border: #e5e9f2;
+  --bg: #f5f7fb;
+  --card: #ffffff;
+  --chip-bg: #eef3ff;
+}
+html.dark {
+  --ink: #f2f4fa;
+  --muted: #9aa3b8;
+  --border: #232a42;
+  --bg: #0b0d17;
+  --card: #12142a;
+  --chip-bg: #16193a;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+button { font-family: inherit; cursor: pointer; }
+input { font-family: inherit; }
+
+/* ── noise texture (shared by page bg + left panel) ── */
+.ls2-noise {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.5'/></svg>");
+  mix-blend-mode: overlay;
+}
+
+/* ── page (mimics Upsy's solid gradient canvas the modal floats on) ── */
+.ls2-page {
+  min-height: 100vh; position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  padding: 40px 20px;
+  background: radial-gradient(1100px 760px at 82% -6%, var(--teal) 0%, var(--navy) 34%, var(--navy-dark) 66%, #00030c 100%);
+}
+.ls2-page > .ls2-noise { opacity: .5; }
+
+.ls2-trigger-btn {
+  position: relative; z-index: 2; font-size: 14px; font-weight: 600;
+  padding: 12px 24px; border-radius: 10px; background: #fff; color: var(--navy-dark);
+  border: none; box-shadow: 0 8px 24px rgba(0,0,0,.25);
+}
+
+/* ── modal ── */
+.ls2-modal {
+  position: relative; z-index: 2; width: 100%; max-width: 880px; max-height: 92vh;
+  background: var(--card); border-radius: 28px; overflow: hidden;
+  display: grid; grid-template-columns: 340px 1fr;
+  box-shadow: 0 30px 80px rgba(0,0,0,.4);
+  animation: ls2-pop .25s cubic-bezier(.22,1,.36,1);
+}
+@keyframes ls2-pop { from { opacity: 0; transform: translateY(16px) scale(.98); } to { opacity: 1; transform: none; } }
+
+.ls2-topbar {
+  position: absolute; top: 18px; right: 18px; z-index: 5; display: flex; gap: 8px;
+}
+.ls2-icon-btn {
+  width: 34px; height: 34px; border-radius: 999px; border: 1px solid var(--border);
+  background: var(--card); color: var(--ink); display: flex; align-items: center; justify-content: center;
+  transition: border-color .15s;
+}
+.ls2-icon-btn:hover { border-color: var(--navy); }
+.ls2-icon-btn i { font-size: 16px; }
+#ls2-theme-icon.ti-moon::before { content: "\ea51"; }
+
+/* ── left inset panel ── */
+.ls2-left {
+  margin: 18px 18px 18px 0; border-radius: 22px; position: relative; overflow: hidden;
+  background: linear-gradient(165deg, var(--navy) 0%, var(--navy-dark) 100%);
+  color: #fff; padding: 26px 24px; display: flex; flex-direction: column;
+}
+.ls2-lines { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .35; }
+
+.ls2-brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 15px; position: relative; z-index: 1; }
+.ls2-brand-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); }
+
+.ls2-badge {
+  align-self: flex-start; margin-top: 16px; font-size: 10.5px; font-weight: 600; letter-spacing: .08em;
+  text-transform: uppercase; background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px; padding: 5px 12px; position: relative; z-index: 1;
+}
+
+.ls2-chips { display: flex; flex-direction: column; gap: 9px; margin: 24px 0 auto; position: relative; z-index: 1; }
+.ls2-chip {
+  align-self: flex-start; display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,.14); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  border: 1px solid rgba(255,255,255,.22); border-radius: 999px; padding: 7px 13px 7px 8px;
+  font-size: 12px; font-weight: 600;
+}
+.ls2-chip i { font-size: 13px; color: var(--teal); }
+
+.ls2-bottom { position: relative; z-index: 1; margin-top: 24px; }
+.ls2-headline { font-size: 24px; font-weight: 700; line-height: 1.28; letter-spacing: -.01em; margin-bottom: 8px; }
+.ls2-subcopy { font-size: 13px; line-height: 1.55; color: rgba(255,255,255,.72); margin-bottom: 16px; }
+.ls2-hr { height: 1px; background: rgba(255,255,255,.18); margin-bottom: 12px; }
+.ls2-trust { font-size: 11.5px; color: rgba(255,255,255,.55); display: flex; align-items: center; gap: 6px; }
+.ls2-trust .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); flex-shrink: 0; }
+
+/* ── right: form ── */
+.ls2-right { padding: 40px 40px 30px; overflow-y: auto; background: var(--card); }
+.ls2-right-inner { max-width: 320px; margin: 0 auto; }
+.ls2-title { font-size: 20px; font-weight: 700; color: var(--ink); letter-spacing: -.01em; margin-bottom: 4px; }
+.ls2-sub { font-size: 13px; color: var(--muted); margin-bottom: 20px; }
+
+.ls2-type-row { display: flex; gap: 8px; margin-bottom: 18px; }
+.ls2-type-pill {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  border: 1px solid var(--border); border-radius: 10px; padding: 9px 10px;
+  font-size: 12.5px; font-weight: 600; color: var(--muted); background: var(--bg);
+  transition: border-color .15s, color .15s, background .15s;
+}
+.ls2-type-pill i { font-size: 14px; }
+.ls2-type-pill.on { border: 1.5px solid var(--navy); color: var(--navy); background: var(--chip-bg); }
+
+.ls2-field { margin-bottom: 12px; }
+.ls2-field label { display: block; font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 6px; }
+.ls2-input-wrap {
+  display: flex; align-items: center; border: 1px solid var(--border); border-radius: 10px;
+  padding: 0 12px; background: var(--card); transition: border-color .15s, box-shadow .15s;
+}
+.ls2-input-wrap:focus-within { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(11,99,196,.12); }
+.ls2-input-wrap input {
+  flex: 1; border: none; outline: none; padding: 10.5px 0; font-size: 13.5px; color: var(--ink);
+  background: transparent; min-width: 0;
+}
+.ls2-eye { background: none; border: none; padding: 4px; display: flex; color: var(--muted); }
+.ls2-eye:hover { color: var(--ink); }
+
+.ls2-submit {
+  width: 100%; background: var(--navy); color: #fff; border: none; border-radius: 10px;
+  padding: 12px 16px; font-size: 14px; font-weight: 600; margin-top: 4px; transition: background .15s;
+}
+.ls2-submit:hover { background: var(--navy-dark); }
+
+.ls2-divider {
+  display: flex; align-items: center; gap: 10px; margin: 16px 0; font-size: 12px; color: var(--muted);
+}
+.ls2-divider::before, .ls2-divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+.ls2-google-btn {
+  width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;
+  border: 1px solid var(--border); border-radius: 10px; background: var(--card);
+  padding: 10.5px 16px; font-size: 13.5px; font-weight: 600; color: var(--ink);
+  transition: border-color .15s, box-shadow .15s;
+}
+.ls2-google-btn:hover { border-color: #c7cee0; box-shadow: 0 1px 6px rgba(0,0,0,.06); }
+
+.ls2-switch { text-align: center; font-size: 12.5px; color: var(--muted); margin-top: 16px; }
+.ls2-switch a { color: var(--navy); font-weight: 600; }
+.ls2-switch a:hover { text-decoration: underline; }
+
+@media (max-width: 720px) {
+  .ls2-modal { grid-template-columns: 1fr; max-height: 100%; height: 100%; border-radius: 0; width: 100%; }
+  .ls2-page { padding: 0; }
+  .ls2-left { display: none; }
+  .ls2-right { padding: 56px 22px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="ls2-page">
+  <div class="ls2-noise"></div>
+  <button class="ls2-trigger-btn" onclick="document.getElementById('ls2-modal').style.display='grid'">Open sign up modal</button>
+
+  <div class="ls2-modal" id="ls2-modal" role="dialog" aria-modal="true" aria-labelledby="ls2-title" style="display:none">
+    <div class="ls2-topbar">
+      <button class="ls2-icon-btn" aria-label="Toggle theme" onclick="ls2ToggleTheme()"><i class="ti ti-sun" id="ls2-theme-icon"></i></button>
+      <button class="ls2-icon-btn" aria-label="Close" onclick="document.getElementById('ls2-modal').style.display='none'"><i class="ti ti-x"></i></button>
+    </div>
+
+    <!-- LEFT: brand panel -->
+    <div class="ls2-left">
+      <div class="ls2-noise"></div>
+      <svg class="ls2-lines" viewBox="0 0 340 560" preserveAspectRatio="none" fill="none">
+        <path d="M-20 40 C 80 10, 140 90, 120 160 S 260 260, 220 340 S 340 420, 320 520" stroke="white" stroke-width="1.4"/>
+        <path d="M-20 100 C 60 70, 120 150, 100 220 S 240 320, 200 400 S 320 480, 300 560" stroke="white" stroke-width="1.2"/>
+        <path d="M-20 170 C 50 150, 100 220, 80 280 S 220 380, 180 450" stroke="white" stroke-width="1"/>
+      </svg>
+
+      <div class="ls2-brand"><span class="ls2-brand-dot"></span> Liners</div>
+      <span class="ls2-badge">Free forever</span>
+
+      <div class="ls2-chips">
+        <div class="ls2-chip"><i class="ti ti-database"></i> 2,007+ products across Africa</div>
+        <div class="ls2-chip"><i class="ti ti-scale"></i> Compare alternatives &amp; reviews</div>
+        <div class="ls2-chip"><i class="ti ti-chart-line"></i> Track funding &amp; investors</div>
+      </div>
+
+      <div class="ls2-bottom">
+        <div class="ls2-headline">The record of African software.</div>
+        <div class="ls2-subcopy">Discover products, compare alternatives, and track funding — curated daily by researchers and AI.</div>
+        <div class="ls2-hr"></div>
+        <div class="ls2-trust"><span class="dot"></span> Trusted across 54 African countries</div>
+      </div>
+    </div>
+
+    <!-- RIGHT: form -->
+    <div class="ls2-right">
+      <div class="ls2-right-inner">
+        <h1 class="ls2-title" id="ls2-title">Create your account</h1>
+        <p class="ls2-sub" id="ls2-sub">Start discovering African software in minutes.</p>
+
+        <div class="ls2-type-row" id="ls2-type-row">
+          <button type="button" class="ls2-type-pill on" data-type="individual" onclick="ls2SetType('individual')"><i class="ti ti-user"></i> Individual</button>
+          <button type="button" class="ls2-type-pill" data-type="business" onclick="ls2SetType('business')"><i class="ti ti-building"></i> Business</button>
+        </div>
+
+        <form onsubmit="return false;">
+          <div class="ls2-field" id="ls2-field-name">
+            <label>Full name</label>
+            <div class="ls2-input-wrap"><input placeholder="Enter your full name" /></div>
+          </div>
+          <div class="ls2-field">
+            <label>Email</label>
+            <div class="ls2-input-wrap"><input type="email" placeholder="you@company.com" /></div>
+          </div>
+          <div class="ls2-field">
+            <label>Password</label>
+            <div class="ls2-input-wrap">
+              <input type="password" placeholder="Create password" id="ls2-pass" />
+              <button type="button" class="ls2-eye" onclick="ls2ToggleEye('ls2-pass','ls2-eye-1')"><i class="ti ti-eye" id="ls2-eye-1"></i></button>
+            </div>
+          </div>
+          <div class="ls2-field" id="ls2-field-confirm">
+            <label>Confirm password</label>
+            <div class="ls2-input-wrap">
+              <input type="password" placeholder="Confirm password" id="ls2-pass2" />
+              <button type="button" class="ls2-eye" onclick="ls2ToggleEye('ls2-pass2','ls2-eye-2')"><i class="ti ti-eye" id="ls2-eye-2"></i></button>
+            </div>
+          </div>
+          <button type="submit" class="ls2-submit" id="ls2-submit-btn">Create account</button>
+        </form>
+
+        <div class="ls2-divider">or continue with</div>
+        <button class="ls2-google-btn">
+          <svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.6 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.7-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.6 15.4 18.9 12 24 12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34.6 6.1 29.6 4 24 4c-7.4 0-13.8 4.1-17.1 10.1z"/><path fill="#4CAF50" d="M24 44c5.5 0 10.4-1.9 14.2-5.1l-6.6-5.4C29.5 35.3 26.9 36 24 36c-5.3 0-9.7-3.4-11.3-8.1l-6.6 5C9.9 39.7 16.4 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.3-2.3 4.2-4.2 5.6l6.6 5.4C39.9 37 44 31.4 44 24c0-1.3-.1-2.5-.4-3.5z"/></svg>
+          Continue with Google
+        </button>
+
+        <p class="ls2-switch" id="ls2-switch-p">Already have an account? <a href="#" onclick="ls2SetTab('login');return false;">Log in</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function ls2SetTab(tab) {
+  var isSignup = tab === 'signup';
+  document.getElementById('ls2-title').textContent = isSignup ? 'Create your account' : 'Welcome back';
+  document.getElementById('ls2-sub').textContent = isSignup
+    ? 'Start discovering African software in minutes.'
+    : 'Log in to continue discovering African software.';
+  document.getElementById('ls2-type-row').style.display = isSignup ? 'flex' : 'none';
+  document.getElementById('ls2-field-name').style.display = isSignup ? 'block' : 'none';
+  document.getElementById('ls2-field-confirm').style.display = isSignup ? 'block' : 'none';
+  document.getElementById('ls2-submit-btn').textContent = isSignup ? 'Create account' : 'Log in';
+  var p = document.getElementById('ls2-switch-p');
+  p.innerHTML = isSignup
+    ? 'Already have an account? <a href="#" onclick="ls2SetTab(\'login\');return false;">Log in</a>'
+    : 'Don\'t have an account? <a href="#" onclick="ls2SetTab(\'signup\');return false;">Sign up</a>';
+}
+
+function ls2SetType(type) {
+  document.querySelectorAll('.ls2-type-pill').forEach(function (b) { b.classList.toggle('on', b.dataset.type === type); });
+}
+
+function ls2ToggleEye(inputId, iconId) {
+  var input = document.getElementById(inputId);
+  var icon = document.getElementById(iconId);
+  var show = input.type === 'password';
+  input.type = show ? 'text' : 'password';
+  icon.className = show ? 'ti ti-eye-off' : 'ti ti-eye';
+}
+
+function ls2ToggleTheme() {
+  var dark = document.documentElement.classList.toggle('dark');
+  document.getElementById('ls2-theme-icon').className = dark ? 'ti ti-moon' : 'ti ti-sun';
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  document.getElementById('ls2-modal').style.display = 'grid';
+});
+</script>
+
+</body>
+</html>
