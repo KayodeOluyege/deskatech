@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liners — Browse Product Categories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+  :root {
+    --navy: #002E99;
+    --navy-dark: #001f6b;
+    --ink: #111111;
+    --muted: #6B7280;
+    --border: #e0e4ef;
+    --bg: #f7f8fc;
+    --chip-bg: #eef3ff;
+    --surface: #ffffff;
+  }
+  html.dark {
+    --ink: #f2f4fa;
+    --muted: #9aa3b8;
+    --border: #2a2f45;
+    --bg: #0b0d17;
+    --chip-bg: #16193a;
+    --surface: #12142a;
+  }
+  * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: var(--surface);
+    -webkit-font-smoothing: antialiased;
+    transition: background .2s, color .2s;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select { font-family: inherit; }
+
+  /* ── HEADER ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 68px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px;
+    position: sticky; top: 0; background: var(--surface); z-index: 30;
+  }
+  .logo { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 17px; flex-shrink: 0; }
+  .logo-mark {
+    width: 30px; height: 30px; border-radius: 8px; background: var(--navy);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; flex-shrink: 0;
+  }
+  .nav-links { display: flex; align-items: center; gap: 26px; flex: 1; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--ink); transition: color .15s; display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+  .nav-links a:hover { color: var(--navy); }
+  .header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: none;
+    display: flex; align-items: center; justify-content: center; color: var(--ink); font-size: 16px;
+    transition: border-color .15s;
+  }
+  .icon-btn:hover { border-color: var(--navy); }
+  .btn-outline {
+    border: 1px solid var(--border); background: none; color: var(--ink);
+    border-radius: 8px; padding: 9px 14px; font-size: 14px; font-weight: 600;
+    display: flex; align-items: center; gap: 5px; transition: border-color .15s;
+  }
+  .btn-outline:hover { border-color: var(--navy); }
+  .btn-primary {
+    background: var(--navy); color: #fff; border: none; border-radius: 8px;
+    padding: 10px 16px; font-size: 14px; font-weight: 600; transition: background .15s;
+  }
+  .btn-primary:hover { background: var(--navy-dark); }
+
+  /* ── AD STRIP ── */
+  .ad-strip {
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    background: var(--chip-bg); border-bottom: 1px solid var(--border);
+    padding: 10px 32px; font-size: 13px;
+  }
+  .ad-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .ad-tag { font-size: 11px; font-weight: 600; color: var(--muted); border: 1px solid var(--border); border-radius: 5px; padding: 2px 6px; flex-shrink: 0; }
+  .ad-logo { width: 22px; height: 22px; border-radius: 6px; background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center; font-size: 12px; flex-shrink: 0; }
+  .ad-left b { font-weight: 700; }
+  .ad-left span.desc { color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .ad-strip .btn-outline { flex-shrink: 0; padding: 7px 14px; font-size: 13px; }
+
+  /* ── BREADCRUMB ── */
+  .breadcrumb {
+    max-width: 1200px; margin: 0 auto; padding: 20px 32px 0;
+    display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted);
+  }
+  .breadcrumb a:hover { color: var(--navy); }
+  .breadcrumb .current { color: var(--ink); font-weight: 600; }
+
+  /* ── PAGE HEAD ── */
+  .page-head { max-width: 1200px; margin: 0 auto; padding: 20px 32px 0; }
+  .page-head h1 { font-size: 36px; font-weight: 700; letter-spacing: -.01em; margin-bottom: 10px; }
+  .page-head p { font-size: 15px; color: var(--muted); max-width: 640px; margin-bottom: 24px; }
+
+  .cat-search {
+    display: flex; align-items: center; gap: 0;
+    border: 1px solid var(--border); border-radius: 12px;
+    max-width: 480px; padding: 4px;
+  }
+  .cat-search i { color: var(--muted); font-size: 16px; margin: 0 10px; }
+  .cat-search input { flex: 1; border: none; outline: none; font-size: 14px; padding: 10px 0; background: none; color: var(--ink); }
+
+  .stats-row { display: flex; gap: 14px; max-width: 1200px; margin: 24px auto 0; padding: 0 32px; }
+  .stat-card { flex: 1; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+  .stat-num { font-size: 24px; font-weight: 700; letter-spacing: -.02em; }
+  .stat-label { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+  .stat-card.accent { background: var(--chip-bg); border-color: var(--chip-bg); }
+  .stat-card.accent .stat-num { color: var(--navy); }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); max-width: 1200px; margin: 28px auto 0; }
+
+  /* ── LAYOUT ── */
+  .layout {
+    max-width: 1200px; margin: 0 auto; padding: 28px 32px 0;
+    display: grid; grid-template-columns: 240px 1fr; gap: 32px; align-items: start;
+  }
+  .sidebar-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+  .filter-group { margin-bottom: 24px; }
+  .filter-group-title {
+    font-size: 11px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px;
+  }
+  .seg-list { display: flex; flex-direction: column; gap: 2px; }
+  .seg-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px;
+    padding: 8px 10px; border-radius: 8px; font-size: 13.5px; font-weight: 500;
+    border: none; background: none; color: var(--ink); width: 100%; text-align: left;
+  }
+  .seg-item:hover { background: var(--chip-bg); }
+  .seg-item.active { background: var(--chip-bg); color: var(--navy); font-weight: 700; }
+  .seg-item .ti { font-size: 15px; }
+
+  .filter-row { display: flex; align-items: center; gap: 9px; padding: 6px 0; font-size: 13.5px; cursor: pointer; }
+  .filter-row input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--navy); cursor: pointer; }
+  .filter-select {
+    width: 100%; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+    font-size: 13px; color: var(--ink); background: var(--surface);
+  }
+  .sidebar-reset { font-size: 13px; font-weight: 600; color: var(--navy); background: none; border: none; }
+  .sidebar-reset:hover { text-decoration: underline; }
+
+  /* ── CATEGORY CARD GRID ── */
+  .grid-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+  .grid-count { font-size: 14px; color: var(--muted); }
+  .grid-count strong { color: var(--ink); }
+  .cat-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px;
+  }
+  .cat-card {
+    display: flex; align-items: flex-start; gap: 14px;
+    border: 1px solid var(--border); border-radius: 14px; padding: 18px;
+    transition: border-color .15s, box-shadow .15s, transform .15s;
+  }
+  .cat-card:hover { border-color: var(--navy); box-shadow: 0 6px 20px rgba(0,46,153,.08); transform: translateY(-2px); }
+  .cat-icon {
+    width: 42px; height: 42px; border-radius: 10px; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+  }
+  .cat-body { flex: 1; min-width: 0; }
+  .cat-name-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 3px; }
+  .cat-name { font-size: 15px; font-weight: 700; }
+  .cat-count { font-size: 12.5px; color: var(--muted); font-weight: 500; white-space: nowrap; }
+  .cat-desc { font-size: 13px; color: var(--muted); line-height: 1.4; }
+  .cat-badge {
+    display: inline-flex; align-items: center; gap: 4px; margin-top: 8px;
+    font-size: 11px; font-weight: 700; color: var(--navy); background: var(--chip-bg);
+    border-radius: 999px; padding: 3px 8px;
+  }
+  .no-results { display: none; text-align: center; padding: 60px 0; color: var(--muted); font-size: 14px; }
+
+  /* ── POPULAR CATEGORIES (bars) ── */
+  .section-title { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+  .section-sub { font-size: 13.5px; color: var(--muted); margin-bottom: 18px; }
+  .bar-list { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: grid; grid-template-columns: 26px 170px 1fr 60px; align-items: center; gap: 12px; }
+  .bar-rank { font-size: 13px; font-weight: 700; color: var(--muted); }
+  .bar-name { font-size: 13.5px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-track { height: 8px; border-radius: 999px; background: var(--chip-bg); overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 999px; background: var(--navy); }
+  .bar-count { font-size: 13px; font-weight: 600; text-align: right; color: var(--muted); }
+
+  /* ── TAG CLOUD ── */
+  .tag-cloud { display: flex; flex-wrap: wrap; gap: 10px; }
+  .tag-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--chip-bg); color: var(--navy); font-weight: 600;
+    border-radius: 999px; padding: 8px 14px; border: none;
+  }
+  .tag-chip .n { color: var(--muted); font-weight: 500; }
+
+  /* ── CTA BAND ── */
+  .cta-band {
+    max-width: 1200px; margin: 40px auto 0; padding: 0 32px;
+  }
+  .cta-inner {
+    background: linear-gradient(120deg, var(--navy), #0057e7);
+    border-radius: 18px; padding: 36px 40px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+    color: #fff;
+  }
+  .cta-inner h2 { font-size: 24px; font-weight: 700; margin-bottom: 6px; }
+  .cta-inner p { font-size: 14px; opacity: .85; max-width: 460px; }
+  .cta-inner .btn-primary { background: #fff; color: var(--navy); }
+  .cta-inner .btn-primary:hover { background: #eef3ff; }
+
+  /* ── FOOTER ── */
+  .footer { max-width: 1200px; margin: 48px auto 0; padding: 32px 32px 0; border-top: 1px solid var(--border); }
+  .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 32px; padding-bottom: 32px; }
+  .footer-brand h3 { font-size: 17px; font-weight: 700; margin-bottom: 10px; }
+  .footer-brand p { font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 16px; max-width: 300px; }
+  .signup-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .signup-row input {
+    flex: 1; border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px; font-size: 13px; background: var(--surface); color: var(--ink);
+  }
+  .signup-row button {
+    background: var(--navy); color: #fff; border: none; border-radius: 8px; padding: 9px 16px; font-size: 13px; font-weight: 700; white-space: nowrap;
+  }
+  .signup-row button:hover { background: var(--navy-dark); }
+  .socials { display: flex; gap: 14px; font-size: 15px; color: var(--muted); align-items: center; }
+  .footer-col h4 { font-size: 13px; font-weight: 700; margin-bottom: 14px; }
+  .footer-col a { display: block; font-size: 13.5px; color: var(--muted); margin-bottom: 10px; }
+  .footer-col a:hover { color: var(--navy); }
+  .footer-col .dot { display: inline-block; width: 6px; height: 6px; background: #16a34a; border-radius: 50%; margin-left: 6px; }
+  .footer-legal { border-top: 1px solid var(--border); padding: 22px 0 32px; font-size: 12px; color: var(--muted); line-height: 1.7; }
+  .footer-legal a { text-decoration: underline; }
+  .footer-legal p { margin-bottom: 10px; }
+
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .layout { grid-template-columns: 1fr; }
+    .cat-grid { grid-template-columns: repeat(2, 1fr); }
+    .stats-row { flex-wrap: wrap; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .bar-row { grid-template-columns: 20px 1fr; grid-template-rows: auto auto; }
+    .bar-track { grid-column: 1 / -1; }
+  }
+  @media (max-width: 560px) {
+    .cat-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <a class="logo" href="#">
+    <span class="logo-mark">L</span> Liners
+  </a>
+  <nav class="nav-links">
+    <a href="#">Browse <i class="ti ti-chevron-down" style="font-size:12px"></i></a>
+    <a href="#">Compare</a>
+    <a href="#">Alternatives</a>
+    <a href="#">Funding</a>
+    <a href="#">News</a>
+    <a href="#">Events</a>
+  </nav>
+  <div class="header-right">
+    <button class="icon-btn" aria-label="Search"><i class="ti ti-search"></i></button>
+    <button class="icon-btn" id="themeToggle" aria-label="Toggle dark mode"><i class="ti ti-moon"></i></button>
+    <button class="btn-outline">Submit <i class="ti ti-chevron-down" style="font-size:12px"></i></button>
+    <button class="btn-primary">Get started</button>
+  </div>
+</header>
+
+<div class="ad-strip">
+  <div class="ad-left">
+    <span class="ad-tag">Ad</span>
+    <span class="ad-logo"><i class="ti ti-currency-dollar"></i></span>
+    <b>Breet</b>
+    <span class="desc">— Crypto &amp; Stablecoins Payment API for African Businesses</span>
+  </div>
+  <button class="btn-outline">Book a Demo</button>
+</div>
+
+<div class="breadcrumb">
+  <a href="#"><i class="ti ti-home"></i></a>
+  <span>/</span>
+  <span class="current">Categories</span>
+</div>
+
+<div class="page-head">
+  <h1>Browse Product Categories</h1>
+  <p>Explore every category of African software — from Fintech to Crypto & Web3 — and find the products, companies, and tools built for each one.</p>
+  <div class="cat-search">
+    <i class="ti ti-search"></i>
+    <input type="text" id="catSearch" placeholder="Search categories, e.g. &quot;Health Tech&quot;..." />
+  </div>
+</div>
+
+<div class="stats-row">
+  <div class="stat-card accent"><div class="stat-num">24</div><div class="stat-label">categories</div></div>
+  <div class="stat-card"><div class="stat-num">1,848</div><div class="stat-label">products listed</div></div>
+  <div class="stat-card"><div class="stat-num">Fintech</div><div class="stat-label">largest category · 753 products</div></div>
+  <div class="stat-card"><div class="stat-num">Insurtech</div><div class="stat-label">most room to grow · 2 products</div></div>
+</div>
+
+<hr class="divider" />
+
+<div class="layout">
+
+  <aside class="sidebar">
+    <div class="sidebar-head" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+      <div class="sidebar-title" style="margin-bottom:0">Sort &amp; filter</div>
+      <button class="sidebar-reset" id="resetFilters">Reset</button>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-title">Sort by</div>
+      <div class="seg-list" id="sortList">
+        <button class="seg-item active" data-sort="count"><span><i class="ti ti-arrow-down" style="font-size:13px"></i> Most products</span></button>
+        <button class="seg-item" data-sort="az"><span><i class="ti ti-sort-ascending-letters" style="font-size:13px"></i> A – Z</span></button>
+        <button class="seg-item" data-sort="trending"><span><i class="ti ti-trending-up" style="font-size:13px"></i> Trending first</span></button>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-title">Minimum products</div>
+      <select class="filter-select" id="minCount">
+        <option value="0">Any</option>
+        <option value="25">25+</option>
+        <option value="50">50+</option>
+        <option value="100">100+</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-title">Show</div>
+      <div class="filter-row">
+        <input type="checkbox" id="trendingOnly" />
+        <label for="trendingOnly">Trending categories only</label>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <div class="filter-group-title">Popular tags</div>
+      <div class="tag-cloud" style="gap:8px">
+        <span class="tag-chip" style="padding:6px 11px;font-size:12.5px">SaaS</span>
+        <span class="tag-chip" style="padding:6px 11px;font-size:12.5px">B2C</span>
+        <span class="tag-chip" style="padding:6px 11px;font-size:12.5px">Fintech</span>
+        <span class="tag-chip" style="padding:6px 11px;font-size:12.5px">AI-Powered</span>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <div class="grid-head">
+      <div class="grid-count"><strong id="visibleCount">24</strong> categories</div>
+    </div>
+    <div class="cat-grid" id="catGrid"></div>
+    <div class="no-results" id="noResults">No categories match your filters. <button class="sidebar-reset" onclick="document.getElementById('resetFilters').click()">Reset filters</button></div>
+  </main>
+</div>
+
+<div class="cta-band">
+  <div class="cta-inner">
+    <div>
+      <h2>Don't see your category?</h2>
+      <p>If your product doesn't fit an existing category, suggest a new one — our research team reviews submissions every week.</p>
+    </div>
+    <button class="btn-primary">Suggest a category</button>
+  </div>
+</div>
+
+<section style="max-width:1200px;margin:48px auto 0;padding:0 32px">
+  <div class="section-title">Popular Categories</div>
+  <div class="section-sub">Ranked by number of products listed</div>
+  <div class="bar-list" id="popularBars"></div>
+</section>
+
+<section style="max-width:1200px;margin:40px auto 0;padding:0 32px">
+  <div class="section-title">Popular Tags</div>
+  <div class="section-sub">Common product tags across the directory</div>
+  <div class="tag-cloud" id="tagCloud"></div>
+</section>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <h3>Line up. Compare. Decide.</h3>
+      <p>The lineup of every software product built for Africa — with reviews and alternatives managed by human researchers and AI agents that never sleep.</p>
+      <div class="signup-row">
+        <input type="email" placeholder="Enter your email" />
+        <button>Join free</button>
+      </div>
+      <div class="socials">
+        <i class="ti ti-brand-x"></i>
+        <i class="ti ti-brand-linkedin"></i>
+        <i class="ti ti-brand-instagram"></i>
+        <i class="ti ti-brand-youtube"></i>
+        <i class="ti ti-brand-tiktok"></i>
+        <span style="font-size:13px">hello@liners.com</span>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Discover:</h4>
+      <a href="#">Categories</a>
+      <a href="#">Tags</a>
+      <a href="#">Compare</a>
+      <a href="#">Alternatives</a>
+      <a href="#">Countries</a>
+      <a href="#">Rankings</a>
+      <a href="#">Events</a>
+      <a href="#">Investors</a>
+      <a href="#">Funding</a>
+      <a href="#">News <span class="dot"></span></a>
+    </div>
+    <div class="footer-col">
+      <h4>Resources:</h4>
+      <a href="#">Ecosystem</a>
+      <a href="#">Submit Product</a>
+      <a href="#">Advertise</a>
+      <a href="#">Write a Review</a>
+      <a href="#">About Us</a>
+      <a href="#">Blog</a>
+      <a href="#">Guides</a>
+      <a href="#">Editorial Standards</a>
+    </div>
+    <div class="footer-col">
+      <h4>Meet the Agents:</h4>
+      <a href="#">Standup Stevo</a>
+      <a href="#">DD Dave</a>
+      <a href="#">LGTM Larry</a>
+      <a href="#">Whiteboard Wasiu</a>
+      <a href="#">QA Quinn</a>
+      <a href="#">Agent Ammie</a>
+      <a href="#">Postmortem Peter</a>
+      <a href="#">Touch Base Tony</a>
+      <a href="#">TL;DR Tara</a>
+      <a href="#" style="color:var(--navy);font-weight:600;margin-top:4px">How we work together →</a>
+    </div>
+  </div>
+  <div class="footer-legal">
+    <p>© 2026, Liners. All rights reserved.</p>
+    <p>Liners is a discovery platform that aggregates information about software products from publicly available sources. All product listings, descriptions, and comparisons are for informational purposes only and do not constitute endorsement or recommendation.</p>
+    <p>References made to third-party names, logos, and trademarks on this website are to identify corresponding products. Unless otherwise specified, the trademark holders are not affiliated with Liners, our products, or website, and they do not sponsor or endorse Liners services. Such references are included strictly as nominative fair use under applicable trademark law and remain fully the property of their respective trademark holders.</p>
+    <p>Check our <a href="#">Policies</a>, <a href="#">Terms of Service</a>, and <a href="#">Privacy Policy</a>.</p>
+    <p>Made with ❤️ in Africa for Africans.</p>
+  </div>
+</footer>
+
+<script>
+  const CATEGORIES = [
+    { name:"Agri Tech", count:55, icon:"ti-plant-2", color:"#2f9e44", desc:"Smart farming, agri-finance & supply tools.", trending:false },
+    { name:"AI & Analytics", count:58, icon:"ti-chart-histogram", color:"#5c3ec9", desc:"AI agents, data platforms & business intelligence.", trending:true },
+    { name:"Betting & Prediction Markets", count:49, icon:"ti-dice", color:"#e8590c", desc:"Sports betting, gaming & prediction platforms.", trending:true },
+    { name:"Communication & Social", count:62, icon:"ti-message-circle", color:"#1c7ed6", desc:"Messaging, social networks & community tools.", trending:false },
+    { name:"Creator Economy", count:18, icon:"ti-camera", color:"#d6336c", desc:"Content monetization & creator tooling.", trending:true },
+    { name:"Crypto & Web3", count:108, icon:"ti-currency-bitcoin", color:"#f08c00", desc:"Exchanges, wallets & blockchain infrastructure.", trending:true },
+    { name:"Cybersecurity", count:22, icon:"ti-shield-lock", color:"#495057", desc:"Threat detection, identity & data protection.", trending:false },
+    { name:"Developer Tools & Cloud", count:31, icon:"ti-code", color:"#0b7285", desc:"APIs, hosting & developer infrastructure.", trending:false },
+    { name:"E-commerce & Retail", count:90, icon:"ti-shopping-cart", color:"#e64980", desc:"Online stores, marketplaces & retail tech.", trending:false },
+    { name:"EdTech", count:80, icon:"ti-school", color:"#7048e8", desc:"Online learning, tutoring & school management.", trending:false },
+    { name:"Energy & Utilities", count:13, icon:"ti-bolt", color:"#f59f00", desc:"Solar, power access & utility payments.", trending:false },
+    { name:"Fintech", count:753, icon:"ti-credit-card", color:"#002E99", desc:"Payments, lending, banking & mobile money.", trending:false },
+    { name:"Health Tech", count:138, icon:"ti-heartbeat", color:"#e03131", desc:"Telemedicine, insurance & health records.", trending:false },
+    { name:"Insurtech", count:2, icon:"ti-umbrella", color:"#0ca678", desc:"Digital insurance & underwriting platforms.", trending:false },
+    { name:"Legal and Compliance", count:31, icon:"ti-scale", color:"#5f3dc4", desc:"Legal tech, compliance & regulatory tools.", trending:false },
+    { name:"Logistics & Supply Chain", count:67, icon:"ti-truck", color:"#e8590c", desc:"Freight, delivery & supply chain platforms.", trending:false },
+    { name:"Marketing & CRM", count:38, icon:"ti-speakerphone", color:"#f76707", desc:"Marketing automation, CRM & analytics.", trending:false },
+    { name:"Media & Entertainment", count:44, icon:"ti-device-tv", color:"#9c36b5", desc:"Streaming, publishing & entertainment tech.", trending:false },
+    { name:"Productivity & Workspace", count:18, icon:"ti-briefcase", color:"#1971c2", desc:"Collaboration, HR & workplace tools.", trending:false },
+    { name:"Quick Commerce", count:31, icon:"ti-rocket", color:"#12b886", desc:"On-demand delivery & instant commerce.", trending:true },
+    { name:"Real Estate & Property", count:34, icon:"ti-building", color:"#495057", desc:"Property listings, rentals & proptech.", trending:false },
+    { name:"Services & Marketplaces", count:40, icon:"ti-building-store", color:"#0b7285", desc:"Service marketplaces & booking platforms.", trending:false },
+    { name:"Telecom & Connectivity", count:15, icon:"ti-antenna", color:"#1c7ed6", desc:"Connectivity, VoIP & telecom infrastructure.", trending:false },
+    { name:"Travel & Mobility", count:51, icon:"ti-plane", color:"#0ca678", desc:"Ride-hailing, travel booking & mobility.", trending:false },
+  ];
+
+  const TAGS = [
+    { name:"SaaS", count:785 }, { name:"B2C", count:601 }, { name:"B2B2C", count:581 },
+    { name:"B2B", count:553 }, { name:"AI-Powered", count:337 }, { name:"Marketplace", count:314 },
+    { name:"Lending and Loans", count:238 }, { name:"Mobile Money", count:236 },
+    { name:"Cross-Border Payments", count:209 }, { name:"Bill Payments", count:190 },
+    { name:"Payment Gateway", count:159 }, { name:"Savings", count:116 },
+    { name:"Invoicing", count:102 }, { name:"Insurance", count:101 },
+  ];
+
+  const catGrid = document.getElementById('catGrid');
+  const noResults = document.getElementById('noResults');
+  const visibleCount = document.getElementById('visibleCount');
+  let sortMode = 'count';
+
+  function render() {
+    const q = document.getElementById('catSearch').value.trim().toLowerCase();
+    const minCount = parseInt(document.getElementById('minCount').value, 10);
+    const trendingOnly = document.getElementById('trendingOnly').checked;
+
+    let list = CATEGORIES.filter(c =>
+      c.name.toLowerCase().includes(q) &&
+      c.count >= minCount &&
+      (!trendingOnly || c.trending)
+    );
+
+    if (sortMode === 'count') list.sort((a,b) => b.count - a.count);
+    else if (sortMode === 'az') list.sort((a,b) => a.name.localeCompare(b.name));
+    else if (sortMode === 'trending') list.sort((a,b) => (b.trending - a.trending) || (b.count - a.count));
+
+    catGrid.innerHTML = list.map(c => `
+      <div class="cat-card">
+        <div class="cat-icon" style="background:${c.color}1a;color:${c.color}"><i class="ti ${c.icon}"></i></div>
+        <div class="cat-body">
+          <div class="cat-name-row">
+            <span class="cat-name">${c.name}</span>
+          </div>
+          <div class="cat-count">${c.count.toLocaleString()} products</div>
+          <div class="cat-desc">${c.desc}</div>
+          ${c.trending ? '<span class="cat-badge"><i class="ti ti-trending-up" style="font-size:11px"></i> Trending</span>' : ''}
+        </div>
+      </div>
+    `).join('');
+
+    visibleCount.textContent = list.length;
+    noResults.style.display = list.length ? 'none' : 'block';
+    catGrid.style.display = list.length ? 'grid' : 'none';
+  }
+
+  document.getElementById('catSearch').addEventListener('input', render);
+  document.getElementById('minCount').addEventListener('change', render);
+  document.getElementById('trendingOnly').addEventListener('change', render);
+  document.querySelectorAll('#sortList .seg-item').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('#sortList .seg-item').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      sortMode = btn.dataset.sort;
+      render();
+    });
+  });
+  document.getElementById('resetFilters').addEventListener('click', () => {
+    document.getElementById('catSearch').value = '';
+    document.getElementById('minCount').value = '0';
+    document.getElementById('trendingOnly').checked = false;
+    sortMode = 'count';
+    document.querySelectorAll('#sortList .seg-item').forEach(b => b.classList.remove('active'));
+    document.querySelector('#sortList .seg-item[data-sort="count"]').classList.add('active');
+    render();
+  });
+
+  render();
+
+  const popularBars = document.getElementById('popularBars');
+  const top = [...CATEGORIES].sort((a,b) => b.count - a.count).slice(0, 9);
+  const max = top[0].count;
+  popularBars.innerHTML = top.map((c, i) => `
+    <div class="bar-row">
+      <span class="bar-rank">${i+1}</span>
+      <span class="bar-name">${c.name}</span>
+      <span class="bar-track"><span class="bar-fill" style="width:${Math.max(4, Math.round(c.count / max * 100))}%"></span></span>
+      <span class="bar-count">${c.count.toLocaleString()}</span>
+    </div>
+  `).join('');
+
+  const tagCloud = document.getElementById('tagCloud');
+  tagCloud.innerHTML = TAGS.map(t => `<span class="tag-chip">${t.name} <span class="n">${t.count}</span></span>`).join('');
+
+  const themeToggle = document.getElementById('themeToggle');
+  function applyTheme(dark) {
+    document.documentElement.classList.toggle('dark', dark);
+    themeToggle.innerHTML = dark ? '<i class="ti ti-sun"></i>' : '<i class="ti ti-moon"></i>';
+  }
+  const savedTheme = localStorage.getItem('liners-theme');
+  applyTheme(savedTheme === 'dark');
+  themeToggle.addEventListener('click', () => {
+    const dark = !document.documentElement.classList.contains('dark');
+    applyTheme(dark);
+    localStorage.setItem('liners-theme', dark ? 'dark' : 'light');
+  });
+</script>
+
+</body>
+</html>

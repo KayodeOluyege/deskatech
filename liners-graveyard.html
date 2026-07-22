@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Liners Graveyard — Discontinued African Products</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+<style>
+  :root {
+    --navy: #002E99;
+    --navy-light: #4d7bff;
+    --ink: #eef0f7;
+    --muted: #8b93a8;
+    --muted-dim: #5b6378;
+    --border: #232838;
+    --bg: #05060a;
+    --panel: #0d0f18;
+    --panel-2: #11141f;
+    --chip-bg: #161a2c;
+    --stone-1: #d9dce1;
+    --stone-2: #a9adb6;
+    --stone-3: #6f747c;
+    --moss: #4c8a63;
+    --moss-light: #6fae83;
+    --moon: #a9c4ff;
+    --amber: #e8a33d;
+    --acquired: #7ea6e0;
+    --shutdown: #c98a7a;
+  }
+  * , *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: var(--bg);
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  input, select { font-family: inherit; }
+  :focus-visible { outline: 2px solid var(--moss-light); outline-offset: 2px; }
+
+  /* ── ATMOSPHERE ── */
+  .sky {
+    position: fixed; inset: 0; z-index: -3;
+    background:
+      radial-gradient(60% 40% at 78% 8%, rgba(169,196,255,.10), transparent 60%),
+      radial-gradient(120% 90% at 50% -10%, #10152a 0%, #05060a 55%, #030308 100%);
+  }
+  .moon {
+    position: fixed; top: 7%; right: 10%; width: 90px; height: 90px; border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #f4f7ff, var(--moon) 60%, #7d97d1 100%);
+    box-shadow: 0 0 60px 18px rgba(169,196,255,.25), 0 0 140px 50px rgba(169,196,255,.08);
+    z-index: -3; opacity: .85;
+  }
+  .stars {
+    position: fixed; inset: 0; z-index: -3; pointer-events: none;
+    background-image:
+      radial-gradient(1.5px 1.5px at 20% 15%, #fff, transparent),
+      radial-gradient(1px 1px at 40% 30%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 65% 10%, #fff, transparent),
+      radial-gradient(1px 1px at 85% 22%, #fff, transparent),
+      radial-gradient(1px 1px at 10% 35%, #fff, transparent),
+      radial-gradient(1.5px 1.5px at 55% 5%, #fff, transparent),
+      radial-gradient(1px 1px at 92% 40%, #fff, transparent);
+    opacity: .5;
+  }
+  .fog-layer {
+    position: fixed; left: -10%; width: 120%; height: 220px; z-index: -2; pointer-events: none;
+    background: linear-gradient(180deg, transparent, rgba(180,190,210,.05) 40%, rgba(180,190,210,.09) 100%);
+    filter: blur(6px);
+  }
+  .fog-1 { bottom: -40px; animation: drift 40s linear infinite; }
+  .fog-2 { bottom: 20px; height: 160px; opacity: .7; animation: drift 60s linear infinite reverse; }
+  @keyframes drift {
+    0% { transform: translateX(-4%); }
+    50% { transform: translateX(4%); }
+    100% { transform: translateX(-4%); }
+  }
+  /* ── FLOATING GRAVEYARD ELEMENTS ── */
+  .ghost {
+    position: absolute; width: 34px; height: 42px; pointer-events: none; z-index: 3;
+    background: radial-gradient(ellipse at 50% 38%, rgba(255,255,255,.88), rgba(200,215,255,.45) 55%, transparent 78%);
+    clip-path: polygon(50% 0%, 78% 6%, 94% 26%, 100% 50%, 92% 66%, 100% 82%, 84% 78%, 72% 100%, 58% 80%, 44% 100%, 30% 78%, 14% 82%, 22% 66%, 0% 50%, 6% 26%, 22% 6%);
+    opacity: .5; filter: blur(.3px) drop-shadow(0 0 10px rgba(200,215,255,.25));
+    animation: ghost-float 8s ease-in-out infinite;
+  }
+  .ghost::before, .ghost::after {
+    content: ''; position: absolute; top: 40%; width: 3px; height: 5px; background: rgba(20,25,40,.55); border-radius: 50%;
+  }
+  .ghost::before { left: 32%; }
+  .ghost::after { left: 58%; }
+  .ghost.g2 { animation-duration: 10s; animation-delay: -3s; }
+  .ghost.g3 { animation-duration: 9s; animation-delay: -6s; }
+  .ghost.g4 { animation-duration: 11s; animation-delay: -1.5s; }
+  @keyframes ghost-float {
+    0%, 100% { transform: translateY(0) translateX(0); opacity: .38; }
+    50% { transform: translateY(-20px) translateX(8px); opacity: .65; }
+  }
+
+  .firefly {
+    position: absolute; width: 5px; height: 5px; border-radius: 50%; pointer-events: none; z-index: 3;
+    background: #d9f5a3; box-shadow: 0 0 8px 3px rgba(217,245,163,.8), 0 0 18px 6px rgba(217,245,163,.3);
+    animation: firefly-drift 5s ease-in-out infinite;
+  }
+  @keyframes firefly-drift {
+    0%, 100% { transform: translate(0,0); opacity: .25; }
+    50% { transform: translate(10px,-16px); opacity: 1; }
+  }
+
+  .bat {
+    position: fixed; top: 12%; left: -8%; width: 34px; height: 17px; z-index: 5; pointer-events: none;
+    opacity: .8; animation: bat-fly 17s linear infinite;
+  }
+  .bat svg { width: 100%; height: 100%; display: block; animation: bat-flap .3s ease-in-out infinite alternate; transform-origin: 50% 50%; }
+  .bat.b2 { top: 24%; animation-duration: 23s; animation-delay: -9s; }
+  .bat.b3 { top: 36%; animation-duration: 20s; animation-delay: -4s; }
+  @keyframes bat-flap { from { transform: scaleY(1); } to { transform: scaleY(.55); } }
+  @keyframes bat-fly {
+    0% { left: -8%; transform: translateY(0); }
+    25% { transform: translateY(-30px); }
+    50% { transform: translateY(10px); }
+    75% { transform: translateY(-16px); }
+    100% { left: 108%; transform: translateY(0); }
+  }
+
+  .spiderweb { position: fixed; top: -6px; left: -6px; width: 86px; height: 86px; z-index: 35; pointer-events: none; opacity: .45; }
+  .raven {
+    position: fixed; top: 13%; right: 13%; width: 32px; z-index: -2; opacity: .9; pointer-events: none;
+    filter: drop-shadow(0 0 6px rgba(169,196,255,.35));
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .fog-1, .fog-2, .ghost, .firefly, .bat, .bat svg { animation: none; }
+  }
+
+  /* ── HEADER ── */
+  .header {
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 68px;
+    display: flex; align-items: center; justify-content: space-between; gap: 20px;
+    position: sticky; top: 0; background: rgba(5,6,10,.82); backdrop-filter: blur(10px);
+    z-index: 30;
+  }
+  .logo { display: flex; align-items: center; gap: 9px; font-weight: 700; font-size: 17px; flex-shrink: 0; }
+  .logo-mark {
+    width: 30px; height: 30px; border-radius: 8px; background: var(--navy);
+    color: #fff; display: flex; align-items: center; justify-content: center;
+    font-size: 15px; font-weight: 700; flex-shrink: 0;
+  }
+  .section-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12px; font-weight: 700; color: var(--moss-light);
+    background: rgba(76,138,99,.12); border: 1px solid rgba(76,138,99,.3);
+    border-radius: 999px; padding: 5px 11px; margin-left: 6px; white-space: nowrap;
+  }
+  .nav-links { display: flex; align-items: center; gap: 24px; flex: 1; padding-left: 28px; }
+  .nav-links a { font-size: 14px; font-weight: 500; color: var(--muted); transition: color .15s; white-space: nowrap; }
+  .nav-links a:hover { color: var(--ink); }
+  .header-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+  .icon-btn {
+    width: 36px; height: 36px; border-radius: 8px; border: 1px solid var(--border); background: var(--panel);
+    display: flex; align-items: center; justify-content: center; color: var(--ink); font-size: 16px;
+    transition: border-color .15s, color .15s;
+  }
+  .icon-btn:hover { border-color: var(--moss-light); }
+  .icon-btn.sound-on { color: var(--moss-light); border-color: rgba(76,138,99,.4); }
+  .icon-btn.sound-on i { animation: pulse-soft 1.6s ease-in-out infinite; }
+  @keyframes pulse-soft { 0%,100% { opacity: 1; } 50% { opacity: .55; } }
+  .btn-outline {
+    border: 1px solid var(--border); background: none; color: var(--ink);
+    border-radius: 8px; padding: 9px 14px; font-size: 13.5px; font-weight: 600;
+    display: flex; align-items: center; gap: 5px; transition: border-color .15s, background .15s; white-space: nowrap;
+  }
+  .btn-outline:hover { border-color: var(--moss-light); background: rgba(76,138,99,.08); }
+
+  /* ── HERO ── */
+  .hero { max-width: 1180px; margin: 0 auto; padding: 60px 32px 20px; text-align: center; position: relative; }
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--moss-light); margin-bottom: 18px;
+  }
+  .hero h1 {
+    font-size: 48px; font-weight: 800; line-height: 1.18; letter-spacing: -.01em;
+    margin-bottom: 16px; color: var(--stone-1);
+    text-shadow: 0 2px 24px rgba(169,196,255,.1);
+  }
+  .hero p.sub { font-size: 16px; color: var(--muted); max-width: 620px; margin: 0 auto 34px; line-height: 1.6; }
+
+  .search-bar {
+    display: flex; align-items: center; gap: 0;
+    border: 1px solid var(--border); border-radius: 14px;
+    background: var(--panel);
+    box-shadow: 0 10px 40px rgba(0,0,0,.4);
+    padding: 6px; max-width: 560px; margin: 0 auto;
+  }
+  .search-bar i.ti-search { color: var(--muted); font-size: 18px; margin: 0 12px; }
+  .search-input {
+    flex: 1; border: none; outline: none; font-size: 15px; padding: 12px 6px 12px 0; color: var(--ink); background: none;
+  }
+  .search-input::placeholder { color: var(--muted-dim); }
+  .trending { margin-top: 16px; font-size: 13px; color: var(--muted-dim); }
+  .trending a { color: var(--moss-light); font-weight: 500; }
+  .trending a:hover { text-decoration: underline; }
+
+  /* ── STATS ── */
+  .stats-row {
+    display: flex; gap: 14px; max-width: 1180px; margin: 40px auto 0; padding: 0 32px;
+  }
+  .stat-card {
+    flex: 1; border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; background: var(--panel);
+    position: relative; overflow: hidden;
+  }
+  .stat-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(160deg, rgba(169,196,255,.04), transparent 60%);
+  }
+  .stat-num { font-size: 28px; font-weight: 800; letter-spacing: -.02em; color: var(--stone-1); position: relative; }
+  .stat-num.accent { color: var(--moss-light); }
+  .stat-label { font-size: 12.5px; color: var(--muted); margin-top: 3px; position: relative; }
+
+  hr.divider { border: none; border-top: 1px solid var(--border); max-width: 1180px; margin: 36px auto 0; }
+
+  /* ── FILTER PANEL ── */
+  .filter-panel { max-width: 1180px; margin: 0 auto; padding: 26px 32px 0; }
+  .filter-row { display: flex; align-items: flex-end; gap: 14px; flex-wrap: wrap; }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 150px; }
+  .field label {
+    font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted-dim);
+  }
+  .field select {
+    border: 1px solid var(--border); border-radius: 8px; padding: 9px 12px;
+    font-size: 13.5px; color: var(--ink); background: var(--panel); min-width: 150px;
+  }
+  .field select:hover { border-color: var(--muted-dim); }
+  .field.grow { flex: 1; min-width: 0; }
+  .clear-filters {
+    font-size: 13px; font-weight: 600; color: var(--muted); background: none; border: 1px solid var(--border);
+    border-radius: 8px; padding: 9px 14px; white-space: nowrap; transition: border-color .15s, color .15s;
+  }
+  .clear-filters:hover { color: var(--ink); border-color: var(--muted-dim); }
+
+  .filter-chips { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 14px; min-height: 0; }
+  .filter-chip {
+    display: inline-flex; align-items: center; gap: 7px;
+    background: var(--chip-bg); color: var(--moss-light); font-size: 12.5px; font-weight: 600;
+    border-radius: 999px; padding: 6px 8px 6px 12px; border: 1px solid rgba(76,138,99,.25);
+  }
+  .filter-chip button { background: none; border: none; color: var(--moss-light); display: flex; opacity: .75; }
+  .filter-chip button:hover { opacity: 1; }
+
+  /* ── CEMETERY ── */
+  .cemetery {
+    max-width: 1180px; margin: 0 auto; padding: 44px 32px 20px;
+    position: relative;
+  }
+  .cemetery::before {
+    content: ''; position: absolute; left: -100vw; right: -100vw; top: 30px; bottom: 0; z-index: -1;
+    background:
+      radial-gradient(ellipse 60% 40% at 30% 100%, rgba(76,138,99,.05), transparent),
+      linear-gradient(180deg, transparent, rgba(10,16,12,.55) 30%, rgba(6,10,8,.85));
+  }
+  .grid-count { font-size: 14px; color: var(--muted); margin-bottom: 22px; }
+  .grid-count strong { color: var(--ink); }
+  .grave-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 34px 20px;
+  }
+  .grave-plot:nth-child(3n+2) { transform: translateY(14px); }
+  .grave-plot:nth-child(4n+3) { transform: translateY(-8px); }
+
+  .grave-plot { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .grave-link { display: flex; flex-direction: column; align-items: center; width: 100%; }
+
+  .tomb-visual { position: relative; }
+  .grave-plot:nth-child(4n+1) .tomb-visual { transform: rotate(-1.5deg); }
+  .grave-plot:nth-child(4n+2) .tomb-visual { transform: rotate(1deg); }
+  .grave-plot:nth-child(4n+3) .tomb-visual { transform: rotate(-.5deg); }
+  .grave-plot:nth-child(4n) .tomb-visual { transform: rotate(1.5deg); }
+
+  .tombstone {
+    width: 150px; height: 174px; position: relative; flex-shrink: 0; margin-bottom: -3px;
+    background: linear-gradient(155deg, #e2e4e8 0%, #b7bbc2 50%, #888d95 100%);
+    border-radius: 50% 50% 4px 4px / 40% 40% 4px 4px;
+    box-shadow: 0 18px 34px -6px rgba(0,0,0,.6), inset 0 0 0 1px rgba(0,0,0,.12);
+    transition: transform .2s, box-shadow .2s;
+    z-index: 2;
+  }
+  .grave-link:hover .tombstone, .grave-link:focus-visible .tombstone { transform: translateY(-4px); box-shadow: 0 24px 40px -6px rgba(0,0,0,.7), inset 0 0 0 1px rgba(0,0,0,.12); }
+  .tombstone::before {
+    content: ''; position: absolute; inset: 0; border-radius: inherit;
+    background-image: repeating-linear-gradient(115deg, rgba(0,0,0,.05) 0 1.5px, transparent 1.5px 7px);
+    mix-blend-mode: multiply;
+  }
+  .tombstone::after {
+    content: ''; position: absolute; top: 18%; left: 62%; width: 2px; height: 55%;
+    background: rgba(0,0,0,.14); transform: rotate(9deg); border-radius: 2px;
+  }
+  .tombstone .crack2 {
+    position: absolute; top: 55%; left: 22%; width: 40%; height: 2px;
+    background: rgba(0,0,0,.12); transform: rotate(-12deg); border-radius: 2px;
+  }
+  .tombstone .moss {
+    position: absolute; inset: 0; border-radius: inherit; pointer-events: none;
+    background-image:
+      radial-gradient(circle at 15% 88%, rgba(76,138,99,.4), transparent 40%),
+      radial-gradient(circle at 88% 18%, rgba(76,138,99,.22), transparent 35%),
+      radial-gradient(circle at 78% 92%, rgba(76,138,99,.28), transparent 30%);
+    mix-blend-mode: multiply;
+  }
+  .tombstone .speckle {
+    position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: .45;
+    background-image: radial-gradient(rgba(0,0,0,.09) 1px, transparent 1px);
+    background-size: 6px 6px;
+  }
+  .tomb-base {
+    width: 178px; height: 20px; margin: 0 auto; position: relative; z-index: 1;
+    background: linear-gradient(180deg, #7d828a, #4d525a);
+    border-radius: 3px;
+    box-shadow: 0 10px 18px -4px rgba(0,0,0,.65), inset 0 1px 0 rgba(255,255,255,.15);
+  }
+  .grave-logo {
+    position: absolute; top: 20px; left: 50%; transform: translateX(-50%);
+    width: 36px; height: 36px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff; font-weight: 800; font-size: 13px; filter: saturate(.7);
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.4), 0 0 0 3px rgba(255,255,255,.15), 0 0 0 4px rgba(0,0,0,.22);
+  }
+  .grave-epitaph {
+    position: absolute; top: 62px; left: 14px; right: 14px; text-align: center;
+    font-size: 10px; font-style: italic; line-height: 1.35; color: #4a4e55;
+    text-shadow: 0 1px 0 rgba(255,255,255,.3);
+  }
+  .grave-mound {
+    width: 172px; height: 26px; margin-top: -8px; position: relative; z-index: 0;
+    background: radial-gradient(ellipse at center, #16221a 0%, #0a120d 75%, transparent 100%);
+    border-radius: 50%;
+  }
+  .grave-mound .blade {
+    position: absolute; bottom: 10px; width: 3px; height: 12px; background: var(--moss);
+    border-radius: 3px 3px 0 0; opacity: .8;
+  }
+
+  .grave-info { margin-top: 12px; width: 100%; }
+  .grave-name { font-size: 15px; font-weight: 700; color: var(--stone-1); letter-spacing: .01em; }
+  .grave-tagline { font-size: 11.5px; color: var(--muted-dim); margin-top: 2px; }
+  .grave-years { font-size: 11.5px; color: var(--muted-dim); margin-top: 6px; font-variant-numeric: tabular-nums; }
+  .grave-lifespan { color: var(--muted); }
+  .grave-meta { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 8px; flex-wrap: wrap; }
+  .grave-tag {
+    font-size: 10px; font-weight: 700; letter-spacing: .03em; text-transform: uppercase;
+    padding: 3px 8px; border-radius: 999px; background: var(--chip-bg); color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  .grave-tag.cause { color: var(--amber); background: rgba(232,163,61,.1); border-color: rgba(232,163,61,.25); }
+  .grave-tag.fate-shutdown { color: var(--shutdown); background: rgba(201,138,122,.1); border-color: rgba(201,138,122,.25); }
+  .grave-tag.fate-acquired { color: var(--acquired); background: rgba(126,166,224,.1); border-color: rgba(126,166,224,.25); }
+
+  .no-results { display: none; text-align: center; padding: 60px 0; color: var(--muted); font-size: 14px; grid-column: 1 / -1; }
+
+  .pagination { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 44px; }
+  .page-btn {
+    border: 1px solid var(--border); background: var(--panel); color: var(--ink);
+    border-radius: 8px; padding: 8px 16px; font-size: 13.5px; font-weight: 600;
+    display: flex; align-items: center; gap: 6px; transition: border-color .15s, opacity .15s;
+  }
+  .page-btn:hover:not(:disabled) { border-color: var(--moss-light); }
+  .page-btn:disabled { opacity: .35; cursor: not-allowed; }
+  .page-indicator { font-size: 13px; color: var(--muted); }
+
+  /* ── CTA ── */
+  .cta-band { max-width: 1180px; margin: 50px auto 0; padding: 0 32px; }
+  .cta-inner {
+    background: linear-gradient(120deg, #0d1a14, #10241a);
+    border: 1px solid rgba(76,138,99,.25);
+    border-radius: 18px; padding: 34px 38px;
+    display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap;
+  }
+  .cta-inner h2 { font-size: 22px; font-weight: 700; margin-bottom: 6px; color: var(--stone-1); }
+  .cta-inner p { font-size: 13.5px; color: var(--muted); max-width: 440px; }
+  .btn-bury {
+    background: var(--moss); color: #fff; border: none; border-radius: 8px;
+    padding: 11px 20px; font-size: 14px; font-weight: 700; white-space: nowrap; transition: background .15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .btn-bury:hover { background: var(--moss-light); }
+
+  /* ── FOOTER ── */
+  .footer { max-width: 1180px; margin: 56px auto 0; padding: 30px 32px 40px; border-top: 1px solid var(--border); }
+  .footer-row { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .footer-brand { font-size: 13px; color: var(--muted-dim); max-width: 460px; line-height: 1.6; }
+  .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .footer-links a { font-size: 13px; color: var(--muted); }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-legal { font-size: 11.5px; color: var(--muted-dim); margin-top: 22px; line-height: 1.7; }
+
+  @media (max-width: 980px) {
+    .grave-grid { grid-template-columns: repeat(3, 1fr); }
+  }
+  @media (max-width: 860px) {
+    .nav-links { display: none; }
+    .stats-row { flex-wrap: wrap; }
+    .stat-card { min-width: 45%; }
+    .grave-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero h1 { font-size: 34px; }
+    .field, .field select { min-width: 130px; }
+  }
+  @media (max-width: 520px) {
+    .grave-grid { grid-template-columns: 1fr 1fr; gap: 28px 12px; }
+    .tombstone { width: 120px; height: 144px; }
+    .grave-mound { width: 140px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sky"></div>
+<div class="moon"></div>
+<div class="stars"></div>
+<div class="fog-layer fog-1"></div>
+<div class="fog-layer fog-2"></div>
+
+<div class="spiderweb" aria-hidden="true">
+  <svg viewBox="0 0 100 100" fill="none" stroke="rgba(210,218,235,.65)" stroke-width="1.4">
+    <path d="M100,0 L0,0" /><path d="M100,0 L0,35" /><path d="M100,0 L0,70" />
+    <path d="M100,0 L35,100" /><path d="M100,0 L70,100" /><path d="M100,0 L100,100" />
+    <path d="M78,0 A 22 22 0 0 1 100,22" />
+    <path d="M53,0 A 47 47 0 0 1 100,47" />
+    <path d="M28,0 A 72 72 0 0 1 100,72" />
+  </svg>
+</div>
+<div class="raven" aria-hidden="true">
+  <svg viewBox="0 0 60 40" fill="#0b0d14">
+    <path d="M30 22 C 22 8 6 10 0 20 C 8 16 14 18 18 22 C 12 22 8 26 6 30 C 12 28 16 26 20 28 C 24 30 27 30 30 26 C 33 30 36 30 40 28 C 44 26 48 28 54 30 C 52 26 48 22 42 22 C 46 18 52 16 60 20 C 54 10 38 8 30 22 Z" />
+  </svg>
+</div>
+
+<div class="ghost" style="top:130px; left:5%;" aria-hidden="true"></div>
+<div class="ghost g2" style="top:70px; right:14%;" aria-hidden="true"></div>
+<div class="firefly" style="top:220px; left:20%; animation-delay:-1s;" aria-hidden="true"></div>
+<div class="firefly" style="top:260px; right:24%; animation-delay:-3s;" aria-hidden="true"></div>
+<div class="firefly" style="top:180px; left:60%; animation-delay:-2.2s;" aria-hidden="true"></div>
+
+<div class="bat"><svg viewBox="0 0 64 32"><path d="M32 10 C26 -4 6 0 0 12 C10 10 18 14 24 18 C28 22 30 26 32 30 C34 26 36 22 40 18 C46 14 54 10 64 12 C58 0 38 -4 32 10 Z" fill="#0b0d14"/></svg></div>
+<div class="bat b2"><svg viewBox="0 0 64 32"><path d="M32 10 C26 -4 6 0 0 12 C10 10 18 14 24 18 C28 22 30 26 32 30 C34 26 36 22 40 18 C46 14 54 10 64 12 C58 0 38 -4 32 10 Z" fill="#0b0d14"/></svg></div>
+<div class="bat b3"><svg viewBox="0 0 64 32"><path d="M32 10 C26 -4 6 0 0 12 C10 10 18 14 24 18 C28 22 30 26 32 30 C34 26 36 22 40 18 C46 14 54 10 64 12 C58 0 38 -4 32 10 Z" fill="#0b0d14"/></svg></div>
+
+<audio id="graveAudio" loop preload="none">
+  <!-- Replace with the real graveyard-ambience track, e.g. src="audio/graveyard-ambience.mp3" -->
+  <source src="audio/graveyard-ambience.mp3" type="audio/mpeg" />
+</audio>
+
+<header class="header">
+  <a class="logo" href="https://liners.com">
+    <span class="logo-mark">L</span> Liners <span class="section-badge"><i class="ti ti-skull" style="font-size:12px"></i> Graveyard</span>
+  </a>
+  <nav class="nav-links">
+    <a href="https://liners.com"><i class="ti ti-arrow-left" style="font-size:12px"></i> Back to Liners</a>
+    <a href="#">All Products</a>
+    <a href="#">Categories</a>
+  </nav>
+  <div class="header-right">
+    <button class="icon-btn" id="soundToggle" aria-label="Toggle graveyard ambience" aria-pressed="false" title="Toggle sound">
+      <i class="ti ti-volume-3"></i>
+    </button>
+    <button class="btn-outline"><i class="ti ti-plus" style="font-size:13px"></i> Submit a shutdown</button>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="eyebrow"><i class="ti ti-skull"></i> Liners Graveyard</div>
+  <h1>Here Lies What<br>Africa Built.</h1>
+  <p class="sub">Every discontinued, acquired-into-oblivion, or quietly sunset product from the African tech ecosystem — with its death certificate, autopsy, and the founders still building.</p>
+
+  <div class="search-bar">
+    <i class="ti ti-search"></i>
+    <input class="search-input" id="graveSearch" type="text" placeholder="Search the graveyard, e.g. &quot;Gigbanc&quot; or &quot;Fintech&quot;..." aria-label="Search the graveyard" />
+  </div>
+  <div class="trending">
+    <span id="recentlyBuried">Recently buried: …</span>
+  </div>
+</section>
+
+<div class="stats-row" id="statsRow" aria-live="polite"></div>
+
+<hr class="divider" />
+
+<form class="filter-panel" id="filterForm" aria-label="Filter graveyard results">
+  <div class="filter-row">
+    <div class="field">
+      <label for="fCountry">Country</label>
+      <select id="fCountry"><option value="">All countries</option></select>
+    </div>
+    <div class="field">
+      <label for="fCategory">Category</label>
+      <select id="fCategory"><option value="">All categories</option></select>
+    </div>
+    <div class="field">
+      <label for="fFate">Fate</label>
+      <select id="fFate"><option value="">All fates</option></select>
+    </div>
+    <div class="field">
+      <label for="fCause">Primary cause</label>
+      <select id="fCause"><option value="">All causes</option></select>
+    </div>
+    <div class="field">
+      <label for="fYear">Death year</label>
+      <select id="fYear"><option value="">Any year</option></select>
+    </div>
+    <div class="field">
+      <label for="fLifespan">Lifespan</label>
+      <select id="fLifespan">
+        <option value="">Any lifespan</option>
+        <option value="0-2">Under 3 years</option>
+        <option value="3-5">3 – 5 years</option>
+        <option value="6-10">6 – 10 years</option>
+        <option value="11-99">10+ years</option>
+      </select>
+    </div>
+    <div class="field grow" style="min-width:140px">
+      <label for="sortSelect">Sort by</label>
+      <select id="sortSelect">
+        <option value="burial">Newest burial</option>
+        <option value="death">Newest death</option>
+        <option value="oldest">Oldest death</option>
+        <option value="lifespan">Shortest lifespan</option>
+      </select>
+    </div>
+    <button type="button" class="clear-filters" id="clearFilters">Clear filters</button>
+  </div>
+  <div class="filter-chips" id="filterChips"></div>
+</form>
+
+<div class="cemetery">
+  <div class="ghost g3" style="top:40px; left:46%;" aria-hidden="true"></div>
+  <div class="ghost g4" style="top:340px; right:6%;" aria-hidden="true"></div>
+  <div class="firefly" style="top:90px; left:12%; animation-delay:-.5s;" aria-hidden="true"></div>
+  <div class="firefly" style="top:260px; left:36%; animation-delay:-2.6s;" aria-hidden="true"></div>
+  <div class="firefly" style="top:150px; right:18%; animation-delay:-1.8s;" aria-hidden="true"></div>
+  <div class="firefly" style="top:400px; left:60%; animation-delay:-3.4s;" aria-hidden="true"></div>
+
+  <div class="grid-count" aria-live="polite"><strong id="visibleCount">0</strong> of <span id="totalCount">0</span> products buried here</div>
+  <div class="grave-grid" id="graveGrid"></div>
+  <div class="no-results" id="noResults">Nothing here matches. Try clearing a filter.</div>
+  <nav class="pagination" id="pagination" aria-label="Graveyard pagination"></nav>
+</div>
+
+<div class="cta-band">
+  <div class="cta-inner">
+    <div>
+      <h2>Know a product that didn't make it?</h2>
+      <p>Help us give it a proper burial. Submit a shutdown and our researchers will verify it before it's laid to rest.</p>
+    </div>
+    <button class="btn-bury"><i class="ti ti-plant-2" style="font-size:15px"></i> Submit a shutdown</button>
+  </div>
+</div>
+</main>
+
+<footer class="footer">
+  <div class="footer-row">
+    <p class="footer-brand">Liners Graveyard is a record of discontinued African software products, kept for research and remembrance. Part of <a href="https://liners.com" style="color:var(--moss-light)">liners.com</a> — the record of African software.</p>
+    <div class="footer-links">
+      <a href="#">Submit a shutdown</a>
+      <a href="#">Methodology</a>
+      <a href="https://liners.com">Back to Liners</a>
+    </div>
+  </div>
+  <p class="footer-legal">© 2026, Liners. Product and company names are trademarks of their respective owners, referenced here strictly for identification and informational purposes; this page does not imply affiliation or endorsement.</p>
+</footer>
+
+<script>
+  const GRAVES = [
+    {
+      slug: "gigbanc", name: "Gigbanc", initial: "G", color: "#0bb4b0",
+      tagline: "Global bank account",
+      country: "Nigeria", flag: "🇳🇬", category: "Fintech",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2023, died: "2026-07", diedLabel: "Jul 2026", lifespanYears: 3,
+      buriedOn: "2026-07-20",
+      epitaph: "Global by ambition, buried by compliance costs.",
+      primaryCauseLabel: "Infrastructure dependency"
+    },
+    {
+      slug: "brass", name: "Brass", initial: "B", color: "#f5a623",
+      tagline: "Banking for local businesses",
+      country: "Nigeria", flag: "🇳🇬", category: "Fintech",
+      fate: "acquired", fateLabel: "Acquired & discontinued",
+      born: 2020, died: "2026-06", diedLabel: "Jun 2026", lifespanYears: 6,
+      buriedOn: "2026-07-18",
+      epitaph: "Rescued for two years, then quietly absorbed.",
+      primaryCauseLabel: "Acquisition or strategy change"
+    },
+    {
+      slug: "chimoney", name: "Chimoney", initial: "C", color: "#7b2fbe",
+      tagline: "API for cross-border payments",
+      country: "Nigeria", flag: "🇳🇬", category: "Fintech",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2022, died: "2026-05", diedLabel: "May 2026", lifespanYears: 4,
+      buriedOn: "2026-07-15",
+      epitaph: "Built the rails. Nobody knew to ride them.",
+      primaryCauseLabel: "Distribution or go-to-market"
+    },
+    {
+      slug: "livestock-wealth", name: "Livestock Wealth", initial: "L", color: "#2f9e44",
+      tagline: "Crowdfarming company",
+      country: "South Africa", flag: "🇿🇦", category: "Agriculture",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2015, died: "2026-05", diedLabel: "May 2026", lifespanYears: 11,
+      buriedOn: "2026-07-12",
+      epitaph: "Covered every farmer's default until it couldn't.",
+      primaryCauseLabel: "Business model or unit economics"
+    },
+    {
+      slug: "foodcourt", name: "FoodCourt", initial: "F", color: "#e8590c",
+      tagline: "Cloud kitchen",
+      country: "Nigeria", flag: "🇳🇬", category: "FoodTech",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2021, died: "2026-04", diedLabel: "Apr 2026", lifespanYears: 5,
+      buriedOn: "2026-07-10",
+      epitaph: "The kitchens went quiet when the wages stopped.",
+      primaryCauseLabel: "Funding or runway"
+    },
+    {
+      slug: "zarttech", name: "Zarttech", initial: "Z", color: "#495057",
+      tagline: "Talent outsourcing",
+      country: "Pan-African", flag: "🌍", category: "Other",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2020, died: "2026-03", diedLabel: "Mar 2026", lifespanYears: 6,
+      buriedOn: "2026-07-14",
+      epitaph: "A mission worth funding. A team that couldn't hold together.",
+      primaryCauseLabel: "Governance or fraud"
+    },
+    {
+      slug: "koko-networks", name: "KOKO Networks", initial: "K", color: "#12b886",
+      tagline: "Smart commerce platform",
+      country: "Kenya", flag: "🇰🇪", category: "Other",
+      fate: "shutdown", fateLabel: "Shut down",
+      born: 2013, died: "2026-01", diedLabel: "Jan 2026", lifespanYears: 13,
+      buriedOn: "2026-07-17",
+      epitaph: "When the carbon credits died, so did the company.",
+      primaryCauseLabel: "Regulation"
+    }
+  ];
+
+  const PAGE_SIZE = 6;
+  let state = { q: "", country: "", category: "", fate: "", cause: "", year: "", lifespan: "", sort: "burial", page: 1 };
+
+  // populate filter dropdowns from data
+  function uniq(field) { return Array.from(new Set(GRAVES.map(g => g[field]))).sort(); }
+  function fillSelect(id, values) {
+    const el = document.getElementById(id);
+    values.forEach(v => {
+      const opt = document.createElement('option');
+      opt.value = v; opt.textContent = v;
+      el.appendChild(opt);
+    });
+  }
+  fillSelect('fCountry', uniq('country'));
+  fillSelect('fCategory', uniq('category'));
+  const FATE_LABELS = { shutdown: "Shut down", acquired: "Acquired & discontinued", sunset: "Sunset by its owner", rebranded: "Rebranded or absorbed", dormant: "Dormant", unknown: "Unknown" };
+  Object.entries(FATE_LABELS).forEach(([val, label]) => {
+    const opt = document.createElement('option'); opt.value = val; opt.textContent = label;
+    document.getElementById('fFate').appendChild(opt);
+  });
+  fillSelect('fCause', uniq('primaryCauseLabel'));
+  fillSelect('fYear', Array.from(new Set(GRAVES.map(g => g.died.slice(0,4)))).sort().reverse());
+
+  // read state from URL
+  function readURL() {
+    const p = new URLSearchParams(location.search);
+    state.q = p.get('q') || "";
+    state.country = p.get('country') || "";
+    state.category = p.get('category') || "";
+    state.fate = p.get('fate') || "";
+    state.cause = p.get('cause') || "";
+    state.year = p.get('year') || "";
+    state.lifespan = p.get('lifespan') || "";
+    state.sort = p.get('sort') || "burial";
+    state.page = parseInt(p.get('page') || "1", 10) || 1;
+    document.getElementById('graveSearch').value = state.q;
+    document.getElementById('fCountry').value = state.country;
+    document.getElementById('fCategory').value = state.category;
+    document.getElementById('fFate').value = state.fate;
+    document.getElementById('fCause').value = state.cause;
+    document.getElementById('fYear').value = state.year;
+    document.getElementById('fLifespan').value = state.lifespan;
+    document.getElementById('sortSelect').value = state.sort;
+  }
+  function writeURL() {
+    const p = new URLSearchParams();
+    Object.entries(state).forEach(([k, v]) => { if (v && !(k === 'sort' && v === 'burial') && !(k === 'page' && v === 1)) p.set(k, v); });
+    history.replaceState(null, '', p.toString() ? `?${p}` : location.pathname);
+  }
+
+  function matchesLifespan(years, bucket) {
+    if (!bucket) return true;
+    const [lo, hi] = bucket.split('-').map(Number);
+    return years >= lo && years <= hi;
+  }
+
+  function filteredSorted() {
+    let list = GRAVES.filter(g =>
+      (!state.country || g.country === state.country) &&
+      (!state.category || g.category === state.category) &&
+      (!state.fate || g.fate === state.fate) &&
+      (!state.cause || g.primaryCauseLabel === state.cause) &&
+      (!state.year || g.died.slice(0,4) === state.year) &&
+      matchesLifespan(g.lifespanYears, state.lifespan) &&
+      (!state.q || (g.name + g.tagline + g.category + g.country).toLowerCase().includes(state.q.toLowerCase()))
+    );
+    if (state.sort === "burial") list.sort((a,b) => b.buriedOn.localeCompare(a.buriedOn));
+    else if (state.sort === "death") list.sort((a,b) => b.died.localeCompare(a.died));
+    else if (state.sort === "oldest") list.sort((a,b) => a.died.localeCompare(b.died));
+    else if (state.sort === "lifespan") list.sort((a,b) => a.lifespanYears - b.lifespanYears);
+    return list;
+  }
+
+  function renderChips() {
+    const chips = [];
+    if (state.country) chips.push(["country", `${GRAVES.find(g=>g.country===state.country)?.flag||''} ${state.country}`]);
+    if (state.category) chips.push(["category", state.category]);
+    if (state.fate) chips.push(["fate", FATE_LABELS[state.fate]]);
+    if (state.cause) chips.push(["cause", state.cause]);
+    if (state.year) chips.push(["year", `Died ${state.year}`]);
+    if (state.lifespan) chips.push(["lifespan", document.getElementById('fLifespan').selectedOptions[0].textContent]);
+    const el = document.getElementById('filterChips');
+    el.innerHTML = chips.map(([key, label]) =>
+      `<span class="filter-chip">${label} <button type="button" data-clear="${key}" aria-label="Remove ${label} filter"><i class="ti ti-x" style="font-size:11px"></i></button></span>`
+    ).join('');
+    el.querySelectorAll('button').forEach(btn => btn.addEventListener('click', () => {
+      state[btn.dataset.clear] = "";
+      state.page = 1;
+      syncControlsFromState();
+      run();
+    }));
+  }
+
+  function syncControlsFromState() {
+    document.getElementById('fCountry').value = state.country;
+    document.getElementById('fCategory').value = state.category;
+    document.getElementById('fFate').value = state.fate;
+    document.getElementById('fCause').value = state.cause;
+    document.getElementById('fYear').value = state.year;
+    document.getElementById('fLifespan').value = state.lifespan;
+  }
+
+  function renderPagination(total) {
+    const totalPages = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    if (state.page > totalPages) state.page = totalPages;
+    const el = document.getElementById('pagination');
+    el.innerHTML = `
+      <button class="page-btn" id="prevPage" ${state.page <= 1 ? 'disabled' : ''}><i class="ti ti-chevron-left" style="font-size:13px"></i> Prev</button>
+      <span class="page-indicator">Page ${state.page} of ${totalPages}</span>
+      <button class="page-btn" id="nextPage" ${state.page >= totalPages ? 'disabled' : ''}>Next <i class="ti ti-chevron-right" style="font-size:13px"></i></button>
+    `;
+    document.getElementById('prevPage').addEventListener('click', () => { state.page--; run(); window.scrollTo({top: document.querySelector('.cemetery').offsetTop - 90, behavior:'smooth'}); });
+    document.getElementById('nextPage').addEventListener('click', () => { state.page++; run(); window.scrollTo({top: document.querySelector('.cemetery').offsetTop - 90, behavior:'smooth'}); });
+  }
+
+  function run() {
+    const all = filteredSorted();
+    const start = (state.page - 1) * PAGE_SIZE;
+    const pageItems = all.slice(start, start + PAGE_SIZE);
+
+    const grid = document.getElementById('graveGrid');
+    const noResults = document.getElementById('noResults');
+
+    grid.innerHTML = pageItems.map(g => `
+      <div class="grave-plot">
+        <a class="grave-link" href="liners-graveyard-product.html?slug=${g.slug}">
+          <div class="tomb-visual">
+            <div class="tombstone">
+              <div class="moss"></div>
+              <div class="speckle"></div>
+              <div class="crack2"></div>
+              <div class="grave-logo" style="background:${g.color}">${g.initial}</div>
+              <div class="grave-epitaph">"${g.epitaph}"</div>
+            </div>
+            <div class="tomb-base"></div>
+          </div>
+          <div class="grave-mound"></div>
+          <div class="grave-info">
+            <div class="grave-name">${g.name}</div>
+            <div class="grave-tagline">${g.tagline}</div>
+            <div class="grave-meta">
+              <span class="grave-tag">${g.flag} ${g.country}</span>
+              <span class="grave-tag">${g.category}</span>
+            </div>
+            <div class="grave-meta">
+              <span class="grave-tag fate-${g.fate}">${g.fateLabel}</span>
+              <span class="grave-tag cause">${g.primaryCauseLabel}</span>
+            </div>
+            <div class="grave-years">${g.born} – ${g.diedLabel} <span class="grave-lifespan">· ~${g.lifespanYears} yrs</span></div>
+          </div>
+        </a>
+      </div>
+    `).join('');
+
+    document.getElementById('visibleCount').textContent = pageItems.length;
+    document.getElementById('totalCount').textContent = all.length;
+    noResults.style.display = all.length ? 'none' : 'block';
+    grid.style.display = all.length ? 'grid' : 'none';
+    renderPagination(all.length);
+    renderChips();
+    writeURL();
+  }
+
+  document.getElementById('graveSearch').addEventListener('input', e => { state.q = e.target.value; state.page = 1; run(); });
+  document.getElementById('fCountry').addEventListener('change', e => { state.country = e.target.value; state.page = 1; run(); });
+  document.getElementById('fCategory').addEventListener('change', e => { state.category = e.target.value; state.page = 1; run(); });
+  document.getElementById('fFate').addEventListener('change', e => { state.fate = e.target.value; state.page = 1; run(); });
+  document.getElementById('fCause').addEventListener('change', e => { state.cause = e.target.value; state.page = 1; run(); });
+  document.getElementById('fYear').addEventListener('change', e => { state.year = e.target.value; state.page = 1; run(); });
+  document.getElementById('fLifespan').addEventListener('change', e => { state.lifespan = e.target.value; state.page = 1; run(); });
+  document.getElementById('sortSelect').addEventListener('change', e => { state.sort = e.target.value; run(); });
+  document.getElementById('clearFilters').addEventListener('click', () => {
+    state = { q: "", country: "", category: "", fate: "", cause: "", year: "", lifespan: "", sort: "burial", page: 1 };
+    document.getElementById('graveSearch').value = "";
+    syncControlsFromState();
+    document.getElementById('sortSelect').value = "burial";
+    run();
+  });
+
+  readURL();
+  run();
+
+  // stats
+  function fundingValue() { return 0; }
+  document.getElementById('statsRow').innerHTML = `
+    <div class="stat-card"><div class="stat-num">${GRAVES.length}</div><div class="stat-label">products buried</div></div>
+    <div class="stat-card"><div class="stat-num accent">$132.1M</div><div class="stat-label">raised, buried anyway</div></div>
+    <div class="stat-card"><div class="stat-num">${uniq('category').length}</div><div class="stat-label">categories affected</div></div>
+    <div class="stat-card"><div class="stat-num">${uniq('country').length}</div><div class="stat-label">countries represented</div></div>
+  `;
+
+  // recently buried trending line (by burial date)
+  const recent = [...GRAVES].sort((a,b) => b.buriedOn.localeCompare(a.buriedOn)).slice(0,3);
+  document.getElementById('recentlyBuried').innerHTML =
+    'Recently buried: ' + recent.map(g => `<a href="liners-graveyard-product.html?slug=${g.slug}">${g.name}</a>`).join(' · ');
+
+  // sound toggle
+  const soundBtn = document.getElementById('soundToggle');
+  const audio = document.getElementById('graveAudio');
+  let soundOn = false;
+  soundBtn.addEventListener('click', () => {
+    soundOn = !soundOn;
+    if (soundOn) {
+      audio.play().catch(() => { /* browser blocked playback or file not found; icon still reflects intent */ });
+      soundBtn.classList.add('sound-on');
+      soundBtn.innerHTML = '<i class="ti ti-volume"></i>';
+      soundBtn.setAttribute('aria-pressed', 'true');
+    } else {
+      audio.pause();
+      soundBtn.classList.remove('sound-on');
+      soundBtn.innerHTML = '<i class="ti ti-volume-3"></i>';
+      soundBtn.setAttribute('aria-pressed', 'false');
+    }
+  });
+</script>
+
+</body>
+</html>

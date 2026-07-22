@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DeskaTech — Get Started</title>
+<link rel="preconnect" href="https://api.fontshare.com">
+<link href="https://api.fontshare.com/v2/css?f[]=clash-grotesk@400,500,600,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<style>
+  /* ── Backdrop ── */
+  .ob-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(10, 10, 9, 0.55);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 1000;
+    animation: ob-fade-in 0.2s ease;
+  }
+
+  @keyframes ob-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  /* ── Modal panel ── */
+  .ob-modal {
+    background: var(--card);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 580px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 24px 64px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.08);
+    animation: ob-slide-up 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+  }
+
+  @keyframes ob-slide-up {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── Close button ── */
+  .ob-close {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: var(--bg-alt);
+    color: var(--ink-mute);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .ob-close:hover {
+    background: var(--line);
+    color: var(--ink);
+  }
+
+  .ob-close svg { width: 16px; height: 16px; }
+
+  /* ── Modal inner padding ── */
+  .ob-inner {
+    padding: 32px 28px 28px;
+  }
+
+  /* ── Header ── */
+  .ob-header {
+    margin-bottom: 22px;
+    padding-right: 32px;
+  }
+
+  .ob-header h1 {
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.25;
+    margin-bottom: 5px;
+    letter-spacing: -0.02em;
+  }
+
+  .ob-header p {
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    font-size: 13.5px;
+    color: var(--ink-mute);
+  }
+
+  /* ── Progress bar ── */
+  .ob-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+
+  .ob-progress-track {
+    flex: 1;
+    height: 5px;
+    background: var(--line);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .ob-progress-fill {
+    height: 100%;
+    width: 66.66%;
+    background: var(--green);
+    border-radius: 99px;
+  }
+
+  .ob-progress-label {
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* ── Required steps card ── */
+  .ob-card {
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .ob-step {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line-soft);
+    background: var(--card);
+  }
+
+  .ob-step:last-child {
+    border-bottom: none;
+  }
+
+  /* ── Step icon ── */
+  .ob-icon {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ob-icon--pending { background: #EAF0F8; }
+  .ob-icon--done    { background: #E6F3EC; }
+  .ob-icon svg      { width: 18px; height: 18px; }
+
+  /* ── Step text ── */
+  .ob-step-body {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .ob-step-title {
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 2px;
+    letter-spacing: -0.01em;
+  }
+
+  .ob-step-desc {
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    font-size: 12.5px;
+    color: var(--ink-mute);
+    line-height: 1.4;
+  }
+
+  /* ── Step action ── */
+  .ob-step-action { flex-shrink: 0; }
+
+  .ob-btn-start {
+    display: inline-flex;
+    align-items: center;
+    padding: 7px 16px;
+    border-radius: 99px;
+    font-size: 12.5px;
+    font-weight: 500;
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    background: #EAF0F8;
+    color: #2A5BAD;
+    border: none;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    letter-spacing: -0.01em;
+  }
+
+  .ob-btn-start:hover { background: #D6E4F5; }
+
+  .ob-badge-done {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 13px;
+    border-radius: 99px;
+    font-size: 12.5px;
+    font-weight: 500;
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    background: #E6F3EC;
+    color: #2D7A4F;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── Section divider label ── */
+  .ob-section-label {
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  /* ── Optional steps ── */
+  .ob-optional {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .ob-opt-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+    background: var(--bg-alt);
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s;
+    border: 1px solid transparent;
+  }
+
+  .ob-opt-item:hover {
+    background: var(--line-soft);
+    border-color: var(--line);
+  }
+
+  .ob-opt-icon {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--card);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ob-opt-icon svg {
+    width: 16px;
+    height: 16px;
+    color: var(--ink-soft);
+  }
+
+  .ob-opt-title {
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--ink);
+    margin-bottom: 1px;
+    letter-spacing: -0.01em;
+  }
+
+  .ob-opt-desc {
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    font-size: 12px;
+    color: var(--ink-mute);
+  }
+
+  /* ── Demo trigger button (for testing) ── */
+  .ob-trigger-wrap {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg);
+  }
+
+  .ob-trigger-btn {
+    font-family: 'Clash Grotesk', 'Inter Tight', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 28px;
+    border-radius: 99px;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .ob-trigger-btn:hover { opacity: 0.85; }
+</style>
+</head>
+<body>
+
+<!-- Demo trigger page -->
+<div class="ob-trigger-wrap">
+  <button class="ob-trigger-btn" onclick="document.getElementById('ob-modal-root').style.display='flex'">
+    Open onboarding checklist
+  </button>
+</div>
+
+<!-- Modal root -->
+<div class="ob-backdrop" id="ob-modal-root" onclick="handleBackdropClick(event)" style="display:none;">
+  <div class="ob-modal" role="dialog" aria-modal="true" aria-labelledby="ob-title">
+
+    <!-- Close -->
+    <button class="ob-close" onclick="closeModal()" aria-label="Close">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M18 6L6 18M6 6l12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+
+    <div class="ob-inner">
+
+      <!-- Header -->
+      <div class="ob-header">
+        <h1 id="ob-title">Just a few steps before you're DeskaTech-ready</h1>
+        <p>Complete the required steps to unlock full platform access.</p>
+      </div>
+
+      <!-- Progress -->
+      <div class="ob-progress">
+        <div class="ob-progress-track">
+          <div class="ob-progress-fill"></div>
+        </div>
+        <span class="ob-progress-label">2 of 3 complete</span>
+      </div>
+
+      <!-- Required steps -->
+      <div class="ob-card">
+
+        <!-- Step 1 — Pending -->
+        <div class="ob-step">
+          <div class="ob-icon ob-icon--pending">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <rect x="3" y="7" width="18" height="14" rx="1.5" stroke="#2A5BAD" stroke-width="1.6"/>
+              <path d="M7 21V11h4v10M13 21V11h4v10" stroke="#2A5BAD" stroke-width="1.6" stroke-linecap="round"/>
+              <path d="M3 10L12 3l9 7" stroke="#2A5BAD" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ob-step-body">
+            <div class="ob-step-title">Verify your business</div>
+            <div class="ob-step-desc">Submit your business details to unlock full platform access.</div>
+          </div>
+          <div class="ob-step-action">
+            <a href="#" class="ob-btn-start">Get started</a>
+          </div>
+        </div>
+
+        <!-- Step 2 — Done -->
+        <div class="ob-step">
+          <div class="ob-icon ob-icon--done">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 13l4 4L19 7" stroke="#2D7A4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ob-step-body">
+            <div class="ob-step-title">First production API key</div>
+            <div class="ob-step-desc">Generate your live API key to enable real transactions.</div>
+          </div>
+          <div class="ob-step-action">
+            <span class="ob-badge-done">Completed</span>
+          </div>
+        </div>
+
+        <!-- Step 3 — Done -->
+        <div class="ob-step">
+          <div class="ob-icon ob-icon--done">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M5 13l4 4L19 7" stroke="#2D7A4F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ob-step-body">
+            <div class="ob-step-title">Production webhook URL</div>
+            <div class="ob-step-desc">Configure your webhook to receive real-time transaction updates.</div>
+          </div>
+          <div class="ob-step-action">
+            <span class="ob-badge-done">Completed</span>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Optional steps -->
+      <div class="ob-section-label">While you're at it</div>
+      <div class="ob-optional">
+
+        <a href="#" class="ob-opt-item">
+          <div class="ob-opt-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M9 3h6M8.5 3v6l-4 9a1 1 0 00.9 1.5h13.2a1 1 0 00.9-1.5l-4-9V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M6.5 14h11" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ob-opt-body">
+            <div class="ob-opt-title">Initiate sandbox</div>
+            <div class="ob-opt-desc">Test your integration before going live.</div>
+          </div>
+        </a>
+
+        <a href="#" class="ob-opt-item">
+          <div class="ob-opt-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M7 16l-4-4 4-4M17 8l4 4-4 4M14 5l-4 14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ob-opt-body">
+            <div class="ob-opt-title">Make your first transaction</div>
+            <div class="ob-opt-desc">Send a live transaction to unlock full benefits.</div>
+          </div>
+        </a>
+
+        <a href="#" class="ob-opt-item">
+          <div class="ob-opt-icon">
+            <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 3L4 7v5c0 4.4 3.4 8.5 8 9.5 4.6-1 8-5.1 8-9.5V7l-8-4z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <div class="ob-opt-body">
+            <div class="ob-opt-title">Set up MFA</div>
+            <div class="ob-opt-desc">Add a third-party authenticator for extra security.</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function closeModal() {
+    document.getElementById('ob-modal-root').style.display = 'none';
+  }
+
+  function handleBackdropClick(e) {
+    if (e.target === e.currentTarget) closeModal();
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closeModal();
+  });
+
+  // Auto-open on load for demo
+  window.addEventListener('DOMContentLoaded', function() {
+    document.getElementById('ob-modal-root').style.display = 'flex';
+  });
+</script>
+
+</body>
+</html>
